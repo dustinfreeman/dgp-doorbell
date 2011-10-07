@@ -6,7 +6,10 @@
              mc:Ignorable="d" >
     <StackPanel>
         <Canvas Name="userCanvas">
+            
             <Image Width="400" Height="300" Name="userImage" />
+            <Ellipse Name="HandEllipse" Width="40" Height="40" Fill="GreenYellow" Opacity="0.7" Visibility="Hidden"/>
+
         </Canvas>
         <StackPanel Name="emailListStackPanel" Orientation="Horizontal">
             

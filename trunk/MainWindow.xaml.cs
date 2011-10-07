@@ -207,9 +207,14 @@ namespace DGPDoorbell
             return polyline;
         }
 
+        SkeletonFrame lastSkeletonFrame;
+
         void nui_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
         {
             SkeletonFrame skeletonFrame = e.SkeletonFrame;
+
+            lastSkeletonFrame = skeletonFrame;
+
             int iSkeleton = 0;
             Brush[] brushes = new Brush[6];
             brushes[0] = new SolidColorBrush(Color.FromRgb(255, 0, 0));
@@ -260,6 +265,48 @@ namespace DGPDoorbell
                 Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, Image.Bits, Image.Width * Image.BytesPerPixel);
 
 
+            if (lastSkeletonFrame != null)
+            {
+                for (int s = 0; s < lastSkeletonFrame.Skeletons.Length; s++)
+                {
+                    if (lastSkeletonFrame.Skeletons[s].TrackingState == SkeletonTrackingState.Tracked)
+                    {
+                        Microsoft.Research.Kinect.Nui.Vector RightHandVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight].Position;
+                        Microsoft.Research.Kinect.Nui.Vector HipCentreVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter].Position;
+
+                        Point RightHand = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight]);
+                        Point HipCentre = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter]);
+
+
+
+                        if (userFrame1.CurrentSkeletonID == s)
+                        {
+                            //update control point
+                            userFrame1.ControlPointUpdate(RightHand);
+
+                        }
+                        else if (userFrame1.CurrentSkeletonID == -1)
+                        {
+                            //new control point
+                            userFrame1.ControlPointAppear(RightHand, s);
+                        }
+                    }
+                    else
+                    {
+                        if (userFrame1.CurrentSkeletonID == s)
+                        {
+                            //lose control point
+                            userFrame1.ControlPointLose();
+                        }
+                    }
+                }
+            }
+
+            UpdateFPS();
+        }
+
+        void UpdateFPS()
+        {
             ++totalFrames;
             DateTime cur = DateTime.Now;
             if (cur.Subtract(lastTime) > TimeSpan.FromSeconds(1))
