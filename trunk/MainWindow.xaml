@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dgp="clr-namespace:DGPDoorbell"
-        Title="" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen"
-        Loaded="Window_Loaded" Closed="Window_Closed" Width="800" WindowStyle="None">
+        
+        Loaded="Window_Loaded" Closed="Window_Closed" WindowStyle="None">
     
     <StackPanel Orientation="Horizontal">
         <dgp:UserFrame x:Name="userFrame1"/>

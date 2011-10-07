@@ -35,9 +35,9 @@ namespace DGPDoorbell
             set
             {
                 emailListPosition = value;
-                if (emailListPosition > 10)
+                if (emailListPosition > 500)
                 {
-                    emailListPosition = 10;
+                    emailListPosition = 500;
                 }
                 if (this.IsLoaded)
                 {
@@ -47,13 +47,21 @@ namespace DGPDoorbell
             }
         }
 
+        const int EMAIL_LISTING_WIDTH = 200;
+
+        int currentEmailIndex = 0;
         int CurrentEmailIndex
         {
             get
             {
-                return ((int)emailListPosition +(int)this.Width/2 )/ 100; //current email width;
-                //return 0;
+                //uncolour old
+                ((EmailListing)emailListStackPanel.Children[currentEmailIndex]).border.Background = Brushes.LightGray;
+
+                //colour new.
+                currentEmailIndex= (-(int)emailListPosition + (int)this.Width / 2) / EMAIL_LISTING_WIDTH; //current email width;
+                return currentEmailIndex;
             }
+
         }
 
         public UserFrame()
@@ -62,7 +70,6 @@ namespace DGPDoorbell
             ParseEmailList();
 
             this.Loaded += new RoutedEventHandler(UserFrame_Loaded);
-
 
         }
 
@@ -92,7 +99,6 @@ namespace DGPDoorbell
             //This is where the interface control happens.
             Vector DiffVector = ctrlPt - anchor;
 
-            UnColourCurrentEmail();
 
             if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
@@ -108,20 +114,16 @@ namespace DGPDoorbell
 
             if (DiffVector.Y < -CONTROL_THRESHOLD)
             {
-                //TODO send email.
+                EmailListing CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
+
+                Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!");
             }
         }
 
-        void UnColourCurrentEmail()
-        {
-            ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = Brushes.LightGray;
-
-        }
 
         void ColourCurrentEmail()
         {
             ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = Brushes.LightBlue;
-
         }
 
         public void ControlPointLose()
