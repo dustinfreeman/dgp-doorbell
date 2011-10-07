@@ -17,7 +17,7 @@ namespace DGPDoorbell
     /// <summary>
     /// Interaction logic for EmailListing.xaml
     /// </summary>
-    public partial class EmailListing : UserControl
+    public partial class EmailListing : UserControl, IComparable<EmailListing>
     {
         string dgpID;
         string emailAddress;
@@ -57,6 +57,12 @@ namespace DGPDoorbell
             {
                 return null;
             }
+        }
+
+        public int CompareTo(EmailListing other)
+        {
+            return String.Compare(this.LastName, other.LastName);
+
         }
     }
 }
