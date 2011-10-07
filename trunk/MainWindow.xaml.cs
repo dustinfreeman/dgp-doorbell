@@ -168,22 +168,13 @@ namespace DGPDoorbell
 
         void nui_DepthFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
-            PlanarImage Image = e.ImageFrame.Image;
-            byte[] convertedDepthFrame = convertDepthFrame(Image.Bits);
+            //PlanarImage Image = e.ImageFrame.Image;
+            //byte[] convertedDepthFrame = convertDepthFrame(Image.Bits);
 
-            depth.Source = BitmapSource.Create(
-                Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, convertedDepthFrame, Image.Width * 4);
+            //depth.Source = BitmapSource.Create(
+            //    Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, convertedDepthFrame, Image.Width * 4);
 
-            ++totalFrames;
-
-            DateTime cur = DateTime.Now;
-            if (cur.Subtract(lastTime) > TimeSpan.FromSeconds(1))
-            {
-                int frameDiff = totalFrames - lastFrames;
-                lastFrames = totalFrames;
-                lastTime = cur;
-                frameRate.Text = frameDiff.ToString() + " fps";
-            }
+            
         }
 
         private Point getDisplayPosition(Joint joint)
@@ -262,8 +253,22 @@ namespace DGPDoorbell
         {
             // 32-bit per pixel, RGBA image
             PlanarImage Image = e.ImageFrame.Image;
-            video.Source = BitmapSource.Create(
+            //video.Source = BitmapSource.Create(
+            //    Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, Image.Bits, Image.Width * Image.BytesPerPixel);
+
+            userFrame1.userImage.Source = BitmapSource.Create(
                 Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, Image.Bits, Image.Width * Image.BytesPerPixel);
+
+
+            ++totalFrames;
+            DateTime cur = DateTime.Now;
+            if (cur.Subtract(lastTime) > TimeSpan.FromSeconds(1))
+            {
+                int frameDiff = totalFrames - lastFrames;
+                lastFrames = totalFrames;
+                lastTime = cur;
+                frameRate.Text = frameDiff.ToString() + " fps";
+            }
         }
 
         private void Window_Closed(object sender, EventArgs e)
