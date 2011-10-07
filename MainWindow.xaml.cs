@@ -282,13 +282,13 @@ namespace DGPDoorbell
                         if (userFrame1.CurrentSkeletonID == s)
                         {
                             //update control point
-                            userFrame1.ControlPointUpdate(RightHand);
+                            userFrame1.ControlPointUpdate(RightHand, HipCentre);
 
                         }
                         else if (userFrame1.CurrentSkeletonID == -1)
                         {
                             //new control point
-                            userFrame1.ControlPointAppear(RightHand, s);
+                            userFrame1.ControlPointAppear(RightHand,HipCentre, s);
                         }
                     }
                     else

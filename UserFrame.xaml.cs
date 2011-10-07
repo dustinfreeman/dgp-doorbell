@@ -25,10 +25,35 @@ namespace DGPDoorbell
 
         public int CurrentSkeletonID = -1;
 
+        int emailListPosition = 0;
+        int EmailListPosition
+        {
+            get
+            {
+                return emailListPosition;
+            }
+            set
+            {
+                emailListPosition = value;
+                if (this.IsLoaded)
+                {
+                    //this.emailListStackPanel.SetValue(Canvas.LeftProperty, 10);//emailListPosition);
+                }
+            }
+        }
+
         public UserFrame()
         {
             InitializeComponent();
             ParseEmailList();
+
+            this.Loaded += new RoutedEventHandler(UserFrame_Loaded);
+
+        }
+
+        void UserFrame_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
 
 
@@ -47,11 +72,24 @@ namespace DGPDoorbell
             //This is where the interface control happens.
             Vector DiffVector = ctrlPt - anchor;
 
+            //EmailListPosition--;
+
+            if (DiffVector.X > 0.3)
+            {
+                emailListStackPanel.LineRight();
+                
+            }
+            if (DiffVector.X < -0.3)
+            {
+                emailListStackPanel.LineLeft();
+
+            }
         }
 
         public void ControlPointLose()
         {
             HandEllipse.Visibility = Visibility.Hidden;
+            CurrentSkeletonID = -1;
         }
 
         void ParseEmailList()
