@@ -3,21 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" Width="400" >
+             mc:Ignorable="d" Width="800" >
     <StackPanel>
-        <Canvas Name="userCanvas"  Height="300">
-            
-            <Image Width="400" Height="300" Name="userImage" />
+        <Canvas Name="userCanvas" Width="800" Height="600">
+
+            <Image  Name="userImage" Width="800" Height="600" />
             <Ellipse Name="HandEllipse" Width="40" Height="40" Fill="GreenYellow" Opacity="0.7" Visibility="Hidden"/>
 
         </Canvas>
-        <Canvas Height="150">
+        <Canvas >
             <StackPanel Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0">
 
             </StackPanel>
-            <ScrollViewer Name="emailScroller" Width="400" CanContentScroll="True" VerticalScrollBarVisibility="Hidden">
             
-        </ScrollViewer>
         </Canvas>
     </StackPanel>
 </UserControl>
