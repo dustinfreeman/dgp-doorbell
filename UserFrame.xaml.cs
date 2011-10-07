@@ -36,11 +36,18 @@ namespace DGPDoorbell
             }
             set
             {
+                double oldEmailListPosition = emailListPosition;
+                
                 emailListPosition = value;
                 if (emailListPosition > 500)
                 {
                     emailListPosition = 500;
                 }
+                if (CurrentEmailIndex >= emailListStackPanel.Children.Count)
+                {
+                    emailListPosition = oldEmailListPosition;
+                }
+
                 if (this.IsLoaded)
                 {
                     this.emailListStackPanel.SetValue(Canvas.LeftProperty, emailListPosition);
@@ -57,9 +64,13 @@ namespace DGPDoorbell
             get
             {
                 //uncolour old
-                ((EmailListing)emailListStackPanel.Children[currentEmailIndex]).border.Background = Brushes.LightGray;
+                try
+                {
+                    ((EmailListing)emailListStackPanel.Children[currentEmailIndex]).border.Background = Brushes.LightGray;
+                }
+                catch { }
 
-                //colour new.
+                //colour new elsewhere
                 currentEmailIndex= (-(int)emailListPosition + (int)this.Width / 2) / EMAIL_LISTING_WIDTH; //current email width;
                 return currentEmailIndex;
             }
@@ -129,16 +140,22 @@ namespace DGPDoorbell
             } 
             else if (DiffVector.Y < -CONTROL_THRESHOLD*2)
             {
-                CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
+                if (!SuppressEmailing)
+                {
+                    SuppressEmailing = true;
 
-                SendEmail.BeginInvoke(null, null);
+                    CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
+
+                    SendEmail.BeginInvoke(null, null);
+                    EmailNotificationTxt.Visibility = Visibility.Visible;
+                    gui.Up();
+                }
             }
             else
             {
                 if (!SuppressEmailing)
                 {
                     gui.ResetGUI();
-                    gui.Up();
 
                 }
 
@@ -153,7 +170,6 @@ namespace DGPDoorbell
             string ImagePath = Photo.Save(mainWindow.GetCurrentImage(), 640, 480);
 
             Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
-            SuppressEmailing = true;
 
 
             if (SuppressionTimer != null)
@@ -166,6 +182,9 @@ namespace DGPDoorbell
         {
             SuppressEmailing = false;
             gui.ResetGUI();
+
+            EmailNotificationTxt.Visibility = Visibility.Collapsed;
+
         }
 
         void ColourCurrentEmail()
