@@ -58,9 +58,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EmailListing.xaml.cs">
+      <DependentUpon>EmailListing.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserFrame.xaml.cs">
       <DependentUpon>UserFrame.xaml</DependentUpon>
     </Compile>
+    <Page Include="EmailListing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

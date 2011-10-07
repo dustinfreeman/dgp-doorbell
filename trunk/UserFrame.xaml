@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             mc:Ignorable="d" >
+             mc:Ignorable="d" Width="400" >
     <StackPanel>
-        <Canvas Name="userCanvas">
+        <Canvas Name="userCanvas"  Height="300">
             
             <Image Width="400" Height="300" Name="userImage" />
             <Ellipse Name="HandEllipse" Width="40" Height="40" Fill="GreenYellow" Opacity="0.7" Visibility="Hidden"/>
