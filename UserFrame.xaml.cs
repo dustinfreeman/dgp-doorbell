@@ -112,8 +112,6 @@ namespace DGPDoorbell
 
             EmailListings.Sort();
 
-            //TODO sort in list
-
             foreach (EmailListing eListing in EmailListings)
             {
                 emailListStackPanel.Children.Add(eListing);
