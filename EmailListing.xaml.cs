@@ -19,10 +19,10 @@ namespace DGPDoorbell
     /// </summary>
     public partial class EmailListing : UserControl, IComparable<EmailListing>
     {
-        string dgpID;
-        string emailAddress;
-        string GivenName;
-        string LastName;
+        public string dgpID;
+        public string emailAddress;
+        public string GivenName;
+        public string LastName;
 
         public EmailListing()
         {

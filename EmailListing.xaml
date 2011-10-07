@@ -5,16 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100"
-             Width="100">
+             Width="200">
     <Border Name="border" CornerRadius="6"
                 BorderBrush="Gray"
                 Background="LightGray"
                 BorderThickness="2"
                 Padding="8">
     <StackPanel>
-        <TextBlock Name="LastNameTxt">LastName</TextBlock>
-        <TextBlock Name="GivenNameTxt">FirstName</TextBlock>
-        <TextBlock Name="EmailTxt" Visibility="Hidden">Email</TextBlock>
+        <TextBlock Name="LastNameTxt" FontSize="24">LastName</TextBlock>
+            <TextBlock Name="GivenNameTxt" FontSize="24">FirstName</TextBlock>
+            <TextBlock Name="EmailTxt" FontSize="24" Visibility="Hidden">Email</TextBlock>
     </StackPanel>
     </Border>
 </UserControl>
