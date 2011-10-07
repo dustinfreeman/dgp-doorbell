@@ -61,6 +61,7 @@
     <Compile Include="EmailListing.xaml.cs">
       <DependentUpon>EmailListing.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Email.cs" />
     <Compile Include="UserFrame.xaml.cs">
       <DependentUpon>UserFrame.xaml</DependentUpon>
     </Compile>

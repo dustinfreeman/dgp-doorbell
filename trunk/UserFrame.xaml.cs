@@ -25,8 +25,8 @@ namespace DGPDoorbell
 
         public int CurrentSkeletonID = -1;
 
-        int emailListPosition = 0;
-        int EmailListPosition
+        double emailListPosition = 0;
+        double EmailListPosition
         {
             get
             {
@@ -37,7 +37,7 @@ namespace DGPDoorbell
                 emailListPosition = value;
                 if (this.IsLoaded)
                 {
-                    //this.emailListStackPanel.SetValue(Canvas.LeftProperty, 10);//emailListPosition);
+                    this.emailListStackPanel.SetValue(Canvas.LeftProperty, emailListPosition);
                 }
             }
         }
@@ -64,6 +64,10 @@ namespace DGPDoorbell
             ControlPointUpdate(ctrlPt, anchor);
         }
 
+        public const double CONTROL_THRESHOLD = 60;
+        public const double CONTROL_OFFSET = 20;
+        public const double SCROLL_RATE = 10;
+
         public void ControlPointUpdate(Point ctrlPt, Point anchor)
         {
             HandEllipse.SetValue(Canvas.LeftProperty, ctrlPt.X - HandEllipse.Width);
@@ -72,17 +76,15 @@ namespace DGPDoorbell
             //This is where the interface control happens.
             Vector DiffVector = ctrlPt - anchor;
 
-            //EmailListPosition--;
 
-            if (DiffVector.X > 0.3)
+            if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
-                emailListStackPanel.LineRight();
-                
+                EmailListPosition -= SCROLL_RATE;
+
             }
-            if (DiffVector.X < -0.3)
+            if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
-                emailListStackPanel.LineLeft();
-
+                EmailListPosition += SCROLL_RATE;
             }
         }
 
@@ -107,6 +109,8 @@ namespace DGPDoorbell
                     EmailListings.Add(eListing);
                 }
             }
+
+            EmailListings.Sort();
 
             //TODO sort in list
 
