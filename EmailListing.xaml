@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100"
              Width="100">
-    <Border CornerRadius="6"
+    <Border Name="border" CornerRadius="6"
                 BorderBrush="Gray"
                 Background="LightGray"
                 BorderThickness="2"

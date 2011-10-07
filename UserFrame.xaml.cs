@@ -35,10 +35,24 @@ namespace DGPDoorbell
             set
             {
                 emailListPosition = value;
+                if (emailListPosition > 10)
+                {
+                    emailListPosition = 10;
+                }
                 if (this.IsLoaded)
                 {
                     this.emailListStackPanel.SetValue(Canvas.LeftProperty, emailListPosition);
+                    Console.WriteLine(emailListPosition);
                 }
+            }
+        }
+
+        int CurrentEmailIndex
+        {
+            get
+            {
+                return ((int)emailListPosition +(int)this.Width/2 )/ 100; //current email width;
+                //return 0;
             }
         }
 
@@ -49,10 +63,12 @@ namespace DGPDoorbell
 
             this.Loaded += new RoutedEventHandler(UserFrame_Loaded);
 
+
         }
 
         void UserFrame_Loaded(object sender, RoutedEventArgs e)
         {
+            ColourCurrentEmail();
 
         }
 
@@ -76,6 +92,7 @@ namespace DGPDoorbell
             //This is where the interface control happens.
             Vector DiffVector = ctrlPt - anchor;
 
+            UnColourCurrentEmail();
 
             if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
@@ -86,6 +103,25 @@ namespace DGPDoorbell
             {
                 EmailListPosition += SCROLL_RATE;
             }
+
+            ColourCurrentEmail();
+
+            if (DiffVector.Y < -CONTROL_THRESHOLD)
+            {
+                //TODO send email.
+            }
+        }
+
+        void UnColourCurrentEmail()
+        {
+            ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = Brushes.LightGray;
+
+        }
+
+        void ColourCurrentEmail()
+        {
+            ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = Brushes.LightBlue;
+
         }
 
         public void ControlPointLose()

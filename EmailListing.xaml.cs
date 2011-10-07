@@ -42,6 +42,11 @@ namespace DGPDoorbell
             {
                 string[] lineSplit = line.Split(',');
 
+                if (lineSplit[4] == "0")
+                {   //account we don't want to use.
+                    return null;
+                }
+
                 EmailListing eListing = new EmailListing();
 
                 eListing.dgpID = lineSplit[0];
