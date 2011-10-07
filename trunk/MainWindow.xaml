@@ -15,6 +15,5 @@
             <Canvas Width="400" Height="300" Name="skeleton" Margin="10 0 10 10" Background="Black" ClipToBounds="True"/>
         </StackPanel>
         
-        
     </StackPanel>
 </Window>

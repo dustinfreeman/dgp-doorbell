@@ -38,9 +38,9 @@ namespace DGPDoorbell
 
             foreach (Image img in guiImages)
             {
-                img.Width = 100;
-                img.SetValue(Canvas.LeftProperty, img.ActualWidth / 2);
-                img.SetValue(Canvas.TopProperty, img.ActualHeight / 2);
+                img.Width = 200;
+                img.SetValue(Canvas.LeftProperty, -img.ActualWidth / 2);
+                img.SetValue(Canvas.TopProperty, -img.ActualHeight / 2);
             }
             ResetGUI();
         }

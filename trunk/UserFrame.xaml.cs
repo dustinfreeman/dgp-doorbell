@@ -88,6 +88,7 @@ namespace DGPDoorbell
         {
             CurrentSkeletonID = ID;
             HandEllipse.Visibility = Visibility.Visible;
+            gui.Visibility = Visibility.Visible;
             ControlPointUpdate(ctrlPt, anchor);
         }
 
@@ -97,14 +98,16 @@ namespace DGPDoorbell
 
         public void ControlPointUpdate(Point ctrlPt, Point anchor)
         {
-            HandEllipse.SetValue(Canvas.LeftProperty, ctrlPt.X - HandEllipse.Width);
-            HandEllipse.SetValue(Canvas.TopProperty, ctrlPt.Y - HandEllipse.Height);
+            HandEllipse.SetValue(Canvas.LeftProperty, ctrlPt.X - HandEllipse.Width/2.0);
+            HandEllipse.SetValue(Canvas.TopProperty, ctrlPt.Y - HandEllipse.Height/2.0);
 
             //This is where the interface control happens.
             Vector DiffVector = ctrlPt - anchor;
 
-            gui.SetValue(Canvas.LeftProperty, anchor.X);
-            gui.SetValue(Canvas.TopProperty, anchor.Y);
+            gui.SetValue(Canvas.LeftProperty, anchor.X - gui.ActualWidth / 2.0);
+            gui.SetValue(Canvas.TopProperty, anchor.Y - gui.ActualHeight / 2.0);
+
+            Console.WriteLine(anchor + " " + ctrlPt);
 
             if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
@@ -158,6 +161,8 @@ namespace DGPDoorbell
         public void ControlPointLose()
         {
             HandEllipse.Visibility = Visibility.Hidden;
+            gui.Visibility = Visibility.Hidden;
+
             CurrentSkeletonID = -1;
         }
 
