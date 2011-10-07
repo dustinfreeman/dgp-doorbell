@@ -12,10 +12,11 @@
 
         </Canvas>
         <Canvas Height="150">
-        <ScrollViewer Name="emailScroller" Width="400" CanContentScroll="True" VerticalScrollBarVisibility="Hidden">
-            <StackPanel Name="emailListStackPanel" Orientation="Horizontal">
-            
+            <StackPanel Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0">
+
             </StackPanel>
+            <ScrollViewer Name="emailScroller" Width="400" CanContentScroll="True" VerticalScrollBarVisibility="Hidden">
+            
         </ScrollViewer>
         </Canvas>
     </StackPanel>
