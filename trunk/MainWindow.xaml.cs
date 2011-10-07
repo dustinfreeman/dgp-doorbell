@@ -36,6 +36,8 @@ namespace DGPDoorbell
             InitializeComponent();
 
             this.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
+
+            userFrame1.mainWindow = this;
         }
 
         void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -271,6 +273,8 @@ namespace DGPDoorbell
             } // for each skeleton
         }
 
+        byte[] lastColorImage = new byte[640 * 480 * 4];
+
         void nui_ColorFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
             // 32-bit per pixel, RGBA image
@@ -319,7 +323,15 @@ namespace DGPDoorbell
                 }
             }
 
+            Image.Bits.CopyTo(lastColorImage, 0);
+
+
             UpdateFPS();
+        }
+
+        public byte[] GetCurrentImage()
+        {
+            return lastColorImage;
         }
 
         void UpdateFPS()
