@@ -207,7 +207,7 @@ namespace DGPDoorbell
             nui.NuiCamera.GetColorPixelCoordinatesFromDepthPixel(ImageResolution.Resolution640x480, iv, (int)depthX, (int)depthY, (short)0, out colorX, out colorY);
 
             // map back to skeleton.Width & skeleton.Height
-            return new Point((int)(skeleton.Width * colorX / 640.0), (int)(skeleton.Height * colorY / 480));
+            return new Point((int)(skeleton.Width * colorX / userFrame1.Width), (int)(skeleton.Height * colorY / userFrame1.Height));
         }
 
         Polyline getBodySegment(Microsoft.Research.Kinect.Nui.JointsCollection joints, Brush brush, params JointID[] ids)
