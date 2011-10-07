@@ -22,6 +22,8 @@
 Raise your right hand and use it to choose a name and send an email.
                 </TextBlock>
 
+                <TextBlock Name="EmailNotificationTxt" Background="White" FontSize="200" Opacity="0.7" Visibility="Collapsed">      Email Sent!</TextBlock>
+                
             </Canvas>
             
         </StackPanel>
