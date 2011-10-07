@@ -6,10 +6,14 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Canvas>
-        <Image Name="BlankImage" Source="gui/Blank.png" Width="200"/>
-        <Image Name="DownImage" Source="gui/Down.png" Width="200"/>
-        <Image Name="LeftImage" Source="gui/Left.png" Width="200"/>
-        <Image Name="RightImage" Source="gui/Right.png" Width="200"/>
-        <Image Name="UpImage" Source="gui/Up.png" Width="200"/>
+        <Image Name="BlankImage" Source="gui/Blank.png" Width="200" Canvas.Left="-100" Canvas.Top="-100" />
+        <Image Name="DownImage" Source="gui/Down.png" Width="200" Canvas.Left="-100" Canvas.Top="-100" />
+        <Image Name="LeftImage" Source="gui/Left.png" Width="200" Canvas.Left="-100" Canvas.Top="-100" />
+        <Image Name="RightImage" Source="gui/Right.png" Width="200" Canvas.Left="-100" Canvas.Top="-100" />
+        <Image Name="UpImage" Source="gui/Up.png" Width="200" Canvas.Left="-100" Canvas.Top="-100" />
+
+        <TextBlock FontSize="40" Foreground="AntiqueWhite" FontWeight="Bold" Canvas.Left="-52" Canvas.Top="-160">Email</TextBlock>
+        <TextBlock FontSize="40" Foreground="AntiqueWhite" FontWeight="Bold" Canvas.Left="107" Canvas.Top="-28">Right</TextBlock>
+        <TextBlock FontSize="40" Foreground="AntiqueWhite" FontWeight="Bold" Canvas.Left="-178" Canvas.Top="-28">Left</TextBlock> 
     </Canvas>
 </UserControl>

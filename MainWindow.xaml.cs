@@ -67,7 +67,6 @@ namespace DGPDoorbell
         const int BLUE_IDX = 0;
         byte[] depthFrame32 = new byte[320 * 240 * 4];
         
-        
         Dictionary<JointID,Brush> jointColors = new Dictionary<JointID,Brush>() { 
             {JointID.HipCenter, new SolidColorBrush(Color.FromRgb(169, 176, 155))},
             {JointID.Spine, new SolidColorBrush(Color.FromRgb(169, 176, 155))},
@@ -207,7 +206,7 @@ namespace DGPDoorbell
             nui.NuiCamera.GetColorPixelCoordinatesFromDepthPixel(ImageResolution.Resolution640x480, iv, (int)depthX, (int)depthY, (short)0, out colorX, out colorY);
 
             // map back to skeleton.Width & skeleton.Height
-            return new Point((int)(skeleton.Width * colorX / userFrame1.Width), (int)(skeleton.Height * colorY / userFrame1.Height));
+            return new Point((int)(userFrame1.userImage.Width * colorX / 640.0), (int)(userFrame1.userImage.Height * colorY / 480.0));
         }
 
         Polyline getBodySegment(Microsoft.Research.Kinect.Nui.JointsCollection joints, Brush brush, params JointID[] ids)
@@ -295,18 +294,18 @@ namespace DGPDoorbell
                         Point RightHand = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight]);
                         Point HipCentre = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter]);
 
-
+                        Point RightHandDefault = HipCentre + new System.Windows.Vector(100,0);
 
                         if (userFrame1.CurrentSkeletonID == s)
                         {
                             //update control point
-                            userFrame1.ControlPointUpdate(RightHand, HipCentre);
+                            userFrame1.ControlPointUpdate(RightHand, RightHandDefault);
 
                         }
                         else if (userFrame1.CurrentSkeletonID == -1)
                         {
                             //new control point
-                            userFrame1.ControlPointAppear(RightHand,HipCentre, s);
+                            userFrame1.ControlPointAppear(RightHand, RightHandDefault, s);
                         }
                     }
                     else
