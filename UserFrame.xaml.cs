@@ -87,19 +87,19 @@ namespace DGPDoorbell
         public void ControlPointAppear(Point ctrlPt, Point anchor, int ID)
         {
             CurrentSkeletonID = ID;
-            HandEllipse.Visibility = Visibility.Visible;
+            Hand.Visibility = Visibility.Visible;
             gui.Visibility = Visibility.Visible;
             ControlPointUpdate(ctrlPt, anchor);
         }
 
         public const double CONTROL_THRESHOLD = 60;
-        public const double CONTROL_OFFSET = 20;
-        public const double SCROLL_RATE = 10;
+        public const double CONTROL_OFFSET = 40;
+        public const double SCROLL_RATE = 0.1;
 
         public void ControlPointUpdate(Point ctrlPt, Point anchor)
         {
-            HandEllipse.SetValue(Canvas.LeftProperty, ctrlPt.X - HandEllipse.Width/2.0);
-            HandEllipse.SetValue(Canvas.TopProperty, ctrlPt.Y - HandEllipse.Height/2.0);
+            Hand.SetValue(Canvas.LeftProperty, ctrlPt.X - Hand.ActualWidth/2.0);
+            Hand.SetValue(Canvas.TopProperty, ctrlPt.Y - Hand.ActualHeight/2.0);
 
             //This is where the interface control happens.
             Vector DiffVector = ctrlPt - anchor;
@@ -111,17 +111,17 @@ namespace DGPDoorbell
 
             if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
-                EmailListPosition -= SCROLL_RATE;
+                EmailListPosition -= SCROLL_RATE*Math.Abs(DiffVector.X);
                 gui.Right();
 
             } 
             else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
-                EmailListPosition += SCROLL_RATE;
+                EmailListPosition += SCROLL_RATE * Math.Abs(DiffVector.X);
                 gui.Left();
 
             } 
-            else if (DiffVector.Y < -CONTROL_THRESHOLD)
+            else if (DiffVector.Y < -CONTROL_THRESHOLD*2)
             {
                 EmailListing CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
 
@@ -160,7 +160,7 @@ namespace DGPDoorbell
 
         public void ControlPointLose()
         {
-            HandEllipse.Visibility = Visibility.Hidden;
+            Hand.Visibility = Visibility.Hidden;
             gui.Visibility = Visibility.Hidden;
 
             CurrentSkeletonID = -1;

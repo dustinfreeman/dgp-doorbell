@@ -6,14 +6,26 @@
              xmlns:dgp="clr-namespace:DGPDoorbell"
              mc:Ignorable="d" Width="800" >
     <StackPanel>
-        <Canvas Name="userCanvas" Width="800" Height="600" Canvas.Left="0">
+        <StackPanel Orientation="Horizontal">
+            
+            <Canvas Name="userCanvas" Width="800" Height="600" Canvas.Left="0">
 
-            <Image  Name="userImage" Width="800" Height="600" />
-            <dgp:GUI x:Name="gui" Opacity="0.5"  Visibility="Hidden"/>
+                <Image  Name="userImage" Width="800" Height="600" />
+                <dgp:GUI x:Name="gui" Opacity="0.8"  Visibility="Hidden"/>
+
+                <!--<Ellipse Name="Hand" Width="40" Height="40" Fill="GreenYellow" Opacity="0.7" Visibility="Hidden"/>-->
+                <Image Name="Hand" Source="gui/hand.png" Width="80" Height ="80" Visibility="Hidden"/>
+
+                <TextBlock Width="300" FontSize="30" TextWrapping="Wrap">
+                This is the DGP Doorbell.<LineBreak/>
+<LineBreak/>
+Raise your right hand and use it to choose a name and send an email.
+                </TextBlock>
+
+            </Canvas>
             
-            <Ellipse Name="HandEllipse" Width="40" Height="40" Fill="GreenYellow" Opacity="0.7" Visibility="Hidden"/>
-            
-        </Canvas>
+        </StackPanel>
+        
         <Canvas >
             <StackPanel Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0">
 

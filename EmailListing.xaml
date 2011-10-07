@@ -12,9 +12,9 @@
                 BorderThickness="2"
                 Padding="8">
     <StackPanel>
-        <TextBlock Name="LastNameTxt" FontSize="24">LastName</TextBlock>
-            <TextBlock Name="GivenNameTxt" FontSize="24">FirstName</TextBlock>
-            <TextBlock Name="EmailTxt" FontSize="24" Visibility="Hidden">Email</TextBlock>
+        <TextBlock Name="LastNameTxt" FontSize="30" FontWeight="Bold">LastName</TextBlock>
+            <TextBlock Name="GivenNameTxt" FontSize="30" FontWeight="Bold">FirstName</TextBlock>
+            <TextBlock Name="EmailTxt" FontSize="30" FontWeight="Bold" Visibility="Hidden">Email</TextBlock>
     </StackPanel>
     </Border>
 </UserControl>
