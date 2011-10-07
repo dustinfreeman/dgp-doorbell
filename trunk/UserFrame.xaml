@@ -22,7 +22,11 @@
 Raise your right hand and use it to choose a name and send an email.
                 </TextBlock>
 
-                <TextBlock Name="EmailNotificationTxt" Background="White" FontSize="150" Opacity="0.7" Visibility="Collapsed">      Email Sent!</TextBlock>
+                <TextBlock Name="EmailNotificationTxt" Background="White" 
+                           TextWrapping="Wrap" FontSize="150" Opacity="0.7" 
+                           Visibility="Collapsed" Width="600">     
+                    Email Sent!
+                </TextBlock>
                 
             </Canvas>
             
