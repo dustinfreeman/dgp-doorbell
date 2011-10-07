@@ -147,6 +147,7 @@ namespace DGPDoorbell
                     CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
 
                     SendEmail.BeginInvoke(null, null);
+                    EmailNotificationTxt.Text = "Email sent to " + CurrentEmailListing.GivenName + "!";
                     EmailNotificationTxt.Visibility = Visibility.Visible;
                     gui.Up();
                 }
@@ -158,9 +159,7 @@ namespace DGPDoorbell
                     gui.ResetGUI();
 
                 }
-
             }
-
             ColourCurrentEmail();
         }
 

@@ -52,7 +52,7 @@ namespace DGPDoorbell
 
             FileStream stream = new FileStream(path, FileMode.Create);
             JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-
+            encoder.QualityLevel = 40;
             //encoder.Interlace = PngInterlaceOption.On;
             encoder.Frames.Add(BitmapFrame.Create(image));
             encoder.Save(stream);
