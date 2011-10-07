@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dgp="clr-namespace:DGPDoorbell"
         
-        Loaded="Window_Loaded" Closed="Window_Closed" WindowStyle="None">
+        Loaded="Window_Loaded" Closed="Window_Closed" WindowStyle="SingleBorderWindow" Title="DGP Doorbell">
     
     <StackPanel Orientation="Horizontal">
         <dgp:UserFrame x:Name="userFrame1"/>
