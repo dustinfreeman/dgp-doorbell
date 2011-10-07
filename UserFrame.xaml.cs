@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.Windows.Threading;
+
 using System.IO;
 
 namespace DGPDoorbell
@@ -64,6 +66,9 @@ namespace DGPDoorbell
 
         }
 
+        bool SuppressEmailing = false;
+        DispatcherTimer SuppressionTimer;
+
         public UserFrame()
         {
             InitializeComponent();
@@ -78,7 +83,6 @@ namespace DGPDoorbell
             ColourCurrentEmail();
 
         }
-
 
         public void ControlPointAppear(Point ctrlPt, Point anchor, int ID)
         {
@@ -99,27 +103,44 @@ namespace DGPDoorbell
             //This is where the interface control happens.
             Vector DiffVector = ctrlPt - anchor;
 
-
             if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
                 EmailListPosition -= SCROLL_RATE;
 
-            }
-            if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
+            } 
+            else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
                 EmailListPosition += SCROLL_RATE;
-            }
-
-            ColourCurrentEmail();
-
-            if (DiffVector.Y < -CONTROL_THRESHOLD)
+            } 
+            else if (DiffVector.Y < -CONTROL_THRESHOLD)
             {
                 EmailListing CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
 
                 Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!");
+                SuppressEmailing = true;
+
+                if (SuppressionTimer != null)
+                    SuppressionTimer.Stop();
+
+                SuppressionTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Render, EndSupression, Dispatcher);
             }
+            else
+            {
+                if (!SuppressEmailing)
+                {
+                    gui.ResetGUI();
+                }
+
+            }
+
+            ColourCurrentEmail();
         }
 
+        private void EndSupression(object o, EventArgs e)
+        {
+            SuppressEmailing = false;
+            gui.ResetGUI();
+        }
 
         void ColourCurrentEmail()
         {

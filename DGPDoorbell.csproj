@@ -8,8 +8,8 @@
     <ProjectGuid>{35D624F4-9657-4D87-8FD3-6CE4E00CB9DA}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SkeletalViewer</RootNamespace>
-    <AssemblyName>SkeletalViewer</AssemblyName>
+    <RootNamespace>DGPDoorbell</RootNamespace>
+    <AssemblyName>DGPDoorbell</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
@@ -63,10 +63,17 @@
       <DependentUpon>EmailListing.xaml</DependentUpon>
     </Compile>
     <Compile Include="Email.cs" />
+    <Compile Include="GUI.xaml.cs">
+      <DependentUpon>GUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserFrame.xaml.cs">
       <DependentUpon>UserFrame.xaml</DependentUpon>
     </Compile>
     <Page Include="EmailListing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -98,6 +105,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="gui\Blank.png" />
+    <Resource Include="gui\Down.png" />
+    <Resource Include="gui\Left.png" />
+    <Resource Include="gui\Right.png" />
+    <Resource Include="gui\Up.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
