@@ -69,6 +69,9 @@ namespace DGPDoorbell
         bool SuppressEmailing = false;
         DispatcherTimer SuppressionTimer;
 
+        public MainWindow mainWindow;
+        Action SendEmail;
+
         public UserFrame()
         {
             InitializeComponent();
@@ -76,6 +79,7 @@ namespace DGPDoorbell
 
             this.Loaded += new RoutedEventHandler(UserFrame_Loaded);
 
+            SendEmail = new Action(SendEmailNow);
         }
 
         void UserFrame_Loaded(object sender, RoutedEventArgs e)
@@ -95,6 +99,8 @@ namespace DGPDoorbell
         public const double CONTROL_THRESHOLD = 60;
         public const double CONTROL_OFFSET = 40;
         public const double SCROLL_RATE = 0.1;
+
+        EmailListing CurrentEmailListing;
 
         public void ControlPointUpdate(Point ctrlPt, Point anchor)
         {
@@ -123,28 +129,37 @@ namespace DGPDoorbell
             } 
             else if (DiffVector.Y < -CONTROL_THRESHOLD*2)
             {
-                EmailListing CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
+                CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
 
-                Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!");
-                SuppressEmailing = true;
-
-                gui.Up();
-
-                if (SuppressionTimer != null)
-                    SuppressionTimer.Stop();
-
-                SuppressionTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Render, EndSupression, Dispatcher);
+                SendEmail.BeginInvoke(null, null);
             }
             else
             {
                 if (!SuppressEmailing)
                 {
                     gui.ResetGUI();
+                    gui.Up();
+
                 }
 
             }
 
             ColourCurrentEmail();
+        }
+
+        void SendEmailNow()
+        {
+
+            string ImagePath = Photo.Save(mainWindow.GetCurrentImage(), 640, 480);
+
+            Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
+            SuppressEmailing = true;
+
+
+            if (SuppressionTimer != null)
+                SuppressionTimer.Stop();
+
+            SuppressionTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Render, EndSupression, Dispatcher);
         }
 
         private void EndSupression(object o, EventArgs e)

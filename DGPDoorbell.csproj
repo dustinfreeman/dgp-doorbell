@@ -66,6 +66,7 @@
     <Compile Include="GUI.xaml.cs">
       <DependentUpon>GUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Photo.cs" />
     <Compile Include="UserFrame.xaml.cs">
       <DependentUpon>UserFrame.xaml</DependentUpon>
     </Compile>
