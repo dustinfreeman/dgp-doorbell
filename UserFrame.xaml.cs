@@ -12,6 +12,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.IO;
+
 namespace DGPDoorbell
 {
     /// <summary>
@@ -26,26 +28,54 @@ namespace DGPDoorbell
         public UserFrame()
         {
             InitializeComponent();
-
+            ParseEmailList();
         }
 
 
-        public void ControlPointAppear(Point pt, int ID)
+        public void ControlPointAppear(Point ctrlPt, Point anchor, int ID)
         {
             CurrentSkeletonID = ID;
             HandEllipse.Visibility = Visibility.Visible;
-            ControlPointUpdate(pt);
+            ControlPointUpdate(ctrlPt, anchor);
         }
 
-        public void ControlPointUpdate(Point pt)
+        public void ControlPointUpdate(Point ctrlPt, Point anchor)
         {
-            HandEllipse.SetValue(Canvas.LeftProperty, pt.X - HandEllipse.Width);
-            HandEllipse.SetValue(Canvas.TopProperty, pt.Y - HandEllipse.Height);
+            HandEllipse.SetValue(Canvas.LeftProperty, ctrlPt.X - HandEllipse.Width);
+            HandEllipse.SetValue(Canvas.TopProperty, ctrlPt.Y - HandEllipse.Height);
+
+            //This is where the interface control happens.
+            Vector DiffVector = ctrlPt - anchor;
+
         }
 
         public void ControlPointLose()
         {
             HandEllipse.Visibility = Visibility.Hidden;
+        }
+
+        void ParseEmailList()
+        {
+            StreamReader reader = new StreamReader("emailList.csv");
+
+            List<EmailListing> EmailListings = new List<EmailListing>();
+
+            while (!reader.EndOfStream)
+            {
+                string line = reader.ReadLine();
+                EmailListing eListing = EmailListing.EmailListingFactory(line);
+                if (eListing != null)
+                {
+                    EmailListings.Add(eListing);
+                }
+            }
+
+            //TODO sort in list
+
+            foreach (EmailListing eListing in EmailListings)
+            {
+                emailListStackPanel.Children.Add(eListing);
+            }
         }
 
     }

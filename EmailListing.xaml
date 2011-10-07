@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="DGPDoorbell.EmailListing"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="170">
+    <Border CornerRadius="6"
+                BorderBrush="Gray"
+                Background="LightGray"
+                BorderThickness="2"
+                Padding="8">
+    <StackPanel>
+        <TextBlock Name="LastNameTxt">LastName</TextBlock>
+        <TextBlock Name="GivenNameTxt">FirstName</TextBlock>
+        <TextBlock Name="EmailTxt">Email</TextBlock>
+    </StackPanel>
+    </Border>
+</UserControl>
