@@ -8,7 +8,7 @@
     <StackPanel Orientation="Horizontal">
         <dgp:UserFrame x:Name="userFrame1"/>
         
-        <StackPanel Name="debugPanel" Visibility="Visible">
+        <StackPanel Name="debugPanel" Visibility="Collapsed">
             <TextBlock>Debug Stuff</TextBlock>
             <TextBox FontSize="24" Name="frameRate" Margin="10" Focusable="False" BorderThickness="0" Text="0 fps" TextAlignment="Right" HorizontalAlignment="Center" VerticalAlignment="Center" Width="250"/>
 

@@ -40,17 +40,17 @@ namespace DGPDoorbell
 
         void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            return;
+            //return;
             Console.WriteLine(e.NewSize.Width);
 
-            userFrame1.Width = e.NewSize.Width - debugPanel.Width;
-            userFrame1.Height = userFrame1.Width * 3 / 4 + userFrame1.emailListStackPanel.Height;
+            userFrame1.Width = e.NewSize.Width - debugPanel.ActualWidth;
+            userFrame1.Height = e.NewSize.Height;// userFrame1.Width * 3 / 4 + userFrame1.emailListStackPanel.ActualHeight;
 
             userFrame1.userCanvas.Width = userFrame1.Width;
-            userFrame1.userCanvas.Height = userFrame1.Height;
+            userFrame1.userCanvas.Height = e.NewSize.Height - 2*userFrame1.emailListStackPanel.ActualHeight;
 
             userFrame1.userImage.Width = userFrame1.Width;
-            userFrame1.userImage.Height = userFrame1.Height;
+            userFrame1.userImage.Height = e.NewSize.Height - 2 * userFrame1.emailListStackPanel.ActualHeight;
 
         }
 
