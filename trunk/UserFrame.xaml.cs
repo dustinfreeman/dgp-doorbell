@@ -103,6 +103,9 @@ namespace DGPDoorbell
             //This is where the interface control happens.
             Vector DiffVector = ctrlPt - anchor;
 
+            gui.SetValue(Canvas.LeftProperty, anchor.X);
+            gui.SetValue(Canvas.TopProperty, anchor.Y);
+
             if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
                 EmailListPosition -= SCROLL_RATE;
