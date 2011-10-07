@@ -21,9 +21,32 @@ namespace DGPDoorbell
     {
         //presents an interface to a single user.
 
+        public int CurrentSkeletonID = -1;
+
         public UserFrame()
         {
             InitializeComponent();
+
         }
+
+
+        public void ControlPointAppear(Point pt, int ID)
+        {
+            CurrentSkeletonID = ID;
+            HandEllipse.Visibility = Visibility.Visible;
+            ControlPointUpdate(pt);
+        }
+
+        public void ControlPointUpdate(Point pt)
+        {
+            HandEllipse.SetValue(Canvas.LeftProperty, pt.X - HandEllipse.Width);
+            HandEllipse.SetValue(Canvas.TopProperty, pt.Y - HandEllipse.Height);
+        }
+
+        public void ControlPointLose()
+        {
+            HandEllipse.Visibility = Visibility.Hidden;
+        }
+
     }
 }
