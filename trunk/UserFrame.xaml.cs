@@ -106,11 +106,14 @@ namespace DGPDoorbell
             if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
                 EmailListPosition -= SCROLL_RATE;
+                gui.Right();
 
             } 
             else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
                 EmailListPosition += SCROLL_RATE;
+                gui.Left();
+
             } 
             else if (DiffVector.Y < -CONTROL_THRESHOLD)
             {
@@ -118,6 +121,8 @@ namespace DGPDoorbell
 
                 Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!");
                 SuppressEmailing = true;
+
+                gui.Up();
 
                 if (SuppressionTimer != null)
                     SuppressionTimer.Stop();
