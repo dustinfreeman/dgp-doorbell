@@ -1,0 +1,3 @@
+Debug = 1
+Timeout = 60
+LogNotSent = 0
