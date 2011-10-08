@@ -23,8 +23,8 @@ Raise your right hand and use it to choose a name and send an email.
                 </TextBlock>
 
                 <TextBlock Name="EmailNotificationTxt" Background="White" 
-                           TextWrapping="Wrap" FontSize="150" Opacity="0.7" 
-                           Visibility="Collapsed" Width="600">     
+                           TextWrapping="Wrap" FontSize="120" Opacity="0.7" 
+                           Visibility="Collapsed" Width="1000">     
                     Email Sent!
                 </TextBlock>
                 

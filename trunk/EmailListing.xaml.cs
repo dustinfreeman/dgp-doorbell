@@ -36,6 +36,8 @@ namespace DGPDoorbell
             EmailTxt.Text = emailAddress;
         }
 
+        public const int EMAIL_LISTING_WIDTH = 250;
+
         public static EmailListing EmailListingFactory(string line)
         {
             try
@@ -48,7 +50,7 @@ namespace DGPDoorbell
                 }
 
                 EmailListing eListing = new EmailListing();
-
+                eListing.Width = EMAIL_LISTING_WIDTH;
                 eListing.dgpID = lineSplit[0];
                 eListing.emailAddress = lineSplit[1];
                 eListing.GivenName = lineSplit[2];

@@ -56,7 +56,6 @@ namespace DGPDoorbell
             }
         }
 
-        const int EMAIL_LISTING_WIDTH = 200;
 
         int currentEmailIndex = 0;
         int CurrentEmailIndex
@@ -71,7 +70,7 @@ namespace DGPDoorbell
                 catch { }
 
                 //colour new elsewhere
-                currentEmailIndex= (-(int)emailListPosition + (int)this.Width / 2) / EMAIL_LISTING_WIDTH; //current email width;
+                currentEmailIndex= (-(int)emailListPosition + (int)this.Width / 2) / EmailListing.EMAIL_LISTING_WIDTH; //current email width;
                 return currentEmailIndex;
             }
 
@@ -82,6 +81,8 @@ namespace DGPDoorbell
 
         public MainWindow mainWindow;
         Action SendEmail;
+
+        int NumFlicks = 0;
 
         public UserFrame()
         {
@@ -130,12 +131,14 @@ namespace DGPDoorbell
             {
                 EmailListPosition -= SCROLL_RATE*Math.Abs(DiffVector.X);
                 gui.Right();
+                NumFlicks = 0;
 
             } 
             else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
                 EmailListPosition += SCROLL_RATE * Math.Abs(DiffVector.X);
                 gui.Left();
+                NumFlicks = 0;
 
             } 
             else if (DiffVector.Y < -CONTROL_THRESHOLD*2)
@@ -144,10 +147,28 @@ namespace DGPDoorbell
                 {
                     SuppressEmailing = true;
 
+                    NumFlicks++;
                     CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
 
-                    SendEmail.BeginInvoke(null, null);
-                    EmailNotificationTxt.Text = "Email sent to " + CurrentEmailListing.GivenName + "!";
+                    switch (NumFlicks)
+                    {
+                        case 1:
+                            EmailNotificationTxt.Text = "Send doorbell email to " + CurrentEmailListing.GivenName + "? Flick up again.";
+
+                            break;
+                        case 2:
+
+                            EmailNotificationTxt.Text = "Email sent to " + CurrentEmailListing.GivenName + "!";
+                            SendEmail.BeginInvoke(null, null);
+
+                            break;
+                    }
+
+                    if (SuppressionTimer != null)
+                        SuppressionTimer.Stop();
+
+                    SuppressionTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Render, EndSupression, Dispatcher);
+
                     EmailNotificationTxt.Visibility = Visibility.Visible;
                     gui.Up();
                 }
@@ -165,16 +186,11 @@ namespace DGPDoorbell
 
         void SendEmailNow()
         {
-
             string ImagePath = Photo.Save(mainWindow.GetCurrentImage(), 640, 480);
 
             Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
 
-
-            if (SuppressionTimer != null)
-                SuppressionTimer.Stop();
-
-            SuppressionTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Render, EndSupression, Dispatcher);
+            
         }
 
         private void EndSupression(object o, EventArgs e)
