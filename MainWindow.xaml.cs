@@ -38,6 +38,8 @@ namespace DGPDoorbell
             this.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
 
             userFrame1.mainWindow = this;
+
+            Log.FileName = "DoorBellLog.txt";
         }
 
         void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
