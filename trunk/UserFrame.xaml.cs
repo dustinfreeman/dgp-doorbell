@@ -56,7 +56,6 @@ namespace DGPDoorbell
             }
         }
 
-
         int currentEmailIndex = 0;
         int CurrentEmailIndex
         {
@@ -84,6 +83,9 @@ namespace DGPDoorbell
 
         int NumFlicks = 0;
 
+        //relative to Control Point
+        Rect EmailHitRect = new Rect(new Point(2*CONTROL_THRESHOLD, -5 * CONTROL_THRESHOLD), new Size(40, 40));
+
         public UserFrame()
         {
             InitializeComponent();
@@ -92,12 +94,15 @@ namespace DGPDoorbell
             this.Loaded += new RoutedEventHandler(UserFrame_Loaded);
 
             SendEmail = new Action(SendEmailNow);
+
+            gui.EmailProgressCanvas.SetValue(Canvas.LeftProperty, EmailHitRect.Left);
+            gui.EmailProgressCanvas.SetValue(Canvas.TopProperty, EmailHitRect.Top);
+            gui.EmailProgressPoly.SetAngle(0);
         }
 
         void UserFrame_Loaded(object sender, RoutedEventArgs e)
         {
             ColourCurrentEmail();
-
         }
 
         public void ControlPointAppear(Point ctrlPt, Point anchor, int ID)
@@ -127,6 +132,9 @@ namespace DGPDoorbell
 
             Console.WriteLine(anchor + " " + ctrlPt);
 
+            
+
+            //scrolling.
             if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
             {
                 EmailListPosition -= SCROLL_RATE*Math.Abs(DiffVector.X);
