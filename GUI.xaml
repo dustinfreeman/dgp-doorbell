@@ -18,9 +18,9 @@
         <TextBlock FontSize="40" Foreground="AntiqueWhite" Background="Black" FontWeight="Bold" Canvas.Left="-178" Canvas.Top="-28">Left</TextBlock>
         <!--Location of Progress feedback is controlled programmatically-->
         <Canvas Name="EmailProgressCanvas" Canvas.Left="120" Canvas.Top="-300" > 
-            <Ellipse Name="EmailProgressEll" Width="140" Height="140" Fill="Blue" Stroke="Black" StrokeThickness="5" />
+            <!--<Ellipse Name="EmailProgressEll" Width="140" Height="140" Fill="Blue" Stroke="Black" StrokeThickness="5" />-->
             <dgp:CircularProgressPoly x:Name="EmailProgressPoly"/>
-            <TextBlock Name="EmailText" FontSize="40" Foreground="AntiqueWhite" Background="Black" FontWeight="Bold" Canvas.Left="18" Canvas.Top="40">Email</TextBlock>
+            <TextBlock Name="EmailText" FontSize="40" Foreground="AntiqueWhite" Background="Black" FontWeight="Bold" Canvas.Left="0" Canvas.Top="40">Email</TextBlock>
         </Canvas>
     </Canvas>
 </UserControl>

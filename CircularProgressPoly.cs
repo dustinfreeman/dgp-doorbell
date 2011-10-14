@@ -13,7 +13,7 @@ namespace DGPDoorbell
     {
         Polygon Poly;
         double angle = 0;
-        double radius = 50;
+        double radius = 100;
 
         public CircularProgressPoly()
         {
@@ -21,6 +21,7 @@ namespace DGPDoorbell
             Poly.Fill = Brushes.AliceBlue;
             Poly.Stroke = Brushes.Black;
             Poly.StrokeThickness = 5;
+            this.Children.Add(Poly);
             Update();
         }
 
@@ -32,16 +33,17 @@ namespace DGPDoorbell
         public void SetAngle(double angle)
         {
             this.angle = angle;
+            Update();
         }
 
         void Update()
         {
             this.Poly.Points.Clear();
-            this.Poly.Points.Add(new Point());
+            this.Poly.Points.Add(new Point(radius, radius));
 
             for (double a = 0; a < Math.PI * 2; a += Math.PI / 40)
             {
-                this.Poly.Points.Add(new Point(radius*Math.Cos(a),radius*Math.Sin(a)));
+                this.Poly.Points.Add(new Point(radius * Math.Cos(a) + radius, radius * Math.Sin(a) + radius));
 
                 if (a > angle)
                 {
@@ -49,7 +51,7 @@ namespace DGPDoorbell
                 }
             }
 
-            this.Poly.Points.Add(new Point());
+            this.Poly.Points.Add(new Point(radius, radius));
 
         }
     }
