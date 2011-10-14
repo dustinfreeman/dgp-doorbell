@@ -11,9 +11,9 @@
                 Background="LightGray"
                 BorderThickness="2"
                 Padding="8">
-    <StackPanel>
-        <TextBlock Name="LastNameTxt" FontSize="30" FontWeight="Bold">LastName</TextBlock>
-            <TextBlock Name="GivenNameTxt" FontSize="30" FontWeight="Bold">FirstName</TextBlock>
+    <StackPanel TextBlock.TextAlignment="Center">
+        <TextBlock Name="LastNameTxt" FontSize="65" FontWeight="Bold">LastName</TextBlock>
+            <TextBlock Name="GivenNameTxt" FontSize="65" FontWeight="Bold">FirstName</TextBlock>
             <TextBlock Name="EmailTxt" FontSize="30" FontWeight="Bold" Visibility="Hidden">Email</TextBlock>
     </StackPanel>
     </Border>

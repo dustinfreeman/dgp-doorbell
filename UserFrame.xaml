@@ -4,13 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dgp="clr-namespace:DGPDoorbell"
-             mc:Ignorable="d" Width="800" >
+             mc:Ignorable="d" Width="800" Loaded="UserControl_Loaded">
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             
             <Canvas Name="userCanvas" Width="800" Height="600" Canvas.Left="0">
 
+                
                 <Image  Name="userImage" Width="800" Height="600" />
+                
                 <dgp:GUI x:Name="gui" Opacity="0.8"  Visibility="Hidden"/>
 
                 <!--<Ellipse Name="Hand" Width="40" Height="40" Fill="GreenYellow" Opacity="0.7" Visibility="Hidden"/>-->
@@ -26,6 +28,10 @@ Raise your right hand and use it to choose a name and send an email.
                            TextWrapping="Wrap" FontSize="120" Opacity="0.7" 
                            Visibility="Collapsed" Width="1000">     
                     Email Sent!
+                </TextBlock>
+                
+                <TextBlock Name="DebugMode" Background="White" FontSize="20" Visibility="Collapsed"  Width="125" Height="32">
+                    Debug Mode
                 </TextBlock>
                 
             </Canvas>

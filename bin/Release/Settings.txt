@@ -1,3 +1,4 @@
 Debug = 1
 Timeout = 60
 LogNotSent = 0
+DebugEmail = rorik@dgp.toronto.edu

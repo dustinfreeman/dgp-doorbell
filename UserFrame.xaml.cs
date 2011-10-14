@@ -222,7 +222,11 @@ namespace DGPDoorbell
         {
             string ImagePath = Photo.Save(mainWindow.GetCurrentImage(), 640, 480);
 
-            Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
+            if (!Settings.Debug)
+                Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
+            else
+                Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door! - sent to: " + 
+                    CurrentEmailListing.emailAddress, ImagePath);
 
             
         }
@@ -275,6 +279,17 @@ namespace DGPDoorbell
             {
                 emailListStackPanel.Children.Add(eListing);
             }
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Settings.Debug)
+                DebugMode.Visibility = Visibility.Visible;
+            else
+                DebugMode.Visibility = Visibility.Hidden;
+
+            DebugMode.SetValue(Canvas.LeftProperty, (double)(userCanvas.Width- DebugMode.Width) - 20);
+            DebugMode.SetValue(Canvas.TopProperty, (double)(userCanvas.Height- DebugMode.Height - 20));
         }
 
     }
