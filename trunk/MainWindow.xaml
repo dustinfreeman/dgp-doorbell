@@ -3,16 +3,16 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:dgp="clr-namespace:DGPDoorbell"
         
-        Loaded="Window_Loaded" Closed="Window_Closed" WindowStyle="SingleBorderWindow" Title="DGP Doorbell">    
+        Loaded="Window_Loaded" Closed="Window_Closed" WindowStyle="SingleBorderWindow" Title="DGP Doorbell" WindowState="Maximized">    
     <StackPanel Orientation="Horizontal">
         <StackPanel Orientation="Vertical">
-            <Border HorizontalAlignment="Center" VerticalAlignment="Top" BorderThickness="0">
+            <Border HorizontalAlignment="Center" BorderThickness="0" VerticalAlignment="Top">
                 <StackPanel Orientation="Horizontal">
                     <Image Name="Title" Source="gui/title.png" Visibility="Visible"/>
                     <TextBlock Name="Doorbell" FontSize="125" FontWeight="Bold">Doorbell</TextBlock>
                 </StackPanel>
             </Border>
-            <dgp:UserFrame x:Name="userFrame1"/>
+            <dgp:UserFrame x:Name="userFrame1" Background="{x:Null}" />
         </StackPanel>
 
         <StackPanel Name="debugPanel" Visibility="Collapsed">
