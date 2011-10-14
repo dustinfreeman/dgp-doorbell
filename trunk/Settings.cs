@@ -29,6 +29,7 @@ namespace DGPDoorbell
         static private bool m_LogNotSent = false;       //flag to indicate if we should log "not sent" events
         static private int m_Timeout = 60;              //number of seconds before an email can be sent again to that user
         static private bool m_SettingsLoaded = false;
+        static private string m_stDebugEmail = "";
 
         /// <summary>
         /// Function to load settings from file
@@ -70,6 +71,11 @@ namespace DGPDoorbell
                                 else
                                     m_LogNotSent = false;
                                 break;
+                            case "DebugEmail":
+                                //stores the debug email address
+                                m_stDebugEmail = parts[1];
+                                break;
+
                         }
                     }
                 }
@@ -133,6 +139,22 @@ namespace DGPDoorbell
                 return m_LogNotSent; 
             }
             set { m_LogNotSent = value; }
+        }
+
+        /// <summary>
+        /// string containing email to use when in debug mode
+        /// </summary>
+        static public string DebugEmail
+        {
+            get
+            {
+                //if the settings haven't been loaded, load them
+                if (!m_SettingsLoaded) LoadSettings();
+
+                //return value
+                return m_stDebugEmail;
+            }
+            set { m_stDebugEmail = value; }
         }
         #endregion
     }

@@ -50,12 +50,18 @@ namespace DGPDoorbell
             userFrame1.Width = e.NewSize.Width - debugPanel.ActualWidth;
             userFrame1.Height = e.NewSize.Height;// userFrame1.Width * 3 / 4 + userFrame1.emailListStackPanel.ActualHeight;
 
+            Title.Width = userFrame1.Width * 0.20;
+            Title.Height = userFrame1.Width / 5.5;
+
             userFrame1.userCanvas.Width = userFrame1.Width;
-            userFrame1.userCanvas.Height = e.NewSize.Height - 2*userFrame1.emailListStackPanel.ActualHeight;
+            userFrame1.userCanvas.Height = e.NewSize.Height - 2*userFrame1.emailListStackPanel.ActualHeight - Title.Height;
 
             userFrame1.userImage.Width = userFrame1.Width;
-            userFrame1.userImage.Height = e.NewSize.Height - 2 * userFrame1.emailListStackPanel.ActualHeight;
-
+            userFrame1.userImage.Height = e.NewSize.Height - 2 * userFrame1.emailListStackPanel.ActualHeight  - Title.Height;
+           
+            //skeleton.Width = skeleton.Width * 4 / 5;
+            //skeleton.Height = skeleton.Height * 4 / 5;
+            
         }
 
         Runtime nui;
