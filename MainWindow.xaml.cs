@@ -108,7 +108,6 @@ namespace DGPDoorbell
                 return;
             }
 
-
             try
             {
                 nui.VideoStream.Open(ImageStreamType.Video, 2, ImageResolution.Resolution640x480, ImageType.Color);

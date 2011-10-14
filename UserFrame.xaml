@@ -16,11 +16,11 @@
                 <!--<Ellipse Name="Hand" Width="40" Height="40" Fill="GreenYellow" Opacity="0.7" Visibility="Hidden"/>-->
                 <Image Name="Hand" Source="gui/hand.png" Width="80" Height ="80" Visibility="Hidden"/>
 
-                <TextBlock Width="300" FontSize="30" TextWrapping="Wrap">
+                <!--<TextBlock Width="300" FontSize="30" TextWrapping="Wrap">
                 This is the DGP Doorbell.<LineBreak/>
 <LineBreak/>
 Raise your right hand and use it to choose a name and send an email.
-                </TextBlock>
+                </TextBlock> -->
 
                 <TextBlock Name="EmailNotificationTxt" Background="White" 
                            TextWrapping="Wrap" FontSize="120" Opacity="0.7" 

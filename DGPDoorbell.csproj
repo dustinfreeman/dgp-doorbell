@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CircularProgressPoly.cs" />
     <Compile Include="EmailListing.xaml.cs">
       <DependentUpon>EmailListing.xaml</DependentUpon>
     </Compile>
