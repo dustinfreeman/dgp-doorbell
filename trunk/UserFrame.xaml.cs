@@ -78,6 +78,8 @@ namespace DGPDoorbell
         bool SuppressEmailing = false;
         DispatcherTimer SuppressionTimer;
 
+        bool Selected = false;
+
         public MainWindow mainWindow;
         Action SendEmail;
 
@@ -103,8 +105,8 @@ namespace DGPDoorbell
         void UserFrame_Loaded(object sender, RoutedEventArgs e)
         {
             ColourCurrentEmail();
-        }
 
+        }
         public void ControlPointAppear(Point ctrlPt, Point anchor, int ID)
         {
             CurrentSkeletonID = ID;
@@ -116,6 +118,9 @@ namespace DGPDoorbell
         public const double CONTROL_THRESHOLD = 60;
         public const double CONTROL_OFFSET = 40;
         public const double SCROLL_RATE = 0.1;
+
+        public const int EMAIL_PROGRESS_FRAMES_NEEDED = 25;
+        int EmailProgressFrames = 0;
 
         EmailListing CurrentEmailListing;
 
@@ -130,63 +135,84 @@ namespace DGPDoorbell
             gui.SetValue(Canvas.LeftProperty, anchor.X - gui.ActualWidth / 2.0);
             gui.SetValue(Canvas.TopProperty, anchor.Y - gui.ActualHeight / 2.0);
 
-            Console.WriteLine(anchor + " " + ctrlPt);
+            //Console.WriteLine(anchor + " " + ctrlPt);
 
-            
-
-            //scrolling.
-            if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
+            if (Selected)
             {
-                EmailListPosition -= SCROLL_RATE*Math.Abs(DiffVector.X);
-                gui.Right();
-                NumFlicks = 0;
-
-            } 
-            else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
-            {
-                EmailListPosition += SCROLL_RATE * Math.Abs(DiffVector.X);
-                gui.Left();
-                NumFlicks = 0;
-
-            } 
-            else if (DiffVector.Y < -CONTROL_THRESHOLD*2)
-            {
-                if (!SuppressEmailing)
+                gui.EmailProgressCanvas.Visibility = Visibility.Visible;
+                if (EmailHitRect.Left <= DiffVector.X && EmailHitRect.Right >= DiffVector.Y &&
+                    EmailHitRect.Top <= DiffVector.Y && EmailHitRect.Bottom >= DiffVector.Y)
                 {
-                    SuppressEmailing = true;
+                    //start progress
+                    EmailProgressFrames++;
 
-                    NumFlicks++;
-                    CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
+                    gui.EmailProgressPoly.SetAngle(EmailProgressFrames / (double)EMAIL_PROGRESS_FRAMES_NEEDED * Math.PI*2);
 
-                    switch (NumFlicks)
+                    if (EmailProgressFrames >= EMAIL_PROGRESS_FRAMES_NEEDED)
                     {
-                        case 1:
-                            EmailNotificationTxt.Text = "Send doorbell email to " + CurrentEmailListing.GivenName + "? Flick up again.";
+                        //Send Email
+                        EmailNotificationTxt.Text = "Email sent to " + CurrentEmailListing.GivenName + "!";
+                        SendEmail.BeginInvoke(null, null);
 
-                            break;
-                        case 2:
-
-                            EmailNotificationTxt.Text = "Email sent to " + CurrentEmailListing.GivenName + "!";
-                            SendEmail.BeginInvoke(null, null);
-
-                            break;
+                        gui.EmailProgressPoly.SetAngle(0);
+                        Selected = false;
                     }
-
-                    if (SuppressionTimer != null)
-                        SuppressionTimer.Stop();
-
-                    SuppressionTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Render, EndSupression, Dispatcher);
-
-                    EmailNotificationTxt.Visibility = Visibility.Visible;
-                    gui.Up();
+                }
+                else
+                {
+                    EmailProgressFrames = 0;
                 }
             }
             else
-            {
-                if (!SuppressEmailing)
-                {
-                    gui.ResetGUI();
+            { //not Selected
 
+                gui.EmailProgressCanvas.Visibility = Visibility.Hidden;
+
+
+                //scrolling.
+                if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
+                {
+                    EmailListPosition -= SCROLL_RATE * Math.Abs(DiffVector.X);
+                    gui.Right();
+                    NumFlicks = 0;
+
+                }
+                else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
+                {
+                    EmailListPosition += SCROLL_RATE * Math.Abs(DiffVector.X);
+                    gui.Left();
+                    NumFlicks = 0;
+
+                }
+                else if (DiffVector.Y < -CONTROL_THRESHOLD * 2)
+                {
+                    //selecting
+                    if (!SuppressEmailing)
+                    {
+                        SuppressEmailing = true;
+
+                        NumFlicks++;
+                        CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
+
+                        Selected = true;
+
+                        //Not sure if the below is useful anymore - Dustin
+                        if (SuppressionTimer != null)
+                            SuppressionTimer.Stop();
+
+                        SuppressionTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Render, EndSupression, Dispatcher);
+
+                        EmailNotificationTxt.Visibility = Visibility.Visible;
+                        gui.Up();
+                    }
+                }
+                else
+                {
+                    if (!SuppressEmailing)
+                    {
+                        gui.ResetGUI();
+
+                    }
                 }
             }
             ColourCurrentEmail();
@@ -212,7 +238,11 @@ namespace DGPDoorbell
 
         void ColourCurrentEmail()
         {
-            ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = Brushes.LightBlue;
+            Brush SelectedBrush = Brushes.LightBlue;
+            if (Selected)
+                SelectedBrush = Brushes.Blue;
+
+            ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = SelectedBrush;
         }
 
         public void ControlPointLose()
