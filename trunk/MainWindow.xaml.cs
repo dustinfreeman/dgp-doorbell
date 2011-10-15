@@ -38,9 +38,11 @@ namespace DGPDoorbell
             this.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
 
             userFrame1.mainWindow = this;
-            this.Topmost = true;
+            
+            //this.WindowState = System.Windows.WindowState.Maximized
+            //this.Topmost = true;
 
-            Log.FileName = "DoorBellLog.txt";
+            Log.FileName = "DoorBellLog.txt";            
         }
 
         void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -49,11 +51,11 @@ namespace DGPDoorbell
             //Console.WriteLine(e.NewSize.Width);
 
             userFrame1.Width = e.NewSize.Width - debugPanel.ActualWidth;
-            userFrame1.Height = e.NewSize.Height;// userFrame1.Width * 3 / 4 + userFrame1.emailListStackPanel.ActualHeight;
-            
+            userFrame1.Height = e.NewSize.Height;// userFrame1.Width * 3 / 4 + userFrame1.emailListStackPanel.ActualHeight;            
 
             Title.Width = userFrame1.Width * 0.20;            
             Title.Height = Title.Width / 2.4;
+
             Doorbell.FontSize = Title.Height;
 
             userFrame1.userCanvas.Width = userFrame1.Width;
