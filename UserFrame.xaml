@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dgp="clr-namespace:DGPDoorbell"
-             mc:Ignorable="d" Width="800" Loaded="UserControl_Loaded">
+             mc:Ignorable="d" Width="800" Loaded="UserControl_Loaded" SizeChanged="UserControl_SizeChanged">
     <StackPanel>
         <StackPanel Orientation="Horizontal">
             

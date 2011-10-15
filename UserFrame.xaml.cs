@@ -286,10 +286,13 @@ namespace DGPDoorbell
             if (Settings.Debug)
                 DebugMode.Visibility = Visibility.Visible;
             else
-                DebugMode.Visibility = Visibility.Hidden;
+                DebugMode.Visibility = Visibility.Hidden;            
+        }
 
-            DebugMode.SetValue(Canvas.LeftProperty, (double)(userCanvas.Width- DebugMode.Width) - 20);
-            DebugMode.SetValue(Canvas.TopProperty, (double)(userCanvas.Height- DebugMode.Height - 20));
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            DebugMode.SetValue(Canvas.LeftProperty, (double)(userCanvas.Width - DebugMode.Width) - 20);
+            DebugMode.SetValue(Canvas.TopProperty, (double)(userCanvas.Height - DebugMode.Height - 20));
         }
 
     }
