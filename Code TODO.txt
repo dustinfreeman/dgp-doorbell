@@ -1,14 +1,15 @@
-- countdown and flash effect for photo
+- finish "hold to email" target functionality
+
 
 
 - black out hallway
 - show active skeleton (outline)
-- instructions (need to be added back in and expanded - i.e. mentioning photo)
-
+- instructions:
+ (need to be added back in and expanded - i.e. mentioning photo)
 
 - message stating email already sent
-- finish "hold to email" target functionality
 
+- countdown and flash effect for photo Smile...3...2...1...!
 
 
 - initialization start-up error
