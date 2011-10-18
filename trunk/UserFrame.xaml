@@ -10,8 +10,9 @@
             
             <Canvas Name="userCanvas" Width="800" Height="600" Canvas.Left="0">
 
-                
+
                 <Image  Name="userImage" Width="800" Height="600" />
+                <Image  Name="depthImage" Width="800" Height="600" />
                 
                 <dgp:GUI x:Name="gui" Opacity="0.8"  Visibility="Hidden"/>
 
@@ -39,9 +40,7 @@ Raise your right hand and use it to choose a name and send an email.
         </StackPanel>
         
         <Canvas >
-            <StackPanel Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0">
-
-            </StackPanel>
+            <StackPanel Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0"/>
             
         </Canvas>
     </StackPanel>
