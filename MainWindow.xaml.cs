@@ -63,6 +63,9 @@ namespace DGPDoorbell
 
             userFrame1.userImage.Width = userFrame1.Width;
             userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight  + Title.Height);
+
+            userFrame1.depthImage.Width = userFrame1.Width;
+            userFrame1.depthImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
         }
 
         Runtime nui;
@@ -76,6 +79,7 @@ namespace DGPDoorbell
         const int RED_IDX = 2;
         const int GREEN_IDX = 1;
         const int BLUE_IDX = 0;
+        const int ALPHA_IDX = 3;
         byte[] depthFrame32 = new byte[320 * 240 * 4];
         
         Dictionary<JointID,Brush> jointColors = new Dictionary<JointID,Brush>() { 
@@ -137,6 +141,8 @@ namespace DGPDoorbell
         // that displays different players in different colors
         byte[] convertDepthFrame(byte[] depthFrame16)
         {
+            //modified so this doesn't exactly match the Kinect SDK sample code. - Dustin
+
             for (int i16 = 0, i32 = 0; i16 < depthFrame16.Length && i32 < depthFrame32.Length; i16 += 2, i32 += 4)
             {
                 int player = depthFrame16[i16] & 0x07;
@@ -148,7 +154,9 @@ namespace DGPDoorbell
                 depthFrame32[i32 + RED_IDX] = 0;
                 depthFrame32[i32 + GREEN_IDX] = 0;
                 depthFrame32[i32 + BLUE_IDX] = 0;
+                depthFrame32[i32 + ALPHA_IDX] = 255;
 
+                
                 // choose different display colors based on player
                 switch (player)
                 {
@@ -189,58 +197,120 @@ namespace DGPDoorbell
                         depthFrame32[i32 + BLUE_IDX] = (byte)(255 - intensity);
                         break;
                 }
+
+                //only highlight main player if a skeleton is using the system.
+                if (SkeletonsVisible && player != userFrame1.CurrentSkeletonID + 1)
+                {
+                    depthFrame32[i32 + ALPHA_IDX] = 0;
+                }
             }
             return depthFrame32;
         }
 
+        byte[] lastDepthFrame16 = new byte[320 * 480 * 2];
+
+        byte[] GrayScaleDepth = new byte[320 * 240];
+
+        int[] DepthIndicesFromColour = new int[640 * 480];
+
+        byte[] drawColourHere = new byte[640 * 480];
+        const int FLAG_BEHIND_DIST_THRESHOLD = 255;
+        const int FLAG_USE_DEPTH = 254;
+        //0 = blank/no data.
+        //+ve = player id.
+
+        const double BLACKOUT_DISTANCE_THRESHOLD = 5;
+
         void nui_DepthFrameReady(object sender, ImageFrameReadyEventArgs e)
         {
-            //PlanarImage Image = e.ImageFrame.Image;
-            //byte[] convertedDepthFrame = convertDepthFrame(Image.Bits);
-
-            //depth.Source = BitmapSource.Create(
-            //    Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, convertedDepthFrame, Image.Width * 4);
-
+            this.Dispatcher.BeginInvoke(new Action<ImageFrameReadyEventArgs>(this.ProcessDepthFrame), new object[] { e });
             
         }
 
-        private Point getDisplayPosition(Joint joint)
+        void ProcessDepthFrame(ImageFrameReadyEventArgs e)
         {
-            float depthX, depthY;
-            nui.SkeletonEngine.SkeletonToDepthImage(joint.Position, out depthX, out depthY);
-            depthX = depthX * 320; //convert to 320, 240 space
-            depthY = depthY * 240; //convert to 320, 240 space
-            int colorX, colorY;
-            ImageViewArea iv = new ImageViewArea();
-            // only ImageResolution.Resolution640x480 is supported at this point
-            nui.NuiCamera.GetColorPixelCoordinatesFromDepthPixel(ImageResolution.Resolution640x480, iv, (int)depthX, (int)depthY, (short)0, out colorX, out colorY);
+            PlanarImage Image = e.ImageFrame.Image;
 
-            // map back to skeleton.Width & skeleton.Height
-            return new Point((int)(userFrame1.userImage.Width * colorX / 640.0), (int)(userFrame1.userImage.Height * colorY / 480.0));
-        }
+            byte[] convertedDepthFrame = convertDepthFrame(Image.Bits);
 
-        Polyline getBodySegment(Microsoft.Research.Kinect.Nui.JointsCollection joints, Brush brush, params JointID[] ids)
-        {
-            PointCollection points = new PointCollection(ids.Length);
-            for (int i = 0; i < ids.Length; ++i )
+            userFrame1.depthImage.Source = BitmapSource.Create(
+                Image.Width, Image.Height, 96, 96, PixelFormats.Bgra32, null, convertedDepthFrame, Image.Width * 4);
+
+            if (SkeletonsVisible)
             {
-                points.Add(getDisplayPosition(joints[ids[i]]));
+                userFrame1.depthImage.Opacity = 0.5;
+            }
+            else
+            {
+                userFrame1.depthImage.Opacity = 1.0;
             }
 
-            Polyline polyline = new Polyline();
-            polyline.Points = points;
-            polyline.Stroke = brush;
-            polyline.StrokeThickness = 5;
-            return polyline;
+            Image.Bits.CopyTo(lastDepthFrame16, 0);
+
+            //CalculateBackgroundRemoval();
         }
 
-        SkeletonFrame lastSkeletonFrame;
+        void CalculateBackgroundRemoval()
+        {
+            drawColourHere = new byte[640 * 480];
 
-        void nui_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+            for (int i =0; i < DepthIndicesFromColour.Length; i++)
+            {
+                DepthIndicesFromColour[i] = -1;
+            }
+
+            int colourX, colourY;
+
+            for (int y = 0; y < 240; y++)
+            {
+                for (int x = 0; x < 320; x++) //these x and y are the coordinates of the depthFrame.
+                {
+                    int d = x + y * 320;
+
+                    //remove if behind a certain depth, or skeletal id is set to zero.
+                    int player = lastDepthFrame16[d * 2] & 0x07;
+                    int realDepth = (lastDepthFrame16[d * 2 + 1] << 5) | (lastDepthFrame16[d * 2] >> 3);
+
+                    GrayScaleDepth[d] = (byte)(255 - (255 * realDepth / 0x0fff));
+
+                    Microsoft.Research.Kinect.Nui.Vector depthVector = nui.SkeletonEngine.DepthImageToSkeleton(x / nui.DepthStream.Width,
+                        y / nui.DepthStream.Height, (short)realDepth);
+
+                    short shortDepth = (short)((short)(lastDepthFrame16[d * 2 + 1] << 8) | (short)(lastDepthFrame16[d * 2]));
+
+                    nui.NuiCamera.GetColorPixelCoordinatesFromDepthPixel(ImageResolution.Resolution640x480, new ImageViewArea(), x, y, shortDepth, out colourX, out colourY);
+
+                    int colourIndex = colourX + colourY * 640;
+
+                    DepthIndicesFromColour[colourIndex] = d; //assign depth index;
+
+                    if (depthVector.Z > BLACKOUT_DISTANCE_THRESHOLD)
+                    {
+                        drawColourHere[colourIndex] = 255;
+                    } else {
+                        drawColourHere[colourIndex] = (byte)player;
+                    }
+                }
+            }
+        }
+
+        private void Set3x3Patch(byte[] data, int index, int width, byte value)
+        {
+            for (int _y = -1; _y < 2; _y++)
+            {
+                for (int _x = -1; _x < 2; _x++)
+                {
+                    int localIndex = index + width * _y + _x;
+                    if (localIndex > data.Length - 1 || localIndex < 0)
+                        continue;
+                    data[localIndex] = 1;
+                }
+            }
+        }
+
+        void DoSkeletonDisplay(SkeletonFrameReadyEventArgs e)
         {
             SkeletonFrame skeletonFrame = e.SkeletonFrame;
-
-            lastSkeletonFrame = skeletonFrame;
 
             int iSkeleton = 0;
             Brush[] brushes = new Brush[6];
@@ -281,44 +351,240 @@ namespace DGPDoorbell
             } // for each skeleton
         }
 
-        byte[] lastColorImage = new byte[640 * 480 * 4];
+        byte[] lastColorFrame = new byte[640 * 480 * 4];
 
         void nui_ColorFrameReady(object sender, ImageFrameReadyEventArgs e)
+        {
+            this.Dispatcher.BeginInvoke(new Action<ImageFrameReadyEventArgs>(this.ProcessColourFrame), new object[] { e });
+        }
+
+        void ProcessColourFrame(ImageFrameReadyEventArgs e)
         {
             // 32-bit per pixel, RGBA image
             PlanarImage Image = e.ImageFrame.Image;
             //video.Source = BitmapSource.Create(
             //    Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, Image.Bits, Image.Width * Image.BytesPerPixel);
 
+            ProcessSkeletalControlInput();
+
+            Image.Bits.CopyTo(lastColorFrame, 0);
+
+            //RemoveBackgroundAndHighlightUser();
+
             userFrame1.userImage.Source = BitmapSource.Create(
-                Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, Image.Bits, Image.Width * Image.BytesPerPixel);
+                Image.Width, Image.Height, 96, 96, PixelFormats.Bgr32, null, lastColorFrame, Image.Width * Image.BytesPerPixel);
 
+            UpdateFPS();
+        }
 
+        void RemoveBackgroundAndHighlightUser()
+        {
+            //will either:
+            // - black out
+            // - draw depth
+            // - draw primary-colour shaded depth (secondary user)
+            // - draw full-colour user.
+
+            const int IMAGE_WIDTH = 640;
+
+            //now, erase everywhere where drawHere isn't!
+            for (int i = 0; i < drawColourHere.Length; i++)
+            {
+                int drawSourceIndex = i;
+                //do 3x3 search for closest valid depth values in drawColourHere
+                // search is CCW, starting at pixel -1 in x direction.
+                int searchPosition = 10; 
+                while (drawColourHere[drawSourceIndex] == 0 && searchPosition < 9)
+                {
+                    searchPosition++;
+                    switch (searchPosition)
+                    {
+                        case 1:
+                            drawSourceIndex = i - 1;
+                            break;
+                        case 2:
+                            drawSourceIndex = i + IMAGE_WIDTH - 1;
+                            break;
+                        case 3:
+                            drawSourceIndex = i + IMAGE_WIDTH;
+                            break;
+                        case 4:
+                            drawSourceIndex = i + IMAGE_WIDTH + 1;
+                            break;
+                        case 5:
+                            drawSourceIndex = i + 1;
+                            break;
+                        case 6:
+                            drawSourceIndex = i - IMAGE_WIDTH + 1;
+                            break;
+                        case 7:
+                            drawSourceIndex = i - IMAGE_WIDTH;
+                            break;
+                        case 8:
+                            drawSourceIndex = i - IMAGE_WIDTH - 1;
+                            break;
+                    }
+
+                    if (drawSourceIndex < 0 || drawSourceIndex >= drawColourHere.Length)
+                    {
+                        //reset to source pixel. searchPosition will keep track of where we are.
+                        drawSourceIndex = i;
+                    }
+                }
+
+                if (searchPosition >= 9 || drawColourHere[drawSourceIndex] == FLAG_BEHIND_DIST_THRESHOLD)
+                {
+                    //black out.
+                    lastColorFrame[4 * i + 0] = 0;
+                    lastColorFrame[4 * i + 1] = 0;
+                    lastColorFrame[4 * i + 2] = 0;
+                    lastColorFrame[4 * i + 3] = 0;
+                    return;
+                }
+
+                if (drawColourHere[drawSourceIndex] == userFrame1.CurrentSkeletonID)
+                {
+                    //leave as-is RGB.
+                    return;
+                }
+
+                if (drawColourHere[drawSourceIndex] == FLAG_USE_DEPTH)
+                {
+                    //draw grayscale depth
+                    lastColorFrame[4 * i + 0] = GrayScaleDepth[drawSourceIndex];
+                    lastColorFrame[4 * i + 1] = GrayScaleDepth[drawSourceIndex];
+                    lastColorFrame[4 * i + 2] = GrayScaleDepth[drawSourceIndex];
+                    lastColorFrame[4 * i + 3] = GrayScaleDepth[drawSourceIndex];
+                    return;
+                }
+
+                if (drawColourHere[drawSourceIndex] > 0)
+                {
+                    //draw depth-shaded colour based on player
+                    switch (drawColourHere[drawSourceIndex])
+                    {
+                        case 1:
+                            lastColorFrame[4 * i + 0] = GrayScaleDepth[drawSourceIndex]; 
+                            lastColorFrame[4 * i + 1] = 0;
+                            lastColorFrame[4 * i + 2] = 0;
+                            lastColorFrame[4 * i + 3] = 255;
+                            break;
+                        case 2:
+                            lastColorFrame[4 * i + 0] = 0; 
+                            lastColorFrame[4 * i + 1] = GrayScaleDepth[drawSourceIndex];
+                            lastColorFrame[4 * i + 2] = 0;
+                            lastColorFrame[4 * i + 3] = 255;
+                            break;
+                        case 3:
+                            lastColorFrame[4 * i + 0] = 0;
+                            lastColorFrame[4 * i + 1] = 0;
+                            lastColorFrame[4 * i + 2] = GrayScaleDepth[drawSourceIndex];
+                            lastColorFrame[4 * i + 3] = 255;
+                            break;
+                        case 4:
+                            lastColorFrame[4 * i + 0] = GrayScaleDepth[drawSourceIndex];
+                            lastColorFrame[4 * i + 1] = GrayScaleDepth[drawSourceIndex];
+                            lastColorFrame[4 * i + 2] = 0;
+                            lastColorFrame[4 * i + 3] = 255;
+                            break;
+                        case 5:
+                            lastColorFrame[4 * i + 0] = 0;
+                            lastColorFrame[4 * i + 1] = GrayScaleDepth[drawSourceIndex];
+                            lastColorFrame[4 * i + 2] = GrayScaleDepth[drawSourceIndex];
+                            lastColorFrame[4 * i + 3] = 255;
+                            break;
+                        case 6:
+                            lastColorFrame[4 * i + 0] = GrayScaleDepth[drawSourceIndex];
+                            lastColorFrame[4 * i + 1] = 0;
+                            lastColorFrame[4 * i + 2] = GrayScaleDepth[drawSourceIndex];
+                            lastColorFrame[4 * i + 3] = 255;
+                            break;
+                    }
+                    return;
+                }
+            }
+        }
+
+        private void Set4Pixels(byte[] data, int startIndex, byte value)
+        {
+            for (int c = 0; c < 4; c++)
+            {
+                data[4 * startIndex + c] = 0;
+            }
+        }
+
+        private Point getDisplayPosition(Joint joint)
+        {
+            float depthX, depthY;
+            nui.SkeletonEngine.SkeletonToDepthImage(joint.Position, out depthX, out depthY);
+            depthX = depthX * 320; //convert to 320, 240 space
+            depthY = depthY * 240; //convert to 320, 240 space
+            int colorX, colorY;
+            ImageViewArea iv = new ImageViewArea();
+            // only ImageResolution.Resolution640x480 is supported at this point
+            nui.NuiCamera.GetColorPixelCoordinatesFromDepthPixel(ImageResolution.Resolution640x480, iv, (int)depthX, (int)depthY, (short)0, out colorX, out colorY);
+
+            // map back to skeleton.Width & skeleton.Height
+            return new Point((int)(userFrame1.userImage.Width * colorX / 640.0), (int)(userFrame1.userImage.Height * colorY / 480.0));
+        }
+
+        Polyline getBodySegment(Microsoft.Research.Kinect.Nui.JointsCollection joints, Brush brush, params JointID[] ids)
+        {
+            PointCollection points = new PointCollection(ids.Length);
+            for (int i = 0; i < ids.Length; ++i)
+            {
+                points.Add(getDisplayPosition(joints[ids[i]]));
+            }
+
+            Polyline polyline = new Polyline();
+            polyline.Points = points;
+            polyline.Stroke = brush;
+            polyline.StrokeThickness = 5;
+            return polyline;
+        }
+
+        SkeletonFrame lastSkeletonFrame;
+
+        void nui_SkeletonFrameReady(object sender, SkeletonFrameReadyEventArgs e)
+        {
+            lastSkeletonFrame = e.SkeletonFrame;
+
+            //DoSkeletonDisplay(e);
+        }
+        
+        bool SkeletonsVisible = false;
+
+        void ProcessSkeletalControlInput()
+        {
             if (lastSkeletonFrame != null)
             {
+                SkeletonsVisible = false;
                 for (int s = 0; s < lastSkeletonFrame.Skeletons.Length; s++)
                 {
-                    if (lastSkeletonFrame.Skeletons[s].TrackingState == SkeletonTrackingState.Tracked)
+                    if (lastSkeletonFrame.Skeletons[s].TrackingState == SkeletonTrackingState.Tracked && lastSkeletonFrame.Skeletons[s].Position.Z < 2)
                     {
+                        SkeletonsVisible = true;
+
                         Microsoft.Research.Kinect.Nui.Vector RightHandVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight].Position;
                         Microsoft.Research.Kinect.Nui.Vector HipCentreVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter].Position;
 
                         Point RightHand = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight]);
                         Point HipCentre = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter]);
 
-                        Point RightHandDefault = HipCentre + new System.Windows.Vector(100,0);
+                        Point RightHandDefault = HipCentre + new System.Windows.Vector(100, 0);
 
                         if (userFrame1.CurrentSkeletonID == s)
                         {
                             //update control point
                             userFrame1.ControlPointUpdate(RightHand, RightHandDefault);
-
                         }
                         else if (userFrame1.CurrentSkeletonID == -1)
                         {
                             //new control point
                             userFrame1.ControlPointAppear(RightHand, RightHandDefault, s);
                         }
+
+                        //userFrame1.depthImage.Visibility = Visibility.Hidden;
                     }
                     else
                     {
@@ -329,17 +595,18 @@ namespace DGPDoorbell
                         }
                     }
                 }
+
+                if (!SkeletonsVisible)
+                {
+                    userFrame1.depthImage.Visibility = Visibility.Visible;
+
+                }
             }
-
-            Image.Bits.CopyTo(lastColorImage, 0);
-
-
-            UpdateFPS();
         }
 
         public byte[] GetCurrentImage()
         {
-            return lastColorImage;
+            return lastColorFrame;
         }
 
         void UpdateFPS()

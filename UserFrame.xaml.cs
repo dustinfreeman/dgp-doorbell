@@ -109,6 +109,7 @@ namespace DGPDoorbell
         }
         public void ControlPointAppear(Point ctrlPt, Point anchor, int ID)
         {
+            Console.WriteLine("Appear " + ID);
             CurrentSkeletonID = ID;
             Hand.Visibility = Visibility.Visible;
             gui.Visibility = Visibility.Visible;

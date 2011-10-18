@@ -1,9 +1,7 @@
 - finish "hold to email" target functionality
+ 
 
 
-
-- black out hallway
-- show active skeleton (outline)
 - instructions:
  (need to be added back in and expanded - i.e. mentioning photo)
 
