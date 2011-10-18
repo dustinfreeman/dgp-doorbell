@@ -7,6 +7,8 @@
              mc:Ignorable="d" Width="800" Loaded="UserControl_Loaded" SizeChanged="UserControl_SizeChanged">
     <StackPanel>
         <StackPanel Orientation="Horizontal">
+            <Image Name="InstructionsImg" Source="gui/Instructions.png" Height="600"/>
+            
             
             <Canvas Name="userCanvas" Width="800" Height="600" Canvas.Left="0">
 
