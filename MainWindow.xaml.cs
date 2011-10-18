@@ -61,7 +61,10 @@ namespace DGPDoorbell
             userFrame1.userCanvas.Width = userFrame1.Width;
             userFrame1.userCanvas.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
 
+
             userFrame1.InstructionsImg.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
+
+            userFrame1.EmailNotificationTxt.Width = userFrame1.userCanvas.Width - userFrame1.InstructionsImg.ActualWidth;
 
             userFrame1.userImage.Width = userFrame1.Width - userFrame1.InstructionsImg.ActualWidth;
             userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight  + Title.Height);
@@ -238,13 +241,16 @@ namespace DGPDoorbell
             userFrame1.depthImage.Source = BitmapSource.Create(
                 Image.Width, Image.Height, 96, 96, PixelFormats.Bgra32, null, convertedDepthFrame, Image.Width * 4);
 
-            if (SkeletonsVisible)
+            if (!userFrame1.CountingDownForPicture)
             {
-                userFrame1.depthImage.Opacity = 0.5;
-            }
-            else
-            {
-                userFrame1.depthImage.Opacity = 1.0;
+                if (SkeletonsVisible)
+                {
+                    userFrame1.depthImage.Opacity = 0.2;
+                }
+                else
+                {
+                    userFrame1.depthImage.Opacity = 1.0;
+                }
             }
 
             Image.Bits.CopyTo(lastDepthFrame16, 0);
@@ -563,7 +569,7 @@ namespace DGPDoorbell
                 SkeletonsVisible = false;
                 for (int s = 0; s < lastSkeletonFrame.Skeletons.Length; s++)
                 {
-                    if (lastSkeletonFrame.Skeletons[s].TrackingState == SkeletonTrackingState.Tracked && lastSkeletonFrame.Skeletons[s].Position.Z < 2)
+                    if (lastSkeletonFrame.Skeletons[s].TrackingState == SkeletonTrackingState.Tracked && lastSkeletonFrame.Skeletons[s].Position.Z < 2.5)
                     {
                         SkeletonsVisible = true;
 
@@ -598,7 +604,7 @@ namespace DGPDoorbell
                     }
                 }
 
-                if (!SkeletonsVisible)
+                if (!SkeletonsVisible && !userFrame1.CountingDownForPicture)
                 {
                     userFrame1.depthImage.Visibility = Visibility.Visible;
 

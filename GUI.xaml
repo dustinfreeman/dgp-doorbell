@@ -17,10 +17,12 @@
         <TextBlock FontSize="40" Foreground="AntiqueWhite" Background="Black" FontWeight="Bold" Canvas.Left="107" Canvas.Top="-28">Right</TextBlock>
         <TextBlock FontSize="40" Foreground="AntiqueWhite" Background="Black" FontWeight="Bold" Canvas.Left="-178" Canvas.Top="-28">Left</TextBlock>
         <!--Location of Progress feedback is controlled programmatically-->
-        <Canvas Name="EmailProgressCanvas" Canvas.Left="120" Canvas.Top="-300" > 
-            <!--<Ellipse Name="EmailProgressEll" Width="140" Height="140" Fill="Blue" Stroke="Black" StrokeThickness="5" />-->
+        <Canvas Name="EmailProgressCanvas" Canvas.Left="120" Canvas.Top="-300" >
             <dgp:CircularProgressPoly x:Name="EmailProgressPoly"/>
-            <TextBlock Name="EmailText" FontSize="40" Foreground="AntiqueWhite" Background="Black" FontWeight="Bold" Canvas.Left="0" Canvas.Top="40">Email</TextBlock>
+            <Rectangle x:Name="EmailBackgroundRect" Fill="Black" Width="100" Height="140"/>
+            <Image Source="gui/bell.png" Height="133" Width="103" Canvas.Left="0" Canvas.Top="-15" />
+            <!--<Ellipse Name="EmailProgressEll" Width="140" Height="140" Fill="Blue" Stroke="Black" StrokeThickness="5" />-->
+            <TextBlock Name="EmailText" FontSize="40" Foreground="AntiqueWhite"  FontWeight="Bold" Canvas.Left="1" Canvas.Top="86">Email</TextBlock>
         </Canvas>
     </Canvas>
 </UserControl>

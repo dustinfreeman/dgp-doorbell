@@ -43,12 +43,11 @@ namespace DGPDoorbell
 
             for (double a = 0; a < Math.PI * 2; a += Math.PI / 40)
             {
-                this.Poly.Points.Add(new Point(radius * Math.Cos(a) + radius, radius * Math.Sin(a) + radius));
-
                 if (a > angle)
                 {
                     break;
                 }
+                this.Poly.Points.Add(new Point(radius * Math.Cos(a) + radius, radius * Math.Sin(a) + radius));
             }
 
             this.Poly.Points.Add(new Point(radius, radius));

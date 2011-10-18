@@ -47,16 +47,19 @@ namespace DGPDoorbell
 
         public void Left()
         {
+            HideAll();
             LeftImage.Visibility = Visibility.Visible;
         }
 
         public void Right()
         {
+            HideAll();
             RightImage.Visibility = Visibility.Visible;
         }
 
         public void Up()
         {
+            HideAll();
             UpImage.Visibility = Visibility.Visible;
         }
 
