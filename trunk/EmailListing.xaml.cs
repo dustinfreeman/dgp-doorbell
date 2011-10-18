@@ -39,6 +39,13 @@ namespace DGPDoorbell
         public const int EMAIL_LISTING_WIDTH = 430;//250;
         public const int EMAIL_LISTING_HEIGHT = 200;
 
+        public void SetForeground(Brush Foreground)
+        {
+            LastNameTxt.Foreground = Foreground;
+            GivenNameTxt.Foreground = Foreground;
+            GivenNameTxt.Foreground = Foreground;
+        }
+
         public static EmailListing EmailListingFactory(string line)
         {
             try

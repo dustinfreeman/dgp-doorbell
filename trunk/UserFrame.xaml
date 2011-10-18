@@ -9,7 +9,6 @@
         <StackPanel Orientation="Horizontal">
             <Image Name="InstructionsImg" Source="gui/Instructions.png" Height="600"/>
             
-            
             <Canvas Name="userCanvas" Width="800" Height="600" Canvas.Left="0">
 
 
@@ -28,8 +27,8 @@ Raise your right hand and use it to choose a name and send an email.
                 </TextBlock> -->
 
                 <TextBlock Name="EmailNotificationTxt" Background="White" 
-                           TextWrapping="Wrap" FontSize="120" Opacity="0.7" 
-                           Visibility="Collapsed" Width="1000">     
+                           TextWrapping="Wrap" FontSize="100" Opacity="0.6" 
+                           Visibility="Hidden" >     
                     Email Sent!
                 </TextBlock>
                 

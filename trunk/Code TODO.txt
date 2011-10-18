@@ -1,8 +1,0 @@
-- finish "hold to email" target functionality
- 
-- message stating email already sent
-
-- countdown and flash effect for photo Smile...3...2...1...!
-
-
-- initialization start-up error

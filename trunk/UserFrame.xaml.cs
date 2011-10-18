@@ -75,18 +75,22 @@ namespace DGPDoorbell
 
         }
 
-        bool SuppressEmailing = false;
-        DispatcherTimer SuppressionTimer;
+        DispatcherTimer PicturingTakingTimer = null;
+
+        public bool CountingDownForPicture
+        {
+            get { return PicturingTakingTimer != null && PicturingTakingTimer.IsEnabled; }
+        }
+
+        DispatcherTimer NotificationTimer = null;
 
         bool Selected = false;
 
         public MainWindow mainWindow;
         Action SendEmail;
 
-        int NumFlicks = 0;
-
         //relative to Control Point
-        Rect EmailHitRect = new Rect(new Point(2*CONTROL_THRESHOLD, -5 * CONTROL_THRESHOLD), new Size(40, 40));
+        Rect EmailHitRect = new Rect(new Point(2*CONTROL_THRESHOLD, -5 * CONTROL_THRESHOLD), new Size(100, 140));
 
         public UserFrame()
         {
@@ -100,6 +104,12 @@ namespace DGPDoorbell
             gui.EmailProgressCanvas.SetValue(Canvas.LeftProperty, EmailHitRect.Left);
             gui.EmailProgressCanvas.SetValue(Canvas.TopProperty, EmailHitRect.Top);
             gui.EmailProgressPoly.SetAngle(0);
+
+            gui.EmailBackgroundRect.Width = EmailHitRect.Width;
+            gui.EmailBackgroundRect.Height = EmailHitRect.Height;
+
+            gui.EmailProgressPoly.SetValue(Canvas.LeftProperty, -EmailHitRect.Width / 2);
+            gui.EmailProgressPoly.SetValue(Canvas.TopProperty, -EmailHitRect.Height / 2);
         }
 
         void UserFrame_Loaded(object sender, RoutedEventArgs e)
@@ -118,9 +128,9 @@ namespace DGPDoorbell
 
         public const double CONTROL_THRESHOLD = 60;
         public const double CONTROL_OFFSET = 40;
-        public const double SCROLL_RATE = 0.1;
+        public const double SCROLL_RATE = 0.15;
 
-        public const int EMAIL_PROGRESS_FRAMES_NEEDED = 25;
+        public const int EMAIL_PROGRESS_FRAMES_NEEDED = 35;
         int EmailProgressFrames = 0;
 
         EmailListing CurrentEmailListing;
@@ -138,7 +148,10 @@ namespace DGPDoorbell
 
             //Console.WriteLine(anchor + " " + ctrlPt);
 
-            if (Selected)
+            if (CountingDownForPicture)
+            {
+                //do nothing.
+            } else if (Selected)
             {
                 gui.EmailProgressCanvas.Visibility = Visibility.Visible;
                 if (EmailHitRect.Left <= DiffVector.X && EmailHitRect.Right >= DiffVector.Y &&
@@ -152,102 +165,138 @@ namespace DGPDoorbell
                     if (EmailProgressFrames >= EMAIL_PROGRESS_FRAMES_NEEDED)
                     {
                         //Send Email
-                        EmailNotificationTxt.Text = "Email sent to " + CurrentEmailListing.GivenName + "!";
-                        SendEmail.BeginInvoke(null, null);
-
-                        gui.EmailProgressPoly.SetAngle(0);
-                        Selected = false;
+                        TakePictureForEmail();
                     }
                 }
                 else
                 {
+                    gui.EmailProgressPoly.SetAngle(0);
                     EmailProgressFrames = 0;
+                }
+
+                if (DiffVector.Y > -CONTROL_THRESHOLD * 2)
+                {
+                    Selected = false;
                 }
             }
             else
             { //not Selected
 
                 gui.EmailProgressCanvas.Visibility = Visibility.Hidden;
-
+                gui.EmailProgressPoly.SetAngle(0);
 
                 //scrolling.
-                if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
+                if (DiffVector.Y > -CONTROL_THRESHOLD)
                 {
-                    EmailListPosition -= SCROLL_RATE * Math.Abs(DiffVector.X);
-                    gui.Right();
-                    NumFlicks = 0;
-
-                }
-                else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
-                {
-                    EmailListPosition += SCROLL_RATE * Math.Abs(DiffVector.X);
-                    gui.Left();
-                    NumFlicks = 0;
-
+                    if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
+                    {
+                        EmailListPosition -= SCROLL_RATE * Math.Abs(DiffVector.X) ;
+                        gui.Right();
+                    }
+                    else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
+                    {
+                        EmailListPosition += SCROLL_RATE * Math.Abs(DiffVector.X);
+                        gui.Left();
+                    }
                 }
                 else if (DiffVector.Y < -CONTROL_THRESHOLD * 2)
                 {
                     //selecting
-                    if (!SuppressEmailing)
-                    {
-                        SuppressEmailing = true;
-
-                        NumFlicks++;
-                        CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
-
-                        Selected = true;
-
-                        //Not sure if the below is useful anymore - Dustin
-                        if (SuppressionTimer != null)
-                            SuppressionTimer.Stop();
-
-                        SuppressionTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Render, EndSupression, Dispatcher);
-
-                        EmailNotificationTxt.Visibility = Visibility.Visible;
-                        gui.Up();
-                    }
+                    CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
+                    Selected = true;
+                    gui.Up();
                 }
                 else
                 {
-                    if (!SuppressEmailing)
-                    {
-                        gui.ResetGUI();
-
-                    }
+                    gui.ResetGUI();
                 }
             }
             ColourCurrentEmail();
+        }
+
+        int CountUntilPicture = 3;
+        void TakePictureForEmail()
+        {
+            CountUntilPicture = 3;
+            EmailNotificationTxt.Text = "Taking Picture in..." + CountUntilPicture;
+            EmailNotificationTxt.Visibility = Visibility.Visible;
+            gui.Visibility = Visibility.Hidden;
+            Hand.Visibility = Visibility.Hidden;
+            depthImage.Visibility = Visibility.Hidden;
+
+            PicturingTakingTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Input, TakePictureCountdown, mainWindow.Dispatcher);
+        }
+
+        void TakePictureCountdown(object o, EventArgs e)
+        {
+            CountUntilPicture--;
+            EmailNotificationTxt.Text = "Taking Picture in..." + CountUntilPicture;
+
+            if (CountUntilPicture <=0)
+            {
+                SendEmailNow();
+                //SendEmail.BeginInvoke(null, null);
+
+                PicturingTakingTimer.Stop();
+
+                gui.Visibility = Visibility.Visible;
+                Hand.Visibility = Visibility.Visible;
+
+                depthImage.Visibility = Visibility.Visible;
+            }
         }
 
         void SendEmailNow()
         {
             string ImagePath = Photo.Save(mainWindow.GetCurrentImage(), 640, 480);
 
-            if (!Settings.Debug)
-                Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
-            else
-                Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door! - sent to: " + 
-                    CurrentEmailListing.emailAddress, ImagePath);
+            int r = 0;
+
+            r = Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
 
             
+            switch (r)
+            {
+                case 0:
+                    if (!Settings.Debug)
+                        ShowNotification("Email sent to: " + CurrentEmailListing.emailAddress);
+                    else
+                        ShowNotification("(Debug) Email sent to: " + Settings.DebugEmail);
+                    break;
+                case 1: //already sent
+                    ShowNotification("Email already sent within " + Settings.Timeout + " s ago");
+                    break;
+                case -1: //other error
+                    ShowNotification("Error: could not send email");
+                    break;
+            }
         }
 
-        private void EndSupression(object o, EventArgs e)
+        void ShowNotification(string msg)
         {
-            SuppressEmailing = false;
-            gui.ResetGUI();
+            EmailNotificationTxt.Visibility = Visibility.Visible;
+            EmailNotificationTxt.Text = msg;
+            NotificationTimer = new DispatcherTimer(TimeSpan.FromSeconds(3), DispatcherPriority.Input, HideNotification, mainWindow.Dispatcher);
+        }
 
-            EmailNotificationTxt.Visibility = Visibility.Collapsed;
-
+        void HideNotification(object o, EventArgs e)
+        {
+            EmailNotificationTxt.Visibility = Visibility.Hidden;
+            NotificationTimer.Stop();
         }
 
         void ColourCurrentEmail()
         {
-            Brush SelectedBrush = Brushes.LightBlue;
+            Brush SelectedBackground = Brushes.LightBlue;
+            //Brush SelectedForeground = Brushes.Black;
             if (Selected)
-                SelectedBrush = Brushes.Blue;
+            {
+                SelectedBackground = Brushes.CadetBlue;
+                //SelectedForeground = Brushes.White;
+            }
 
-            ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = SelectedBrush;
+            ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = SelectedBackground;
+            //((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).SetForeground(SelectedForeground);
         }
 
         public void ControlPointLose()
