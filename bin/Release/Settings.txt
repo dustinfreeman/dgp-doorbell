@@ -1,4 +1,0 @@
-Debug = 1
-Timeout = 60
-LogNotSent = 1
-DebugEmail = dustin@cs.toronto.edu
