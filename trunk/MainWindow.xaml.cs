@@ -61,10 +61,12 @@ namespace DGPDoorbell
             userFrame1.userCanvas.Width = userFrame1.Width;
             userFrame1.userCanvas.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
 
-            userFrame1.userImage.Width = userFrame1.Width;
+            userFrame1.InstructionsImg.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
+
+            userFrame1.userImage.Width = userFrame1.Width - userFrame1.InstructionsImg.ActualWidth;
             userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight  + Title.Height);
 
-            userFrame1.depthImage.Width = userFrame1.Width;
+            userFrame1.depthImage.Width = userFrame1.Width - userFrame1.InstructionsImg.ActualWidth;
             userFrame1.depthImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
         }
 
