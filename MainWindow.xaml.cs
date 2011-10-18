@@ -53,24 +53,23 @@ namespace DGPDoorbell
             userFrame1.Width = e.NewSize.Width - debugPanel.ActualWidth;
             userFrame1.Height = e.NewSize.Height;// userFrame1.Width * 3 / 4 + userFrame1.emailListStackPanel.ActualHeight;            
 
-            Title.Width = userFrame1.Width * 0.20;            
-            Title.Height = Title.Width / 2.4;
+            userFrame1.Title.Width = userFrame1.Width * 0.20;
+            userFrame1.Title.Height = userFrame1.Title.Width / 2.4;
 
-            Doorbell.FontSize = Title.Height;
+            userFrame1.Doorbell.FontSize = userFrame1.Title.Height;
 
-            userFrame1.userCanvas.Width = userFrame1.Width;
-            userFrame1.userCanvas.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
+            userFrame1.InstructionsImg.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight); ;
 
+            userFrame1.userCanvas.Width = userFrame1.Width - userFrame1.InstructionsImg.ActualWidth;
+            userFrame1.userCanvas.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
 
-            userFrame1.InstructionsImg.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
+            userFrame1.EmailNotificationTxt.Width = userFrame1.userCanvas.Width;
 
-            userFrame1.EmailNotificationTxt.Width = userFrame1.userCanvas.Width - userFrame1.InstructionsImg.ActualWidth;
+            userFrame1.userImage.Width = userFrame1.userCanvas.Width;
+            userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
 
-            userFrame1.userImage.Width = userFrame1.Width - userFrame1.InstructionsImg.ActualWidth;
-            userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight  + Title.Height);
-
-            userFrame1.depthImage.Width = userFrame1.Width - userFrame1.InstructionsImg.ActualWidth;
-            userFrame1.depthImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + Title.Height);
+            userFrame1.depthImage.Width = userFrame1.userCanvas.Width;
+            userFrame1.depthImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
         }
 
         Runtime nui;
@@ -245,7 +244,7 @@ namespace DGPDoorbell
             {
                 if (SkeletonsVisible)
                 {
-                    userFrame1.depthImage.Opacity = 0.2;
+                    userFrame1.depthImage.Opacity = 0.3;
                 }
                 else
                 {

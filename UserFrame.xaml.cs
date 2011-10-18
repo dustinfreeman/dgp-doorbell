@@ -90,7 +90,7 @@ namespace DGPDoorbell
         Action SendEmail;
 
         //relative to Control Point
-        Rect EmailHitRect = new Rect(new Point(2*CONTROL_THRESHOLD, -5 * CONTROL_THRESHOLD), new Size(100, 140));
+        Rect EmailHitRect = new Rect(new Point(2.5*CONTROL_THRESHOLD, -4 * CONTROL_THRESHOLD), new Size(100, 140));
 
         public UserFrame()
         {
@@ -128,7 +128,7 @@ namespace DGPDoorbell
 
         public const double CONTROL_THRESHOLD = 60;
         public const double CONTROL_OFFSET = 40;
-        public const double SCROLL_RATE = 0.15;
+        public const double SCROLL_RATE = 0.3;
 
         public const int EMAIL_PROGRESS_FRAMES_NEEDED = 35;
         int EmailProgressFrames = 0;
@@ -190,12 +190,12 @@ namespace DGPDoorbell
                 {
                     if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
                     {
-                        EmailListPosition -= SCROLL_RATE * Math.Abs(DiffVector.X) ;
+                        EmailListPosition -= SCROLL_RATE * (Math.Abs(DiffVector.X) - CONTROL_THRESHOLD) ;
                         gui.Right();
                     }
                     else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
                     {
-                        EmailListPosition += SCROLL_RATE * Math.Abs(DiffVector.X);
+                        EmailListPosition += SCROLL_RATE * (Math.Abs(DiffVector.X) - CONTROL_THRESHOLD);
                         gui.Left();
                     }
                 }
