@@ -27,7 +27,7 @@ namespace DGPDoorbell
 
         public int CurrentSkeletonID = -1;
 
-        double emailListPosition = 0;
+        double emailListPosition = 0; //in pixels
         double EmailListPosition
         {
             get
@@ -39,9 +39,9 @@ namespace DGPDoorbell
                 double oldEmailListPosition = emailListPosition;
                 
                 emailListPosition = value;
-                if (emailListPosition > 500)
+                if (emailListPosition > 800)
                 {
-                    emailListPosition = 500;
+                    emailListPosition = 800;
                 }
                 if (CurrentEmailIndex >= emailListStackPanel.Children.Count)
                 {
@@ -70,6 +70,10 @@ namespace DGPDoorbell
 
                 //colour new elsewhere
                 currentEmailIndex= (-(int)emailListPosition + (int)this.Width / 2) / EmailListing.EMAIL_LISTING_WIDTH; //current email width;
+                if (currentEmailIndex < 0)
+                    currentEmailIndex = 0;
+                if (currentEmailIndex > emailListStackPanel.Children.Count - 1)
+                    currentEmailIndex = emailListStackPanel.Children.Count - 1;
                 return currentEmailIndex;
             }
 
@@ -166,6 +170,8 @@ namespace DGPDoorbell
                     {
                         //Send Email
                         TakePictureForEmail();
+                        Selected = false;
+                        EmailProgressFrames = 0;
                     }
                 }
                 else
@@ -198,6 +204,10 @@ namespace DGPDoorbell
                         EmailListPosition += SCROLL_RATE * (Math.Abs(DiffVector.X) - CONTROL_THRESHOLD);
                         gui.Left();
                     }
+                    else
+                    {
+                        gui.ResetGUI();
+                    }
                 }
                 else if (DiffVector.Y < -CONTROL_THRESHOLD * 2)
                 {
@@ -210,7 +220,7 @@ namespace DGPDoorbell
                 {
                     gui.ResetGUI();
                 }
-            }
+            } 
             ColourCurrentEmail();
         }
 
@@ -265,7 +275,7 @@ namespace DGPDoorbell
             {
                 case 0:
                     if (!Settings.Debug)
-                        ShowNotification("Email sent to: " + CurrentEmailListing.emailAddress);
+                        ShowNotification("Email sent to: " + CurrentEmailListing.GivenName);
                     else
                         ShowNotification("(Debug) Email sent to: " + Settings.DebugEmail);
                     break;
@@ -330,11 +340,11 @@ namespace DGPDoorbell
             }
 
             EmailListings.Sort();
-
             foreach (EmailListing eListing in EmailListings)
             {
                 emailListStackPanel.Children.Add(eListing);
             }
+
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -342,7 +352,9 @@ namespace DGPDoorbell
             if (Settings.Debug)
                 DebugMode.Visibility = Visibility.Visible;
             else
-                DebugMode.Visibility = Visibility.Hidden;            
+                DebugMode.Visibility = Visibility.Hidden;
+
+            EmailListPosition = -emailListStackPanel.Children.Count * EmailListing.EMAIL_LISTING_WIDTH / 2.0;
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)

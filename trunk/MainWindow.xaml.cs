@@ -64,6 +64,7 @@ namespace DGPDoorbell
             userFrame1.userCanvas.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
 
             userFrame1.EmailNotificationTxt.Width = userFrame1.userCanvas.Width;
+            userFrame1.EmailNotificationTxt.SetValue(Canvas.BottomProperty, userFrame1.EmailNotificationTxt.ActualHeight);
 
             userFrame1.userImage.Width = userFrame1.userCanvas.Width;
             userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
