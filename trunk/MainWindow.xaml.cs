@@ -559,7 +559,7 @@ namespace DGPDoorbell
             //DoSkeletonDisplay(e);
         }
         
-        bool SkeletonsVisible = false;
+        public bool SkeletonsVisible = false;
 
         void ProcessSkeletalControlInput()
         {

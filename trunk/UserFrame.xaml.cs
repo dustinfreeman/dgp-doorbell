@@ -234,8 +234,15 @@ namespace DGPDoorbell
 
             if (CountUntilPicture <=0)
             {
-                SendEmailNow();
-                //SendEmail.BeginInvoke(null, null);
+                if (mainWindow.SkeletonsVisible)
+                {
+                    SendEmailNow();
+                }
+                else
+                {
+                    ShowNotification("Can't see anyone! Cancelled.");
+
+                }
 
                 PicturingTakingTimer.Stop();
 
@@ -253,7 +260,6 @@ namespace DGPDoorbell
             int r = 0;
 
             r = Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
-
             
             switch (r)
             {
