@@ -1,0 +1,7 @@
+Out of frame when picture taken? cancel.
+
+Problem: Thing scrolls to end when people walk towards to the door.
+
+Dont show email in sent message
+
+Fix head cropping problem...somehow.
