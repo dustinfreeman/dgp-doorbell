@@ -22,7 +22,7 @@
             <Rectangle x:Name="EmailBackgroundRect" Fill="Black" Width="100" Height="140"/>
             <Image Source="gui/bell.png" Height="133" Width="103" Canvas.Left="0" Canvas.Top="-15" />
             <!--<Ellipse Name="EmailProgressEll" Width="140" Height="140" Fill="Blue" Stroke="Black" StrokeThickness="5" />-->
-            <TextBlock Name="EmailText" FontSize="40" Foreground="AntiqueWhite"  FontWeight="Bold" Canvas.Left="1" Canvas.Top="86">Email</TextBlock>
+            <TextBlock Name="EmailText" FontSize="40" Foreground="AntiqueWhite"  FontWeight="Bold" Canvas.Left="1" Canvas.Top="86" Background="Black">Email</TextBlock>
         </Canvas>
     </Canvas>
 </UserControl>
