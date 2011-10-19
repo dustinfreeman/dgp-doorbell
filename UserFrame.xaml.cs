@@ -57,7 +57,7 @@ namespace DGPDoorbell
         }
 
         int currentEmailIndex = 0;
-        int CurrentEmailIndex
+        public int CurrentEmailIndex
         {
             get
             {
@@ -194,12 +194,12 @@ namespace DGPDoorbell
                 //scrolling.
                 if (DiffVector.Y > -CONTROL_THRESHOLD)
                 {
-                    if (DiffVector.X > CONTROL_THRESHOLD + CONTROL_OFFSET)
+                    if (DiffVector.X > CONTROL_THRESHOLD)
                     {
-                        EmailListPosition -= SCROLL_RATE * (Math.Abs(DiffVector.X) - CONTROL_THRESHOLD) ;
+                        EmailListPosition -= SCROLL_RATE * (Math.Abs(DiffVector.X) - CONTROL_THRESHOLD);
                         gui.Right();
                     }
-                    else if (DiffVector.X < -CONTROL_THRESHOLD + CONTROL_OFFSET)
+                    else if (DiffVector.X < -CONTROL_THRESHOLD)
                     {
                         EmailListPosition += SCROLL_RATE * (Math.Abs(DiffVector.X) - CONTROL_THRESHOLD);
                         gui.Left();
@@ -213,6 +213,7 @@ namespace DGPDoorbell
                 {
                     //selecting
                     CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
+                    gui.EmailText.Text = "Email\n" + CurrentEmailListing.GivenName.Trim();
                     Selected = true;
                     gui.Up();
                 }
@@ -313,6 +314,7 @@ namespace DGPDoorbell
 
             ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = SelectedBackground;
             //((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).SetForeground(SelectedForeground);
+
         }
 
         public void ControlPointLose()
