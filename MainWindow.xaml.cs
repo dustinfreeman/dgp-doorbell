@@ -38,10 +38,6 @@ namespace DGPDoorbell
             this.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
 
             userFrame1.mainWindow = this;
-            
-            //this.WindowState = System.Windows.WindowState.Maximized
-            //this.Topmost = true;
-
             Log.FileName = "DoorBellLog.txt";            
         }
 

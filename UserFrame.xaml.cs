@@ -39,9 +39,14 @@ namespace DGPDoorbell
                 double oldEmailListPosition = emailListPosition;
                 
                 emailListPosition = value;
-                if (emailListPosition > 800)
+                if (emailListPosition > 0)
                 {
-                    emailListPosition = 800;
+                    emailListPosition = 0;
+                }
+                if (emailListPosition < -EmailListing.EMAIL_LISTING_WIDTH * emailListStackPanel.Children.Count + 500)
+                {
+                    emailListPosition = oldEmailListPosition;
+
                 }
                 if (CurrentEmailIndex >= emailListStackPanel.Children.Count)
                 {
@@ -254,6 +259,9 @@ namespace DGPDoorbell
                     ShowNotification("Can't see anyone! Cancelled.");
 
                 }
+
+                //Reset Email Position
+                EmailListPosition = -emailListStackPanel.Children.Count * EmailListing.EMAIL_LISTING_WIDTH / 2.0;
 
                 PicturingTakingTimer.Stop();
 
