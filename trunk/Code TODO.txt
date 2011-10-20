@@ -1,2 +1,12 @@
+BUGFIXES
+
+Fix problem where people walking to the door get control of the system briefly.
+ - maybe only when people stop & stand still can they control it?
 
 Fix head cropping problem...somehow. Either changes people's behaviour or change the system.
+
+Add "blank" emails at the beginning and the end. Zhao complains that he gets excessive emails.
+
+FUTURE IMPROVEMENT IDEAS
+
+Instead of emailing faculty, it shows a map to their offices. Also, show internal maps to people's desks.
