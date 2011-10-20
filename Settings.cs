@@ -30,16 +30,30 @@ namespace DGPDoorbell
         static private int m_Timeout = 60;              //number of seconds before an email can be sent again to that user
         static private bool m_SettingsLoaded = false;
         static private string m_stDebugEmail = "";
+        static private string m_stUsername = "";
+        static private string m_stPassword = "";
+        static private string m_stDomain = "";
+        static private string m_stBcc = "";
+        static private string m_stMailServer = "";
+
+
+        /// <summary>
+        /// Default function for loading settings from file
+        /// </summary>
+        static public void LoadSettings()
+        {
+            LoadSettings("Settings.txt");
+        }
 
         /// <summary>
         /// Function to load settings from file
         /// </summary>
-        static public void LoadSettings()
+        static public void LoadSettings(string filename)
         {
             try
             {
                 //open the settings file for read
-                using (StreamReader sr = new StreamReader("Settings.txt"))
+                using (StreamReader sr = new StreamReader(filename))
                 {
                     string line;        //variable for given line
                     string[] parts;     //string array for parts of line
@@ -53,18 +67,18 @@ namespace DGPDoorbell
                         //check to see if the part is someting we're interested in
                         switch (parts[0].Trim())
                         {
-                            case "Debug":   //debug case
+                            case "Debug":  
                                 //if the value is 1, make it true, else false
                                 if (Int32.Parse(parts[1]) == 1)
                                     m_Debug = true;
                                 else
                                     m_Debug = false;
                                 break;
-                            case "Timeout": //timeout case
+                            case "Timeout": 
                                 //store number of seconds
                                 m_Timeout = Int32.Parse(parts[1]);
                                 break;
-                            case "LogNotSent":  //LogNotSent case
+                            case "LogNotSent":  
                                 //if the value is 1, make it true, else false
                                 if (Int32.Parse(parts[1]) == 1)
                                     m_LogNotSent = true;
@@ -75,7 +89,26 @@ namespace DGPDoorbell
                                 //stores the debug email address
                                 m_stDebugEmail = parts[1];
                                 break;
-
+                            case "username":
+                                //stores email server user name
+                                m_stUsername = parts[1];
+                                break;
+                            case "password":
+                                //stores email server password
+                                m_stPassword = parts[1];
+                                break;
+                            case "domain":
+                                //stores email address domain
+                                m_stDomain = parts[1];
+                                break;
+                            case "bcc":
+                                //stores bcc names
+                                m_stBcc = parts[1];
+                                break;
+                            case "mailserver":
+                                //stores mail server address
+                                m_stMailServer = parts[1];
+                                break;
                         }
                     }
                 }
@@ -155,6 +188,69 @@ namespace DGPDoorbell
                 return m_stDebugEmail;
             }
             set { m_stDebugEmail = value; }
+        }
+
+        /// <summary>
+        /// String containing email server user name
+        /// </summary>
+        static public string UserName
+        {
+            get
+            {                
+                //return value
+                return m_stUsername;
+            }
+            set{ m_stUsername = value;}            
+        }
+
+        /// <summary>
+        /// String containing email server password
+        /// </summary>
+        static public string Password
+        {
+            get
+            {
+                //return value
+                return m_stPassword;
+            }
+            set { m_stPassword = value; }
+        }
+
+        /// <summary>
+        /// String containing email address domain
+        /// </summary>
+        static public string Domain
+        {         
+            get
+            {                
+                //return value
+                return m_stDomain;
+            }
+            set{ m_stDomain = value;}            
+        }
+
+        /// <summary>
+        /// String containing email addresses to BCC
+        /// </summary>
+        static public string Bcc
+        {
+            get
+            {
+                return m_stBcc;
+            }
+            set { m_stBcc = value; }
+        }
+
+        /// <summary>
+        /// String containing email server address
+        /// </summary>
+        static public string Mailserver
+        {
+            get
+            {
+                return m_stMailServer;
+            }
+            set { m_stMailServer = value; }
         }
         #endregion
     }
