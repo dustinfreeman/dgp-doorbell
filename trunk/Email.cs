@@ -168,7 +168,7 @@ namespace DGPDoorbell
             SmtpClient smtp = new SmtpClient();                                         //smtp server object
             MailMessage message = new MailMessage();                                    //message object
             MailAddress address = new MailAddress(ToAddress);                           //to address object
-            NetworkCredential myCreds = new NetworkCredential("username", "password");  //default credentials
+            NetworkCredential myCreds = new NetworkCredential(Settings.UserName, Settings.Password);  //default credentials
 
             try
             {
@@ -185,7 +185,7 @@ namespace DGPDoorbell
             }
 
             //provide message info for email
-            message.From = new MailAddress("DoorBell@domain", "Door Bell");            
+            message.From = new MailAddress("DoorBell@" + Settings.Domain, "Door Bell");            
             message.Subject = Subject;
             message.Body = Body;
             message.IsBodyHtml = true;
@@ -199,14 +199,19 @@ namespace DGPDoorbell
                 message.Body += " - intended for : " + address;
                 message.To.Add(Settings.DebugEmail);
             }
-            message.Bcc.Add("debug1@domain");
-            message.Bcc.Add("debug2@domain");
+
+            //split names in the bcc list
+            string[] bcclist = Settings.Bcc.Split(',');
+
+            //add all bcc names to the email
+            foreach (string bcc in bcclist)
+                message.Bcc.Add(bcc.Trim());
 
             //try sending the message
             try
             {
                 //provide smtp info for server
-                smtp.Host = "mailserver";
+                smtp.Host = Settings.Mailserver;
                 smtp.UseDefaultCredentials = false;
                 smtp.Credentials = myCreds;
 

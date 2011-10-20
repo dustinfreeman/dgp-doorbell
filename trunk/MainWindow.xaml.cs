@@ -38,6 +38,11 @@ namespace DGPDoorbell
             this.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
 
             userFrame1.mainWindow = this;
+            //load default settings
+            Settings.LoadSettings("Settings.txt");
+            //load email settings
+            Settings.LoadSettings("EmailSettings.txt");
+            //name log file
             Log.FileName = "DoorBellLog.txt";            
         }
 
