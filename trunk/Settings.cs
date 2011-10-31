@@ -64,6 +64,9 @@ namespace DGPDoorbell
                         //split the line
                         parts = line.Split('=');
 
+                        parts[0] = parts[0].Trim();
+                        parts[1] = parts[1].Trim();
+
                         //check to see if the part is someting we're interested in
                         switch (parts[0].Trim())
                         {
