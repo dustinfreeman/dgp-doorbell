@@ -6,11 +6,12 @@ BUGFIXES
 - Add "blank" emails at the beginning and the end. Zhao complains that he gets excessive emails.
 - Fix issue of not being able to scroll completely to left
 - More name cleanups (e.g., corrections for multiword last names)
+- Better error handling if (private or public) settings files missing
 
 MINOR IMPROVEMENTS
 
 - Make it run in "Exclusive" Mode (Frank) like a game. Hides Windows Update notifications, etc.
-- Jon: suggests it should restart into the proper mode when the computer does (mostly does now, except for fullscreen issue)
+- Jon: suggests it should restart into the proper mode when the computer does (mostly does now, except for fullscreen issue).  Note that this needs to be optional to enable debugging sessions.
 - Heartbeat feature so we know it's running
 - List of names wraps (so A follows Z)
 
