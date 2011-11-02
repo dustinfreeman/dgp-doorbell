@@ -6,6 +6,11 @@ BUGFIXES
 - Add "blank" emails at the beginning and the end. Zhao complains that he gets excessive emails.
 - Fix issue of not being able to scroll completely to left
 
+MINOR IMPROVEMENTS
+
+- Make it run in "Exclusive" Mode (Frank) like a game. Hides Windows Update notifications, etc.
+- Jon: suggests it should restart into the proper mode when the computer does.
+
 FUTURE IMPROVEMENT IDEAS
 
 -Instead of emailing faculty, it shows a map to their offices. Also, show internal maps to people's desks.
