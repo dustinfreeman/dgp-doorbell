@@ -14,6 +14,7 @@ MINOR IMPROVEMENTS
 - Jon: suggests it should restart into the proper mode when the computer does (mostly does now, except for fullscreen issue).  Note that this needs to be optional to enable debugging sessions.
 - Heartbeat feature so we know it's running
 - List of names wraps (so A follows Z)
+- Dynamic reloading of names (and settings?) if underlying files change
 
 
 FUTURE IMPROVEMENT IDEAS
