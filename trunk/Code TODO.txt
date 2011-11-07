@@ -15,6 +15,7 @@ MINOR IMPROVEMENTS
 - Heartbeat feature so we know it's running
 - List of names wraps (so A follows Z)
 - Dynamic reloading of names (and settings?) if underlying files change
+- Camera "flash" animation for taking of picture, show a preview, maybe option to retake photo?
 
 
 FUTURE IMPROVEMENT IDEAS
