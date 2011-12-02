@@ -7,6 +7,7 @@ BUGFIXES
 - Fix issue of not being able to scroll completely to left
 - More name cleanups (e.g., corrections for multiword last names)
 - Better error handling if (private or public) settings files missing
+- Flip image so it's not mirrored of reality
 
 MINOR IMPROVEMENTS
 
@@ -17,10 +18,12 @@ MINOR IMPROVEMENTS
 - Dynamic reloading of names (and settings?) if underlying files change
 - Camera "flash" animation for taking of picture, show a preview, maybe option to retake photo?
 - Meta todo: switch todo list items to actual bug tracker issues
+- by first name and last name
+- customizable email addresses
 
 
 FUTURE IMPROVEMENT IDEAS
 
--Instead of emailing faculty, it shows a map to their offices. Also, show internal maps to people's desks.
--Flip image so it's not mirrored of reality
--Other notifications, e.g., SMS, phone call, IM, etc
+- Instead of emailing faculty, it shows a map to their offices. Also, show internal maps to people's desks.
+- Other notifications, e.g., SMS, phone call, IM, etc
+- Logging interaction timings/events
