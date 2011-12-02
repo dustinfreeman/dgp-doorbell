@@ -27,3 +27,8 @@ FUTURE IMPROVEMENT IDEAS
 - Instead of emailing faculty, it shows a map to their offices. Also, show internal maps to people's desks.
 - Other notifications, e.g., SMS, phone call, IM, etc
 - Logging interaction timings/events
+- Announcements/Ticker/Classes/Studies
+- Screen saver 
+- map
+- reply back / personal state (I'm here, I'm not here, etc.)
+- Door open/close tracking
