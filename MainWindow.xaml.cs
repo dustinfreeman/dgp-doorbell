@@ -43,7 +43,9 @@ namespace DGPDoorbell
             //load email settings
             Settings.LoadSettings("EmailSettings.txt");
             //name log file
-            Log.FileName = "DoorBellLog.txt";            
+            Log.FileName = "DoorBellLog.txt";
+
+            Log.Write("Program Starting", Log.Categories.System);
         }
 
         void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -633,9 +635,10 @@ namespace DGPDoorbell
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            Log.Write("Window Closed", Log.Categories.System);
             nui.Uninitialize();
             Environment.Exit(0);
-        }
+        }        
 
     }
 }
