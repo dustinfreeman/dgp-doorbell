@@ -35,6 +35,11 @@ namespace DGPDoorbell
         {
             InitializeComponent();
 
+            //full screen mode
+            WindowStyle = WindowStyle.None;
+            Topmost = true;
+            WindowState = WindowState.Maximized;
+
             this.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
 
             userFrame1.mainWindow = this;
