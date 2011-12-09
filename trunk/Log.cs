@@ -60,6 +60,8 @@ namespace DGPDoorbell
     /// </summary>
     class Log
     {
+        public enum Categories { Interaction, Email, System, Unknown }
+
         #region VARIABLES
 
         static string m_stLogFile = "Log.txt";                  //log file name
@@ -102,6 +104,29 @@ namespace DGPDoorbell
                 //note the last date an entry was made
                 m_lastDate = DateTime.Now;                
             }
+        }
+
+        static public void Write(string Info, Categories cat)
+        {
+            string pre = "";
+
+            switch(cat)
+            {
+                case Categories.Email:
+                    pre = "[E] ";
+                    break;
+                case Categories.Interaction:
+                    pre = "[I] ";
+                    break;
+                case Categories.System:
+                    pre = "[S] ";
+                    break;
+                case Categories.Unknown:
+                    pre = "[U] ";
+                    break;
+            }
+
+            Write(pre + Info);
         }
 
         /// <summary>
