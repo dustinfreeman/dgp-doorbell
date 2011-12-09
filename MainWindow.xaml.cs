@@ -35,11 +35,6 @@ namespace DGPDoorbell
         {
             InitializeComponent();
 
-            //full screen mode
-            WindowStyle = WindowStyle.None;
-            Topmost = true;
-            WindowState = WindowState.Maximized;
-
             this.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
 
             userFrame1.mainWindow = this;
@@ -51,6 +46,15 @@ namespace DGPDoorbell
             Log.FileName = "DoorBellLog.txt";
 
             Log.Write("Program Starting", Log.Categories.System);
+
+            //Check if it's in Debug mode, if not go to full screen
+            if (!Settings.Debug)
+            {
+                //full screen mode
+                WindowStyle = WindowStyle.None;
+                Topmost = true;
+                WindowState = WindowState.Maximized;
+            }
         }
 
         void MainWindow_SizeChanged(object sender, SizeChangedEventArgs e)
