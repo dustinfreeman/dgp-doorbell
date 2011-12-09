@@ -146,6 +146,21 @@ namespace DGPDoorbell
 
         public void ControlPointUpdate(Point ctrlPt, Point anchor)
         {
+            HitTestResult hitWidget = VisualTreeHelper.HitTest(userCanvas, ctrlPt);
+            if (hitWidget.VisualHit is IGestureWidget)
+            {
+                ((IGestureWidget)hitWidget.VisualHit).ControlPointHits();
+            }
+            
+            foreach(UIElement uie in userCanvas.Children)
+            {
+                if (uie is IGestureWidget)
+                {
+                    ((IGestureWidget)hitWidget.VisualHit).ControlPointUpdate(ctrlPt);
+                }
+            }
+
+
             Hand.SetValue(Canvas.LeftProperty, ctrlPt.X - Hand.ActualWidth/2.0);
             Hand.SetValue(Canvas.TopProperty, ctrlPt.Y - Hand.ActualHeight/2.0);
 
@@ -229,6 +244,7 @@ namespace DGPDoorbell
             } 
             ColourCurrentEmail();
         }
+
 
         int CountUntilPicture = 3;
         void TakePictureForEmail()

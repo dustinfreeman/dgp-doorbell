@@ -62,27 +62,25 @@ namespace DGPDoorbell
             //return;
             //Console.WriteLine(e.NewSize.Width);
 
-            userFrame1.Width = e.NewSize.Width - debugPanel.ActualWidth;
+            userFrame1.Width = e.NewSize.Width;
             userFrame1.Height = e.NewSize.Height;// userFrame1.Width * 3 / 4 + userFrame1.emailListStackPanel.ActualHeight;            
 
-            userFrame1.Title.Width = userFrame1.Width * 0.20;
-            userFrame1.Title.Height = userFrame1.Title.Width / 2.4;
+            //userFrame1.Title.Width = userFrame1.Width * 0.20;
+            //userFrame1.Title.Height = userFrame1.Title.Width / 2.4;
 
-            userFrame1.Doorbell.FontSize = userFrame1.Title.Height;
+            //userFrame1.Doorbell.FontSize = userFrame1.Title.Height;
 
-            userFrame1.InstructionsImg.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight); ;
+            
+            //userFrame1.userCanvas.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
 
-            userFrame1.userCanvas.Width = userFrame1.Width - userFrame1.InstructionsImg.ActualWidth;
-            userFrame1.userCanvas.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
-
-            userFrame1.EmailNotificationTxt.Width = userFrame1.userCanvas.Width;
-            userFrame1.EmailNotificationTxt.SetValue(Canvas.BottomProperty, userFrame1.EmailNotificationTxt.ActualHeight);
+            //userFrame1.EmailNotificationTxt.Width = userFrame1.userCanvas.Width;
+            //userFrame1.EmailNotificationTxt.SetValue(Canvas.BottomProperty, userFrame1.EmailNotificationTxt.ActualHeight);
 
             userFrame1.userImage.Width = userFrame1.userCanvas.Width;
-            userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
+            //userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
 
-            userFrame1.depthImage.Width = userFrame1.userCanvas.Width;
-            userFrame1.depthImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
+            //userFrame1.depthImage.Width = userFrame1.userCanvas.Width;
+            //userFrame1.depthImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
         }
 
         Runtime nui;
@@ -638,10 +636,7 @@ namespace DGPDoorbell
                             }
                             break;
                     }
-                    
-                       
                 }
-
                 if (!SkeletonsVisible && !userFrame1.CountingDownForPicture)
                 {
                     userFrame1.depthImage.Visibility = Visibility.Visible;
@@ -651,7 +646,6 @@ namespace DGPDoorbell
                 {
                     Log.Write("Presence: " + userFrame1.CurrentSkeletonID + " " + LogString);
                 }
-
                 LastSkeletonsVisible = SkeletonsVisible;
             }
         }

@@ -1,6 +1,9 @@
 To Do - Friday Dec 9th
 ----------------------
 Code:
+- Left/Right Widget.
+
+
 - move "bell" location <Dustin>
 - reset to middle after... <Dustin>
 - fix scrolling/looping <Dustin>
