@@ -564,54 +564,86 @@ namespace DGPDoorbell
         }
         
         public bool SkeletonsVisible = false;
+        public bool LastSkeletonsVisible = false;
 
         void ProcessSkeletalControlInput()
         {
             if (lastSkeletonFrame != null)
             {
                 SkeletonsVisible = false;
+                string LogString = "";
+                
                 for (int s = 0; s < lastSkeletonFrame.Skeletons.Length; s++)
                 {
-                    if (lastSkeletonFrame.Skeletons[s].TrackingState == SkeletonTrackingState.Tracked && lastSkeletonFrame.Skeletons[s].Position.Z < 2.5)
+                    switch (lastSkeletonFrame.Skeletons[s].TrackingState)
                     {
-                        SkeletonsVisible = true;
+                        case SkeletonTrackingState.Tracked:
+                        
+                            if (lastSkeletonFrame.Skeletons[s].TrackingState == SkeletonTrackingState.Tracked && lastSkeletonFrame.Skeletons[s].Position.Z < 2.5)
+                            {
+                                SkeletonsVisible = true;
 
-                        Microsoft.Research.Kinect.Nui.Vector RightHandVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight].Position;
-                        Microsoft.Research.Kinect.Nui.Vector HipCentreVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter].Position;
+                                Microsoft.Research.Kinect.Nui.Vector RightHandVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight].Position;
+                                Microsoft.Research.Kinect.Nui.Vector HipCentreVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter].Position;
 
-                        Point RightHand = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight]);
-                        Point HipCentre = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter]);
+                                Point RightHand = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight]);
+                                Point HipCentre = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter]);
 
-                        Point RightHandDefault = HipCentre + new System.Windows.Vector(100, 0);
+                                Point RightHandDefault = HipCentre + new System.Windows.Vector(100, 0);
 
-                        if (userFrame1.CurrentSkeletonID == s)
-                        {
-                            //update control point
-                            userFrame1.ControlPointUpdate(RightHand, RightHandDefault);
-                        }
-                        else if (userFrame1.CurrentSkeletonID == -1)
-                        {
-                            //new control point
-                            userFrame1.ControlPointAppear(RightHand, RightHandDefault, s);
-                        }
+                                if (userFrame1.CurrentSkeletonID == s)
+                                {
+                                    //update control point
+                                    userFrame1.ControlPointUpdate(RightHand, RightHandDefault);
+                                }
+                                else if (userFrame1.CurrentSkeletonID == -1)
+                                {
+                                    //new control point
+                                    userFrame1.ControlPointAppear(RightHand, RightHandDefault, s);
+                                }
+                            }
+                            LogString += " " + lastSkeletonFrame.Skeletons[s].Position.X
+                                + "," + lastSkeletonFrame.Skeletons[s].Position.Y
+                                + "," + lastSkeletonFrame.Skeletons[s].Position.Z
+                                + "," + lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight].Position.X
+                                + "," + lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight].Position.Y
+                                + "," + lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight].Position.Z
+                                + "," + lastSkeletonFrame.Skeletons[s].Joints[JointID.WristLeft].Position.X
+                                + "," + lastSkeletonFrame.Skeletons[s].Joints[JointID.WristLeft].Position.Y
+                                + "," + lastSkeletonFrame.Skeletons[s].Joints[JointID.WristLeft].Position.Z;
 
-                        //userFrame1.depthImage.Visibility = Visibility.Hidden;
+                            break;
+
+                        case SkeletonTrackingState.PositionOnly:
+                            LogString += " " + lastSkeletonFrame.Skeletons[s].Position.X 
+                                + "," + lastSkeletonFrame.Skeletons[s].Position.Y 
+                                + "," + lastSkeletonFrame.Skeletons[s].Position.Z;
+
+                            break;
+                        case SkeletonTrackingState.NotTracked:
+                            LogString += " X";
+                            if (userFrame1.CurrentSkeletonID == s)
+                            {
+                                //lose control point
+                                userFrame1.ControlPointLose();
+                            }
+                            break;
                     }
-                    else
-                    {
-                        if (userFrame1.CurrentSkeletonID == s)
-                        {
-                            //lose control point
-                            userFrame1.ControlPointLose();
-                        }
-                    }
+                    
+                       
                 }
 
                 if (!SkeletonsVisible && !userFrame1.CountingDownForPicture)
                 {
                     userFrame1.depthImage.Visibility = Visibility.Visible;
-
                 }
+
+                if (LastSkeletonsVisible || SkeletonsVisible)
+                {
+                    Log.Write("Presence: " + userFrame1.CurrentSkeletonID + " " + LogString);
+                }
+
+                LastSkeletonsVisible = SkeletonsVisible;
             }
         }
 
