@@ -100,7 +100,7 @@ namespace DGPDoorbell
                 }
 
                 //note the last date an entry was made
-                m_lastDate = DateTime.Now;
+                m_lastDate = DateTime.Now;                
             }
         }
 
@@ -122,8 +122,8 @@ namespace DGPDoorbell
             else
             {
                 //if we're auto dating, and the day/month/year is different than last message
-                if((m_bAutoDate) && (DateTime.Now.Year != m_lastDate.Year) && (DateTime.Now.Month != m_lastDate.Month) &&
-                    (DateTime.Now.Day != m_lastDate.Day))
+                if((m_bAutoDate) && ((DateTime.Now.Year != m_lastDate.Year) || (DateTime.Now.Month != m_lastDate.Month) ||
+                    (DateTime.Now.Day != m_lastDate.Day)))
                 {
                     //write the date
                     WriteDate();
