@@ -137,6 +137,12 @@
   <ItemGroup>
     <Resource Include="gui\bell.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="gui\ArrowLeft.png" />
+    <Resource Include="gui\ArrowLeftSelect.png" />
+    <Resource Include="gui\ArrowRight.png" />
+    <Resource Include="gui\ArrowRightSelect.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

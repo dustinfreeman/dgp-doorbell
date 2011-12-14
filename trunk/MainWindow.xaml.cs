@@ -593,7 +593,7 @@ namespace DGPDoorbell
                                 Microsoft.Research.Kinect.Nui.Vector RightHandVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight].Position;
                                 Microsoft.Research.Kinect.Nui.Vector HipCentreVector = lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter].Position;
 
-                                Point RightHand = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.WristRight]);
+                                Point RightHand = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.HandRight]);
                                 Point HipCentre = getDisplayPosition(lastSkeletonFrame.Skeletons[s].Joints[JointID.HipCenter]);
 
                                 Point RightHandDefault = HipCentre + new System.Windows.Vector(100, 0);

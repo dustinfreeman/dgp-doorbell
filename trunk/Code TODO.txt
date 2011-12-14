@@ -1,10 +1,8 @@
 To Do - Friday Dec 9th
 ----------------------
 Code:
-- Left/Right Widget.
 
 
-- move "bell" location <Dustin>
 - reset to middle after... <Dustin>
 - fix scrolling/looping <Dustin>
 - Fix issue of not being able to scroll completely to left <Dustin>
@@ -13,12 +11,14 @@ Code:
 - Flip image so it's not mirrored of reality <Dustin>
 - Camera "flash" animation for taking of picture, show a preview, maybe option to retake photo? <Dustin>
 - send photo/retake <Dustin>
+- position of person must stop for 500 ms before they receive control (must show progress)
+- Left/Right: Starts scrolling slow and ramps up.
 
 Heartbeat Monitoring:
 - icon showing "last email failed"
 
 Logging:
-- Talk about log format <Rorhik>
+- Talk about log format <Rorik>
 - backup
 - interaction start
 - scroll left/right

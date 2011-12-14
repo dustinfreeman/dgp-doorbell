@@ -110,16 +110,24 @@ namespace DGPDoorbell
 
             SendEmail = new Action(SendEmailNow);
 
-            gui.EmailProgressCanvas.SetValue(Canvas.LeftProperty, EmailHitRect.Left);
-            gui.EmailProgressCanvas.SetValue(Canvas.TopProperty, EmailHitRect.Top);
-            gui.EmailProgressPoly.SetAngle(0);
+            LeftScrollArrow.SetScrollDirn(ScrollDirn.Left);
+            RightScrollArrow.SetScrollDirn(ScrollDirn.Right);
 
-            gui.EmailBackgroundRect.Width = EmailHitRect.Width;
-            gui.EmailBackgroundRect.Height = EmailHitRect.Height;
+            LeftScrollArrow.ActivatedWParam += new Action<double>(ScrollArrow_Scrolled);
+            RightScrollArrow.ActivatedWParam += new Action<double>(ScrollArrow_Scrolled);
 
-            gui.EmailProgressPoly.SetValue(Canvas.LeftProperty, -EmailHitRect.Width / 2);
-            gui.EmailProgressPoly.SetValue(Canvas.TopProperty, -EmailHitRect.Height / 2);
+            //gui.EmailProgressCanvas.SetValue(Canvas.LeftProperty, EmailHitRect.Left);
+            //gui.EmailProgressCanvas.SetValue(Canvas.TopProperty, EmailHitRect.Top);
+            //gui.EmailProgressPoly.SetAngle(0);
+
+            //gui.EmailBackgroundRect.Width = EmailHitRect.Width;
+            //gui.EmailBackgroundRect.Height = EmailHitRect.Height;
+
+            //gui.EmailProgressPoly.SetValue(Canvas.LeftProperty, -EmailHitRect.Width / 2);
+            //gui.EmailProgressPoly.SetValue(Canvas.TopProperty, -EmailHitRect.Height / 2);
         }
+
+       
 
         void UserFrame_Loaded(object sender, RoutedEventArgs e)
         {
@@ -131,118 +139,60 @@ namespace DGPDoorbell
             Console.WriteLine("Appear " + ID);
             CurrentSkeletonID = ID;
             Hand.Visibility = Visibility.Visible;
-            gui.Visibility = Visibility.Visible;
+            //gui.Visibility = Visibility.Visible;
             ControlPointUpdate(ctrlPt, anchor);
         }
 
         public const double CONTROL_THRESHOLD = 60;
         public const double CONTROL_OFFSET = 40;
-        public const double SCROLL_RATE = 0.3;
+        public const double SCROLL_RATE = 20;
 
         public const int EMAIL_PROGRESS_FRAMES_NEEDED = 35;
         int EmailProgressFrames = 0;
 
         EmailListing CurrentEmailListing;
 
+        void ScrollArrow_Scrolled(double param)
+        {
+            EmailListPosition += SCROLL_RATE * param;
+        }
+
+        List<object> hitResultsList = new List<object>();
+        // Return the result of the hit test to the callback.
+        public HitTestResultBehavior MyHitTestResult(HitTestResult result)
+        {
+            // Add the hit test result to the list that will be processed after the enumeration.
+            hitResultsList.Add(result.VisualHit);
+
+            // Set the behavior to return visuals at all z-order levels.
+            return HitTestResultBehavior.Continue;
+        }
+
         public void ControlPointUpdate(Point ctrlPt, Point anchor)
         {
-            HitTestResult hitWidget = VisualTreeHelper.HitTest(userCanvas, ctrlPt);
-            if (hitWidget.VisualHit is IGestureWidget)
+            hitResultsList.Clear();
+            VisualTreeHelper.HitTest(userCanvas, null, new HitTestResultCallback(MyHitTestResult),
+                new PointHitTestParameters(ctrlPt));
+            foreach (object result in hitResultsList)
             {
-                ((IGestureWidget)hitWidget.VisualHit).ControlPointHits();
+                if (result is IGestureWidget)
+                {
+                    ((IGestureWidget)result).ControlPointHits();
+                }
             }
+
             
             foreach(UIElement uie in userCanvas.Children)
             {
                 if (uie is IGestureWidget)
                 {
-                    ((IGestureWidget)hitWidget.VisualHit).ControlPointUpdate(ctrlPt);
+                    ((IGestureWidget)uie).ControlPointUpdate(ctrlPt);
                 }
             }
-
 
             Hand.SetValue(Canvas.LeftProperty, ctrlPt.X - Hand.ActualWidth/2.0);
             Hand.SetValue(Canvas.TopProperty, ctrlPt.Y - Hand.ActualHeight/2.0);
 
-            //This is where the interface control happens.
-            Vector DiffVector = ctrlPt - anchor;
-
-            gui.SetValue(Canvas.LeftProperty, anchor.X - gui.ActualWidth / 2.0);
-            gui.SetValue(Canvas.TopProperty, anchor.Y - gui.ActualHeight / 2.0);
-
-            //Console.WriteLine(anchor + " " + ctrlPt);
-
-            if (CountingDownForPicture)
-            {
-                //do nothing.
-            } else if (Selected)
-            {
-                gui.EmailProgressCanvas.Visibility = Visibility.Visible;
-                if (EmailHitRect.Left <= DiffVector.X && EmailHitRect.Right >= DiffVector.Y &&
-                    EmailHitRect.Top <= DiffVector.Y && EmailHitRect.Bottom >= DiffVector.Y)
-                {
-                    //start progress
-                    EmailProgressFrames++;
-
-                    gui.EmailProgressPoly.SetAngle(EmailProgressFrames / (double)EMAIL_PROGRESS_FRAMES_NEEDED * Math.PI*2);
-
-                    if (EmailProgressFrames >= EMAIL_PROGRESS_FRAMES_NEEDED)
-                    {
-                        //Send Email
-                        TakePictureForEmail();
-                        Selected = false;
-                        EmailProgressFrames = 0;
-                    }
-                }
-                else
-                {
-                    gui.EmailProgressPoly.SetAngle(0);
-                    EmailProgressFrames = 0;
-                }
-
-                if (DiffVector.Y > -CONTROL_THRESHOLD * 2)
-                {
-                    Selected = false;
-                }
-            }
-            else
-            { //not Selected
-
-                gui.EmailProgressCanvas.Visibility = Visibility.Hidden;
-                gui.EmailProgressPoly.SetAngle(0);
-
-                //scrolling.
-                if (DiffVector.Y > -CONTROL_THRESHOLD)
-                {
-                    if (DiffVector.X > CONTROL_THRESHOLD)
-                    {
-                        EmailListPosition -= SCROLL_RATE * (Math.Abs(DiffVector.X) - CONTROL_THRESHOLD);
-                        gui.Right();
-                    }
-                    else if (DiffVector.X < -CONTROL_THRESHOLD)
-                    {
-                        EmailListPosition += SCROLL_RATE * (Math.Abs(DiffVector.X) - CONTROL_THRESHOLD);
-                        gui.Left();
-                    }
-                    else
-                    {
-                        gui.ResetGUI();
-                    }
-                }
-                else if (DiffVector.Y < -CONTROL_THRESHOLD * 2)
-                {
-                    //selecting
-                    CurrentEmailListing = ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]);
-                    gui.EmailText.Text = "Email\n" + CurrentEmailListing.GivenName.Trim();
-                    Selected = true;
-                    gui.Up();
-                }
-                else
-                {
-                    gui.ResetGUI();
-                }
-            } 
-            ColourCurrentEmail();
         }
 
 
@@ -252,7 +202,7 @@ namespace DGPDoorbell
             CountUntilPicture = 3;
             EmailNotificationTxt.Text = "Taking Picture in..." + CountUntilPicture;
             EmailNotificationTxt.Visibility = Visibility.Visible;
-            gui.Visibility = Visibility.Hidden;
+            //gui.Visibility = Visibility.Hidden;
             Hand.Visibility = Visibility.Hidden;
             depthImage.Visibility = Visibility.Hidden;
 
@@ -281,7 +231,7 @@ namespace DGPDoorbell
 
                 PicturingTakingTimer.Stop();
 
-                gui.Visibility = Visibility.Visible;
+                //gui.Visibility = Visibility.Visible;
                 Hand.Visibility = Visibility.Visible;
 
                 depthImage.Visibility = Visibility.Visible;
@@ -344,7 +294,7 @@ namespace DGPDoorbell
         public void ControlPointLose()
         {
             Hand.Visibility = Visibility.Hidden;
-            gui.Visibility = Visibility.Hidden;
+            //gui.Visibility = Visibility.Hidden;
 
             CurrentSkeletonID = -1;
         }
