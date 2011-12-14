@@ -22,6 +22,29 @@ namespace DGPDoorbell
         public event Action Activated;
         public event Action<double> ActivatedWParam;
 
+        bool _selected = false;
+        public bool Selected
+        {
+            get { return _selected;  }
+            set 
+            {
+                _selected = value;
+                ImgArrowLeftSelect.Visibility = Visibility.Hidden;
+                ImgArrowRightSelect.Visibility = Visibility.Hidden;
+                switch (Direction)
+                {
+                    case ScrollDirn.Left:
+                        ImgArrowLeftSelect.Visibility = _selected ? Visibility.Visible : Visibility.Hidden;
+                        break;
+                    case ScrollDirn.Right:
+                        ImgArrowRightSelect.Visibility = _selected ? Visibility.Visible : Visibility.Hidden;
+
+                        break;
+                }
+                
+            }
+        }
+
         ScrollDirn Direction = ScrollDirn.Left;
 
         public ScrollArrow()
@@ -29,45 +52,59 @@ namespace DGPDoorbell
             InitializeComponent();
         }
 
+        double ScrollingSign = 1;
         public void SetScrollDirn(ScrollDirn Direction)
         {
             this.Direction = Direction;
 
+            ImgArrowLeft.Visibility = Visibility.Hidden;
+            ImgArrowLeftSelect.Visibility = Visibility.Hidden;
+            ImgArrowRight.Visibility = Visibility.Hidden;
+            ImgArrowRightSelect.Visibility = Visibility.Hidden;
+
             switch (this.Direction)
             {
                 case ScrollDirn.Left:
-
+                    ImgArrowLeft.Visibility = Visibility.Visible;
+                    ScrollingSign = -1;
                     break;
                 case ScrollDirn.Right:
-
+                    ImgArrowRight.Visibility = Visibility.Visible;
+                    ScrollingSign = 1;
                     break;
             }
-            //TODO scroll arrow updates.
         }
 
         protected override HitTestResult HitTestCore(PointHitTestParameters hitTestParameters)
         {
-            //taken from
             // http://msdn.microsoft.com/en-us/library/ms752097.aspx
 
-            Point pt = hitTestParameters.HitPoint;
-            return new PointHitTestResult(this, pt);
+            HitTestResult result = base.HitTestCore(hitTestParameters);
+
+            return new PointHitTestResult(this, hitTestParameters.HitPoint);
         }
 
         public void ControlPointUpdate(Point ctrlPt)
         {
-            //TODO if not hit, do cancelling.
-
-            //TODO do updating stuff.
-
+            if (!cpHits)
+            {
+                Selected = false;
+            }
+            else
+            {
+                //TODO do updating stuff.
+                if (ActivatedWParam != null)
+                {
+                    ActivatedWParam(ScrollingSign);
+                }
+            }
             cpHits = false;
         }
 
         bool cpHits = false;
         public void ControlPointHits()
         {
-            //TODO show visual hit feedback
-
+            Selected = true;
             cpHits = true;
         }
 
