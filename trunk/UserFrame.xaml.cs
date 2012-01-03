@@ -43,7 +43,7 @@ namespace DGPDoorbell
                 {
                     emailListPosition = 0;
                 }
-                if (emailListPosition < -EmailListing.EMAIL_LISTING_WIDTH * emailListStackPanel.Children.Count + 500)
+                if (emailListPosition < -EmailVisual.EMAIL_WIDTH * emailListStackPanel.Children.Count + 500)
                 {
                     emailListPosition = oldEmailListPosition;
 
@@ -66,15 +66,16 @@ namespace DGPDoorbell
         {
             get
             {
+                //TODO get rid of re-colouring.
                 //uncolour old
                 try
                 {
-                    ((EmailListing)emailListStackPanel.Children[currentEmailIndex]).border.Background = Brushes.LightGray;
+                    ((EmailVisual)emailListStackPanel.Children[currentEmailIndex]).border.Background = Brushes.LightGray;
                 }
                 catch { }
 
                 //colour new elsewhere
-                currentEmailIndex= (-(int)emailListPosition + (int)this.Width / 2) / EmailListing.EMAIL_LISTING_WIDTH; //current email width;
+                currentEmailIndex = (-(int)emailListPosition + (int)this.Width / 2) / EmailVisual.EMAIL_WIDTH; //current email width;
                 if (currentEmailIndex < 0)
                     currentEmailIndex = 0;
                 if (currentEmailIndex > emailListStackPanel.Children.Count - 1)
@@ -110,7 +111,7 @@ namespace DGPDoorbell
                         RightScrollArrow.Visibility = Visibility.Hidden;
                         emailListStackPanel.Visibility = Visibility.Hidden;
                         //Reset Email Position
-                        EmailListPosition = -emailListStackPanel.Children.Count * EmailListing.EMAIL_LISTING_WIDTH / 2.0;
+                        EmailListPosition = -emailListStackPanel.Children.Count * EmailVisual.EMAIL_WIDTH / 2.0;
 
                         break;
                     case UIState.PictureCountdown:
@@ -185,7 +186,7 @@ namespace DGPDoorbell
         public const int EMAIL_PROGRESS_FRAMES_NEEDED = 35;
         int EmailProgressFrames = 0;
 
-        EmailListing CurrentEmailListing;
+        EmailVisual CurrentEmailVisual;
 
         void ScrollArrow_Scrolled(double param)
         {
@@ -273,13 +274,13 @@ namespace DGPDoorbell
 
             int r = 0;
 
-            r = Email.SendEmail(CurrentEmailListing.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
+            r = Email.SendEmail(CurrentEmailVisual.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
             
             switch (r)
             {
                 case 0:
                     if (!Settings.Debug)
-                        ShowNotification("Email sent to: " + CurrentEmailListing.GivenName);
+                        ShowNotification("Email sent to: " + CurrentEmailVisual.GivenName);
                     else
                         ShowNotification("(Debug) Email sent to: " + Settings.DebugEmail);
                     break;
@@ -315,22 +316,22 @@ namespace DGPDoorbell
         {
             StreamReader reader = new StreamReader("emailList.csv");
 
-            List<EmailListing> EmailListings = new List<EmailListing>();
+            List<EmailVisual> EmailVisuals = new List<EmailVisual>();
 
             while (!reader.EndOfStream)
             {
                 string line = reader.ReadLine();
-                EmailListing eListing = EmailListing.EmailListingFactory(line);
-                if (eListing != null)
+                EmailVisual eVisual = EmailVisual.EmailVisualFactory(line);
+                if (eVisual != null)
                 {
-                    EmailListings.Add(eListing);
+                    EmailVisuals.Add(eVisual);
                 }
             }
 
-            EmailListings.Sort();
-            foreach (EmailListing eListing in EmailListings)
+            EmailVisuals.Sort();
+            foreach (EmailVisual eVisual in EmailVisuals)
             {
-                emailListStackPanel.Children.Add(eListing);
+                emailListStackPanel.Children.Add(eVisual);
             }
 
         }
@@ -342,7 +343,7 @@ namespace DGPDoorbell
             else
                 DebugMode.Visibility = Visibility.Hidden;
 
-            EmailListPosition = -emailListStackPanel.Children.Count * EmailListing.EMAIL_LISTING_WIDTH / 2.0;
+            EmailListPosition = -emailListStackPanel.Children.Count * EmailVisual.EMAIL_WIDTH / 2.0;
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
