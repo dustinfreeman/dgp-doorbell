@@ -23,6 +23,8 @@ namespace DGPDoorbell
         protected TimeSpan HoverTime = new TimeSpan(0); //time spent hovering
         private DateTime _LastHoverIncrement = DateTime.Now;
 
+        public const double STANDARD_HOVER_DURATION = 1.5; //seconds.
+
         public double HoverFraction
         {
             get
@@ -40,10 +42,11 @@ namespace DGPDoorbell
                 if (_state == value)
                     return; //no change
 
+                WidgetState oldState = _state;
+
                 _state = value;
 
-                StateChanged();
-
+                StateChanged(oldState);
             }
         }
 
@@ -71,6 +74,7 @@ namespace DGPDoorbell
                         //hover update
                         DateTime Now = DateTime.Now;
                         HoverTime += Now - _LastHoverIncrement;
+                        _LastHoverIncrement = Now;
                         if (HoverTime >= HoverDuration)
                         {
                             State = WidgetState.Active;
@@ -103,7 +107,7 @@ namespace DGPDoorbell
             ActivatedWString(str);
         }
 
-        virtual protected void StateChanged() { } //for visual stuff.
+        virtual protected void StateChanged(WidgetState oldState) { } //for visual stuff.
 
         public GestureWidget()
         {

@@ -1,8 +1,11 @@
 To Do - Friday Dec 9th
 ----------------------
 Code:
-- send photo/retake <Dustin>
-SendEmailNow()
+PictureOptions Buttons:
+	- send Photo
+	SendEmailNow()
+	- Retake Photo
+	- Cancel
 
 - Get rid of CurrentEmailVisual framework 
  
@@ -21,9 +24,8 @@ SendEmailNow()
 - PictureOptions timeout - 10 s?
 
 - Flip image so it's not mirrored of reality <Dustin>
-- Camera "flash" animation for taking of picture, show a preview, maybe option to retake photo? <Dustin>
 
-
+- Logging on all buttons.
 
 
 Heartbeat Monitoring:

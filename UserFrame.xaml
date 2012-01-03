@@ -14,12 +14,18 @@
             </StackPanel>
         </Border>
         <!--Interactive Interface-->
-        <Canvas Name="userCanvas" Width="800" Height="600" Canvas.Left="-100">
+        <Canvas Name="userCanvas" Width="800" Height="600">
             <Image  Name="userImage" Width="800" Height="600"/>
             <Image  Name="depthImage" Width="800" Height="600" />
-            <Border BorderThickness="4" BorderBrush="AntiqueWhite">
-            <Image  Name="previewImage" Width="800" Height="600" />
-            </Border>
+            
+            <Canvas Name="PictureOptionsCanvas" Visibility="Hidden">
+                <Border BorderThickness="10" BorderBrush="AntiqueWhite">
+                    <Image  Name="previewImage" Width="800" Height="600" />
+                </Border>
+                <dgp:HoverButton x:Name="SendButton"  Canvas.Top="300" Canvas.Left="700"/>
+                <dgp:HoverButton x:Name="RetakeButton"  Canvas.Top="300" Canvas.Left="100"/>
+                <dgp:HoverButton x:Name="HiddenButton"  Canvas.Top="300" Canvas.Left="400"/>
+            </Canvas>
             <!--<Rectangle Fill="AliceBlue" Width="80" Height="80"/>-->
             
             <StackPanel Opacity="0.5" Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0"/>
@@ -29,6 +35,7 @@
             <dgp:ScrollArrow x:Name="RightScrollArrow" Visibility="Hidden" Canvas.Top="300" Canvas.Left="600"/>
             <dgp:ScrollArrow x:Name="LeftScrollArrow" Visibility="Hidden" Canvas.Top="300" Canvas.Left="200"/>
 
+            
             <TextBlock Name="EmailNotificationTxt" Background="White" 
                         TextWrapping="Wrap" FontSize="80" Opacity="0.6" 
                         Visibility="Hidden" 

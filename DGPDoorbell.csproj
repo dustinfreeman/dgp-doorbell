@@ -65,9 +65,7 @@
     <Compile Include="GestureWidget.xaml.cs">
       <DependentUpon>GestureWidget.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GUI.xaml.cs">
-      <DependentUpon>GUI.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="HoverButton.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Photo.cs" />
     <Compile Include="ScrollArrow.cs" />
@@ -76,10 +74,6 @@
       <DependentUpon>UserFrame.xaml</DependentUpon>
     </Compile>
     <Page Include="GestureWidget.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="GUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

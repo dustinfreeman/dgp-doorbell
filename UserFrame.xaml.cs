@@ -120,7 +120,7 @@ namespace DGPDoorbell
                         depthImage.Visibility = Visibility.Visible;
                         break;
                     case UIState.PictureOptions:
-                        previewImage.Visibility = Visibility.Hidden;
+                        PictureOptionsCanvas.Visibility = Visibility.Hidden;
                         break;
                 }
 
@@ -140,9 +140,7 @@ namespace DGPDoorbell
                         emailListStackPanel.Visibility = Visibility.Hidden;
                         break;
                     case UIState.PictureOptions:
-                        previewImage.Visibility = Visibility.Visible;
-                        //send, retake
-                        //TODO PictureOptions display
+                        PictureOptionsCanvas.Visibility = Visibility.Visible;
                         break;
                 }
 
@@ -170,6 +168,10 @@ namespace DGPDoorbell
 
             LeftScrollArrow.ActivatedWDouble += new Action<double>(ScrollArrow_Scrolled);
             RightScrollArrow.ActivatedWDouble += new Action<double>(ScrollArrow_Scrolled);
+
+            SendButton.SetText("Send");
+            RetakeButton.SetText("Retake");
+            HiddenButton.SetText("Hidden");
 
             State = UIState.Standby;
         }
