@@ -60,10 +60,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CircularProgressPoly.cs" />
-    <Compile Include="EmailListing.xaml.cs">
-      <DependentUpon>EmailListing.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Email.cs" />
+    <Compile Include="EmailVisual.cs" />
     <Compile Include="GestureWidget.xaml.cs">
       <DependentUpon>GestureWidget.xaml</DependentUpon>
     </Compile>
@@ -77,10 +75,6 @@
     <Compile Include="UserFrame.xaml.cs">
       <DependentUpon>UserFrame.xaml</DependentUpon>
     </Compile>
-    <Page Include="EmailListing.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="GestureWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
