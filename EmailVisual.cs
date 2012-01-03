@@ -105,8 +105,11 @@ namespace DGPDoorbell
             switch (State)
             {
                 case WidgetState.Inactive:
+                    HoverRectangle.Visibility = Visibility.Hidden;
+                    break;
                 case WidgetState.Active:
                     HoverRectangle.Visibility = Visibility.Hidden;
+                    RaiseActivated();
                     break;
                 case WidgetState.Hovering:
                     HoverRectangle.Visibility = Visibility.Visible;
@@ -121,10 +124,6 @@ namespace DGPDoorbell
             {
                 HoverRectangle.Height = HoverFraction * EMAIL_HEIGHT;
                 HoverRectangle.SetValue(Canvas.TopProperty, (1 - HoverFraction) * EMAIL_HEIGHT);
-            }
-            if (State == WidgetState.Active)
-            {
-                //TODO take picture....switch to PictureCountdown.
             }
             base.ControlPointUpdate(ctrlPt);
         }
@@ -162,5 +161,6 @@ namespace DGPDoorbell
                 return null;
             }
         }
+
     }
 }

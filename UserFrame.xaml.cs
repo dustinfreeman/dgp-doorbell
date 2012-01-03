@@ -85,6 +85,8 @@ namespace DGPDoorbell
 
         }
 
+        EmailVisual CurrentEmail = null;
+
         DispatcherTimer PicturingTakingTimer = null;
 
         public bool CountingDownForPicture
@@ -117,6 +119,9 @@ namespace DGPDoorbell
                     case UIState.PictureCountdown:
                         depthImage.Visibility = Visibility.Visible;
                         break;
+                    case UIState.PictureOptions:
+                        previewImage.Visibility = Visibility.Hidden;
+                        break;
                 }
 
                 switch (value)
@@ -132,11 +137,12 @@ namespace DGPDoorbell
                         break;
                     case UIState.PictureCountdown:
                         depthImage.Visibility = Visibility.Hidden;
-                        TakePictureForEmail();
+                        emailListStackPanel.Visibility = Visibility.Hidden;
                         break;
                     case UIState.PictureOptions:
+                        previewImage.Visibility = Visibility.Visible;
                         //send, retake
-                        //TODO PictureOptions
+                        //TODO PictureOptions display
                         break;
                 }
 
@@ -145,8 +151,6 @@ namespace DGPDoorbell
         }
 
         DispatcherTimer NotificationTimer = null;
-
-        bool Selected = false;
 
         public MainWindow mainWindow;
         Action SendEmail;
@@ -164,8 +168,8 @@ namespace DGPDoorbell
             LeftScrollArrow.SetScrollDirn(ScrollDirn.Left);
             RightScrollArrow.SetScrollDirn(ScrollDirn.Right);
 
-            LeftScrollArrow.ActivatedWParam += new Action<double>(ScrollArrow_Scrolled);
-            RightScrollArrow.ActivatedWParam += new Action<double>(ScrollArrow_Scrolled);
+            LeftScrollArrow.ActivatedWDouble += new Action<double>(ScrollArrow_Scrolled);
+            RightScrollArrow.ActivatedWDouble += new Action<double>(ScrollArrow_Scrolled);
 
             State = UIState.Standby;
         }
@@ -185,8 +189,6 @@ namespace DGPDoorbell
 
         public const int EMAIL_PROGRESS_FRAMES_NEEDED = 35;
         int EmailProgressFrames = 0;
-
-        EmailVisual CurrentEmailVisual;
 
         void ScrollArrow_Scrolled(double param)
         {
@@ -238,56 +240,109 @@ namespace DGPDoorbell
 
         }
 
-        int CountUntilPicture = 3;
-        void TakePictureForEmail()
+        const int COUNT_UNTIL_PICTURE_LENGTH = 3;
+        int CountUntilPicture = COUNT_UNTIL_PICTURE_LENGTH;
+
+        void TakePictureForEmail(EmailVisual PictureEmail)
         {
-            CountUntilPicture = 3;
-            EmailNotificationTxt.Text = "Taking Picture in..." + CountUntilPicture;
+            State = UIState.PictureCountdown;
+            CurrentEmail = PictureEmail;
+            StartPictureCountdown();
+        }
+        void TakePicture()
+        {
+            State = UIState.PictureCountdown;
+            CurrentEmail = null;
+            StartPictureCountdown();
+        }
+        void StartPictureCountdown()
+        {
+            CountUntilPicture = COUNT_UNTIL_PICTURE_LENGTH + 1;
+            PictureCountingDown(null,null);
             EmailNotificationTxt.Visibility = Visibility.Visible;
-            
-            PicturingTakingTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Input, TakePictureCountdown, mainWindow.Dispatcher);
+            PicturingTakingTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Input, PictureCountingDown, mainWindow.Dispatcher);
+
         }
 
-        void TakePictureCountdown(object o, EventArgs e)
+        void PictureCountingDown(object o, EventArgs e)
         {
             CountUntilPicture--;
-            EmailNotificationTxt.Text = "Taking Picture in..." + CountUntilPicture;
+            if (CurrentEmail == null)
+            {
+                EmailNotificationTxt.Text = "Taking Picture in..." + CountUntilPicture;
+            }
+            else
+            {
+                EmailNotificationTxt.Text = "Taking Picture for " + CurrentEmail.GivenName + " in..." + CountUntilPicture;
+            }
 
             if (CountUntilPicture <=0)
             {
                 if (mainWindow.SkeletonsVisible)
                 {
-                    SendEmailNow();
+                    TakePictureNow();
+                    this.State = UIState.PictureOptions;
+
                 }
                 else
                 {
                     ShowNotification("Can't see anyone! Cancelled.");
-
+                    this.State = UIState.NameScrolling;
                 }
-
-                
-
                 PicturingTakingTimer.Stop();
 
-                this.State = UIState.PictureOptions;
-
-                
+                EmailNotificationTxt.Visibility = Visibility.Hidden;
             }
+        }
+
+        string CurrentImagePath = "";
+        const double PREVIEW_IMAGE_ANIM_END_SCALE = 0.25;
+        TimeSpan PREVIEW_IMAGE_ANIM_DURATION = TimeSpan.FromMilliseconds(300);
+        DispatcherTimer PreviewImageAnimTimer = null;
+        DateTime PreviewImageAnimStart = DateTime.Now;
+
+        void TakePictureNow()
+        {
+            byte[] previewImageSource = mainWindow.GetCurrentImage();
+            string ImagePath = Photo.Save(previewImageSource, 640, 480);
+            CurrentImagePath = ImagePath;
+
+            previewImage.Width = userImage.Width;
+            previewImage.Height = userImage.Height;
+            previewImage.Source = BitmapSource.Create(
+                640, 480, 96, 96, PixelFormats.Bgr32, null, previewImageSource, 640 * 4);
+            previewImage.Visibility = Visibility.Visible;
+
+            PreviewImageAnimStart = DateTime.Now;
+            PreviewImageAnimTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(20), DispatcherPriority.Render, PreviewImageAnimTick, mainWindow.Dispatcher);
+        }
+
+        void PreviewImageAnimTick(object o, EventArgs e)
+        {
+            TimeSpan Elapsed = DateTime.Now - PreviewImageAnimStart;
+            double Fraction = Elapsed.TotalMilliseconds / PREVIEW_IMAGE_ANIM_DURATION.TotalMilliseconds;
+            if (Fraction >= 1)
+            {
+                PreviewImageAnimTimer.Stop();
+                return;
+            }
+            double factor = 1 - (1 - PREVIEW_IMAGE_ANIM_END_SCALE)*Fraction;
+            previewImage.Width = userImage.Width * factor;
+            previewImage.Height = userImage.Height * factor;
         }
 
         void SendEmailNow()
         {
-            string ImagePath = Photo.Save(mainWindow.GetCurrentImage(), 640, 480);
 
             int r = 0;
 
-            r = Email.SendEmail(CurrentEmailVisual.emailAddress, "DGP Doorbell", "You have someone at the door!", ImagePath);
+            r = Email.SendEmail(CurrentEmail.emailAddress, "DGP Doorbell", "You have someone at the door!", CurrentImagePath);
             
             switch (r)
             {
                 case 0:
                     if (!Settings.Debug)
-                        ShowNotification("Email sent to: " + CurrentEmailVisual.GivenName);
+                        ShowNotification("Email sent to: " + CurrentEmail.GivenName);
                     else
                         ShowNotification("(Debug) Email sent to: " + Settings.DebugEmail);
                     break;
@@ -332,6 +387,7 @@ namespace DGPDoorbell
                 if (eVisual != null)
                 {
                     EmailVisuals.Add(eVisual);
+                    eVisual.Activated += new Action<object>(eVisual_Activated);
                 }
             }
 
@@ -341,6 +397,14 @@ namespace DGPDoorbell
                 emailListStackPanel.Children.Add(eVisual);
             }
 
+        }
+
+        void eVisual_Activated(object obj)
+        {
+            if (obj is EmailVisual)
+            {
+                TakePictureForEmail((EmailVisual)obj);
+            }
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)

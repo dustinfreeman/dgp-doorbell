@@ -100,7 +100,7 @@ namespace DGPDoorbell
         {
             if (cpHits && State == WidgetState.Active)
             {
-                RaiseActivatedWParam(ScrollingSign);
+                RaiseActivatedWDouble(ScrollingSign);
             }
             base.ControlPointUpdate(ctrlPt);
         }

@@ -15,9 +15,13 @@
         </Border>
         <!--Interactive Interface-->
         <Canvas Name="userCanvas" Width="800" Height="600" Canvas.Left="-100">
-            <Image  Name="userImage" Width="800" Height="600" />
+            <Image  Name="userImage" Width="800" Height="600"/>
             <Image  Name="depthImage" Width="800" Height="600" />
-                
+            <Border BorderThickness="4" BorderBrush="AntiqueWhite">
+            <Image  Name="previewImage" Width="800" Height="600" />
+            </Border>
+            <!--<Rectangle Fill="AliceBlue" Width="80" Height="80"/>-->
+            
             <StackPanel Opacity="0.5" Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0"/>
             <!--<dgp:GUI x:Name="gui" Opacity="0.8"  Visibility="Hidden"/>-->
 
@@ -26,8 +30,9 @@
             <dgp:ScrollArrow x:Name="LeftScrollArrow" Visibility="Hidden" Canvas.Top="300" Canvas.Left="200"/>
 
             <TextBlock Name="EmailNotificationTxt" Background="White" 
-                        TextWrapping="Wrap" FontSize="100" Opacity="0.6" 
-                        Visibility="Hidden" >     
+                        TextWrapping="Wrap" FontSize="80" Opacity="0.6" 
+                        Visibility="Hidden" 
+                        Canvas.Bottom="0">     
                 Email Sent!
             </TextBlock>
                 
