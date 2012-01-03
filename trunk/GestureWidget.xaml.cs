@@ -89,13 +89,18 @@ namespace DGPDoorbell
             cpHits = false;
         }
 
-        public event Action Activated;
-        public event Action<double> ActivatedWParam;
+        public event Action<object> Activated;
+        public event Action<double> ActivatedWDouble;
         protected void RaiseActivated()
-        { if(Activated != null) Activated(); }
-        protected void RaiseActivatedWParam(double obj)
+        { if(Activated != null) Activated(this); }
+        protected void RaiseActivatedWDouble(double obj)
         {
-            ActivatedWParam(obj); 
+            ActivatedWDouble(obj); 
+        }
+        public event Action<string> ActivatedWString;
+        protected void RaiseActivatedWString(string str)
+        {
+            ActivatedWString(str);
         }
 
         virtual protected void StateChanged() { } //for visual stuff.

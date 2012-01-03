@@ -62,6 +62,8 @@ namespace DGPDoorbell
             //return;
             //Console.WriteLine(e.NewSize.Width);
 
+            //TODO sizing.
+
             userFrame1.Width = e.NewSize.Width;
             userFrame1.Height = e.NewSize.Height;// userFrame1.Width * 3 / 4 + userFrame1.emailListStackPanel.ActualHeight;            
 
@@ -78,6 +80,8 @@ namespace DGPDoorbell
 
             userFrame1.userImage.Width = userFrame1.userCanvas.Width;
             //userFrame1.userImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
+
+            userFrame1.EmailNotificationTxt.Width = userFrame1.userCanvas.Width;
 
             //userFrame1.depthImage.Width = userFrame1.userCanvas.Width;
             //userFrame1.depthImage.Height = e.NewSize.Height - 1.25 * (userFrame1.emailListStackPanel.ActualHeight + userFrame1.Title.Height);
@@ -250,6 +254,8 @@ namespace DGPDoorbell
 
             userFrame1.depthImage.Source = BitmapSource.Create(
                 Image.Width, Image.Height, 96, 96, PixelFormats.Bgra32, null, convertedDepthFrame, Image.Width * 4);
+
+            
 
             if (!userFrame1.CountingDownForPicture)
             {

@@ -1,13 +1,14 @@
 To Do - Friday Dec 9th
 ----------------------
 Code:
-- Activating email triggers PictureCountdown.
-"Taking picture to send to...<Name>"
-- Get rid of CurrentEmailVisual framework
- 
 - send photo/retake <Dustin>
+SendEmailNow()
 
-- position of person must stop for 500 ms before they receive control (must show progress)
+- Get rid of CurrentEmailVisual framework 
+ 
+
+
+- position of person must stop for 500 ms before they receive control (must show progress) (fill up vertical)
  
 - List of names wraps (so A follows Z) <Dustin>
 - Fix issue of not being able to scroll completely to left <Dustin>
@@ -15,7 +16,9 @@ Code:
 
 - Make it run in "Exclusive" Mode (Frank) like a game. Hides Windows Update notifications, etc. (debug mode vs "normal") <Frank>
 
+- Take Picture "for Fun" Stuff.
 
+- PictureOptions timeout - 10 s?
 
 - Flip image so it's not mirrored of reality <Dustin>
 - Camera "flash" animation for taking of picture, show a preview, maybe option to retake photo? <Dustin>
