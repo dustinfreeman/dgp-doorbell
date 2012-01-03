@@ -36,7 +36,7 @@ namespace DGPDoorbell
             EmailTxt.Text = emailAddress;
         }
 
-        public const int EMAIL_LISTING_WIDTH = 430;//250;
+        public const int EMAIL_LISTING_WIDTH = 430;
         public const int EMAIL_LISTING_HEIGHT = 200;
 
         public void SetForeground(Brush Foreground)
