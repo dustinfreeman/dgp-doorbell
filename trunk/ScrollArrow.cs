@@ -20,9 +20,9 @@ namespace DGPDoorbell
         Image ImgArrowLeftSelect = new Image();
         Image ImgArrowRight = new Image();
         Image ImgArrowRightSelect = new Image();
-        
 
-        protected override void StateChanged()
+
+        protected override void StateChanged(WidgetState oldState)
         {
             ImgArrowLeftSelect.Visibility = Visibility.Hidden;
             ImgArrowRightSelect.Visibility = Visibility.Hidden;
@@ -104,8 +104,6 @@ namespace DGPDoorbell
             }
             base.ControlPointUpdate(ctrlPt);
         }
-
-        
     }
 
     public enum ScrollDirn

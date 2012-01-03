@@ -15,12 +15,16 @@ namespace DGPDoorbell
         double angle = 0;
         double radius = 100;
 
-        public CircularProgressPoly()
+        const double DRAW_SMOOTHNESS = Math.PI / 40; 
+
+        public CircularProgressPoly(double radius)
         {
+            this.radius = radius;
+
             Poly = new Polygon();
-            Poly.Fill = Brushes.AliceBlue;
-            Poly.Stroke = Brushes.Black;
-            Poly.StrokeThickness = 5;
+            Poly.Fill = Brushes.Black;
+            //Poly.Stroke = Brushes.Black;
+            //Poly.StrokeThickness = 5;
             this.Children.Add(Poly);
             Update();
         }
@@ -28,6 +32,11 @@ namespace DGPDoorbell
         public void SetRadius(double radius)
         {
             this.radius = radius;
+        }
+
+        public void SetFraction(double fraction)
+        {
+            SetAngle(fraction * 2 * Math.PI);
         }
 
         public void SetAngle(double angle)
@@ -39,18 +48,22 @@ namespace DGPDoorbell
         void Update()
         {
             this.Poly.Points.Clear();
-            this.Poly.Points.Add(new Point(radius, radius));
 
-            for (double a = 0; a < Math.PI * 2; a += Math.PI / 40)
+            if (angle == 0)
+                return;
+
+            this.Poly.Points.Add(new Point(0, 0));
+
+            for (double a = 0; a <= Math.PI * 2 + DRAW_SMOOTHNESS; a += DRAW_SMOOTHNESS)
             {
                 if (a > angle)
                 {
                     break;
                 }
-                this.Poly.Points.Add(new Point(radius * Math.Cos(a) + radius, radius * Math.Sin(a) + radius));
+                this.Poly.Points.Add(new Point(radius * Math.Cos(a), radius * Math.Sin(a)));
             }
 
-            this.Poly.Points.Add(new Point(radius, radius));
+            this.Poly.Points.Add(new Point(0, 0));
 
         }
     }

@@ -35,7 +35,7 @@ namespace DGPDoorbell
         {
             InitializeComponent();
 
-            HoverDuration = TimeSpan.FromSeconds(5);
+            HoverDuration = TimeSpan.FromSeconds(STANDARD_HOVER_DURATION);
 
             LoadWidgets();
         }
@@ -100,7 +100,7 @@ namespace DGPDoorbell
             EmailTxt.Text = emailAddress;
         }
 
-        protected override void StateChanged()
+        protected override void StateChanged(WidgetState oldState)
         {
             switch (State)
             {
