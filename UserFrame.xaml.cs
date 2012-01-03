@@ -66,7 +66,7 @@ namespace DGPDoorbell
         {
             get
             {
-                //TODO get rid of re-colouring.
+                //TODO get rid of re-colourin and use of email index.
                 //uncolour old
                 try
                 {
@@ -219,6 +219,13 @@ namespace DGPDoorbell
 
             
             foreach(UIElement uie in userCanvas.Children)
+            {
+                if (uie is GestureWidget)
+                {
+                    ((GestureWidget)uie).ControlPointUpdate(ctrlPt);
+                }
+            }
+            foreach (UIElement uie in emailListStackPanel.Children)
             {
                 if (uie is GestureWidget)
                 {

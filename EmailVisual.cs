@@ -29,10 +29,14 @@ namespace DGPDoorbell
         TextBlock LastNameTxt;
         TextBlock GivenNameTxt;
         TextBlock EmailTxt;
+        Rectangle HoverRectangle;
 
         public EmailVisual()
         {
             InitializeComponent();
+
+            HoverDuration = TimeSpan.FromSeconds(5);
+
             LoadWidgets();
         }
 
@@ -44,6 +48,18 @@ namespace DGPDoorbell
             border.Background = Brushes.LightGray;
             border.BorderThickness = new Thickness(2);
             border.Padding = new Thickness(8);
+
+            Canvas BorderCanvas = new Canvas();
+            border.Child = BorderCanvas;
+
+            HoverRectangle = new Rectangle();
+            HoverRectangle.Opacity = 0.5;
+            HoverRectangle.Width = EMAIL_WIDTH;
+            HoverRectangle.Height = EMAIL_HEIGHT;
+            HoverRectangle.Fill = Brushes.Blue;
+            HoverRectangle.Visibility = Visibility.Hidden;
+
+            BorderCanvas.Children.Add(HoverRectangle);
 
             StackPanel sp = new StackPanel();
             sp.SetValue(TextBlock.TextAlignmentProperty, TextAlignment.Center);
@@ -64,12 +80,17 @@ namespace DGPDoorbell
             sp.Children.Add(EmailTxt);
             EmailTxt.Visibility = Visibility.Hidden;
 
-            border.Child = sp;
+            sp.Width = EMAIL_WIDTH;
+            sp.Height = EMAIL_HEIGHT;
+
+            BorderCanvas.Children.Add(sp);
 
             border.Width = EMAIL_WIDTH;
             border.Height = EMAIL_HEIGHT;
 
             widgetCanvas.Children.Add(border);
+            //widgetCanvas.Children.Add(HoverRectangle);
+            //widgetCanvas.Children.Add(sp);
         }
 
         public void UpdateNameData()
@@ -81,16 +102,29 @@ namespace DGPDoorbell
 
         protected override void StateChanged()
         {
-            //TODO hovering
-
-            //TODO selected
+            switch (State)
+            {
+                case WidgetState.Inactive:
+                case WidgetState.Active:
+                    HoverRectangle.Visibility = Visibility.Hidden;
+                    break;
+                case WidgetState.Hovering:
+                    HoverRectangle.Visibility = Visibility.Visible;
+                    
+                    break;
+            }
         }
 
         public override void ControlPointUpdate(Point ctrlPt)
         {
-            if (cpHits && State == WidgetState.Active)
+            if (State == WidgetState.Hovering)
             {
-                //TODO take picture....
+                HoverRectangle.Height = HoverFraction * EMAIL_HEIGHT;
+                HoverRectangle.SetValue(Canvas.TopProperty, (1 - HoverFraction) * EMAIL_HEIGHT);
+            }
+            if (State == WidgetState.Active)
+            {
+                //TODO take picture....switch to PictureCountdown.
             }
             base.ControlPointUpdate(ctrlPt);
         }
