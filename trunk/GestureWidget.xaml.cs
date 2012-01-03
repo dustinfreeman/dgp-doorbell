@@ -23,6 +23,14 @@ namespace DGPDoorbell
         protected TimeSpan HoverTime = new TimeSpan(0); //time spent hovering
         private DateTime _LastHoverIncrement = DateTime.Now;
 
+        public double HoverFraction
+        {
+            get
+            {
+                return HoverTime.TotalMilliseconds / HoverDuration.TotalMilliseconds;
+            }
+        }
+
         WidgetState _state = WidgetState.Inactive;
         protected WidgetState State
         {

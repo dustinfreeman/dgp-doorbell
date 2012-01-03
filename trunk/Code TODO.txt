@@ -1,7 +1,9 @@
 To Do - Friday Dec 9th
 ----------------------
 Code:
- - hover over time
+- Activating email triggers PictureCountdown.
+"Taking picture to send to...<Name>"
+- Get rid of CurrentEmailVisual framework
  
 - send photo/retake <Dustin>
 
