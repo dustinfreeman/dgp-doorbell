@@ -91,6 +91,58 @@ namespace DGPDoorbell
             get { return PicturingTakingTimer != null && PicturingTakingTimer.IsEnabled; }
         }
 
+        UIState? _state = null;
+        UIState State
+        {
+            get { return (UIState)_state; }
+            set {
+                if (_state == value) { return; } //only NEW states
+
+                //old state.
+                switch (_state)
+                {
+                    case UIState.Standby:
+                        userImage.Visibility = Visibility.Visible;
+                        break;
+
+                    case UIState.NameScrolling:
+                        LeftScrollArrow.Visibility = Visibility.Hidden;
+                        RightScrollArrow.Visibility = Visibility.Hidden;
+                        emailListStackPanel.Visibility = Visibility.Hidden;
+                        //Reset Email Position
+                        EmailListPosition = -emailListStackPanel.Children.Count * EmailListing.EMAIL_LISTING_WIDTH / 2.0;
+
+                        break;
+                    case UIState.PictureCountdown:
+                        depthImage.Visibility = Visibility.Visible;
+                        break;
+                }
+
+                switch (value)
+                {
+                    case UIState.Standby:
+                        userImage.Visibility = Visibility.Hidden;
+
+                        break;
+                    case UIState.NameScrolling:
+                        LeftScrollArrow.Visibility = Visibility.Visible;
+                        RightScrollArrow.Visibility = Visibility.Visible;
+                        emailListStackPanel.Visibility = Visibility.Visible;
+                        break;
+                    case UIState.PictureCountdown:
+                        depthImage.Visibility = Visibility.Hidden;
+                        TakePictureForEmail();
+                        break;
+                    case UIState.PictureOptions:
+                        //send, retake
+                        //TODO PictureOptions
+                        break;
+                }
+
+                _state = value;
+            }
+        }
+
         DispatcherTimer NotificationTimer = null;
 
         bool Selected = false;
@@ -106,8 +158,6 @@ namespace DGPDoorbell
             InitializeComponent();
             ParseEmailList();
 
-            this.Loaded += new RoutedEventHandler(UserFrame_Loaded);
-
             SendEmail = new Action(SendEmailNow);
 
             LeftScrollArrow.SetScrollDirn(ScrollDirn.Left);
@@ -116,30 +166,15 @@ namespace DGPDoorbell
             LeftScrollArrow.ActivatedWParam += new Action<double>(ScrollArrow_Scrolled);
             RightScrollArrow.ActivatedWParam += new Action<double>(ScrollArrow_Scrolled);
 
-            //gui.EmailProgressCanvas.SetValue(Canvas.LeftProperty, EmailHitRect.Left);
-            //gui.EmailProgressCanvas.SetValue(Canvas.TopProperty, EmailHitRect.Top);
-            //gui.EmailProgressPoly.SetAngle(0);
-
-            //gui.EmailBackgroundRect.Width = EmailHitRect.Width;
-            //gui.EmailBackgroundRect.Height = EmailHitRect.Height;
-
-            //gui.EmailProgressPoly.SetValue(Canvas.LeftProperty, -EmailHitRect.Width / 2);
-            //gui.EmailProgressPoly.SetValue(Canvas.TopProperty, -EmailHitRect.Height / 2);
+            State = UIState.Standby;
         }
 
-       
-
-        void UserFrame_Loaded(object sender, RoutedEventArgs e)
-        {
-            ColourCurrentEmail();
-
-        }
         public void ControlPointAppear(Point ctrlPt, Point anchor, int ID)
         {
             Console.WriteLine("Appear " + ID);
             CurrentSkeletonID = ID;
-            Hand.Visibility = Visibility.Visible;
-            //gui.Visibility = Visibility.Visible;
+            State = UIState.NameScrolling;
+
             ControlPointUpdate(ctrlPt, anchor);
         }
 
@@ -175,18 +210,18 @@ namespace DGPDoorbell
                 new PointHitTestParameters(ctrlPt));
             foreach (object result in hitResultsList)
             {
-                if (result is IGestureWidget)
+                if (result is GestureWidget)
                 {
-                    ((IGestureWidget)result).ControlPointHits();
+                    ((GestureWidget)result).ControlPointHits();
                 }
             }
 
             
             foreach(UIElement uie in userCanvas.Children)
             {
-                if (uie is IGestureWidget)
+                if (uie is GestureWidget)
                 {
-                    ((IGestureWidget)uie).ControlPointUpdate(ctrlPt);
+                    ((GestureWidget)uie).ControlPointUpdate(ctrlPt);
                 }
             }
 
@@ -195,17 +230,13 @@ namespace DGPDoorbell
 
         }
 
-
         int CountUntilPicture = 3;
         void TakePictureForEmail()
         {
             CountUntilPicture = 3;
             EmailNotificationTxt.Text = "Taking Picture in..." + CountUntilPicture;
             EmailNotificationTxt.Visibility = Visibility.Visible;
-            //gui.Visibility = Visibility.Hidden;
-            Hand.Visibility = Visibility.Hidden;
-            depthImage.Visibility = Visibility.Hidden;
-
+            
             PicturingTakingTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Input, TakePictureCountdown, mainWindow.Dispatcher);
         }
 
@@ -226,15 +257,13 @@ namespace DGPDoorbell
 
                 }
 
-                //Reset Email Position
-                EmailListPosition = -emailListStackPanel.Children.Count * EmailListing.EMAIL_LISTING_WIDTH / 2.0;
+                
 
                 PicturingTakingTimer.Stop();
 
-                //gui.Visibility = Visibility.Visible;
-                Hand.Visibility = Visibility.Visible;
+                this.State = UIState.PictureOptions;
 
-                depthImage.Visibility = Visibility.Visible;
+                
             }
         }
 
@@ -276,26 +305,9 @@ namespace DGPDoorbell
             NotificationTimer.Stop();
         }
 
-        void ColourCurrentEmail()
-        {
-            Brush SelectedBackground = Brushes.LightBlue;
-            //Brush SelectedForeground = Brushes.Black;
-            if (Selected)
-            {
-                SelectedBackground = Brushes.CadetBlue;
-                //SelectedForeground = Brushes.White;
-            }
-
-            ((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).border.Background = SelectedBackground;
-            //((EmailListing)emailListStackPanel.Children[CurrentEmailIndex]).SetForeground(SelectedForeground);
-
-        }
-
         public void ControlPointLose()
         {
-            Hand.Visibility = Visibility.Hidden;
-            //gui.Visibility = Visibility.Hidden;
-
+            State = UIState.Standby;
             CurrentSkeletonID = -1;
         }
 
@@ -339,5 +351,13 @@ namespace DGPDoorbell
             DebugMode.SetValue(Canvas.TopProperty, (double)(userCanvas.Height - DebugMode.Height - 20));
         }
 
+    }
+
+    public enum UIState
+    {
+        Standby,
+        NameScrolling,
+        PictureCountdown,
+        PictureOptions,
     }
 }

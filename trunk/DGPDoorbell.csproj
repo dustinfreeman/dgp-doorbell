@@ -64,20 +64,24 @@
       <DependentUpon>EmailListing.xaml</DependentUpon>
     </Compile>
     <Compile Include="Email.cs" />
+    <Compile Include="GestureWidget.xaml.cs">
+      <DependentUpon>GestureWidget.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GUI.xaml.cs">
       <DependentUpon>GUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IGestureWidget.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="Photo.cs" />
-    <Compile Include="ScrollArrow.xaml.cs">
-      <DependentUpon>ScrollArrow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="ScrollArrow.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="UserFrame.xaml.cs">
       <DependentUpon>UserFrame.xaml</DependentUpon>
     </Compile>
     <Page Include="EmailListing.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GestureWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -97,10 +101,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="ScrollArrow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserFrame.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
