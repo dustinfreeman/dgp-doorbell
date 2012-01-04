@@ -22,7 +22,7 @@ namespace DGPDoorbell
             this.radius = radius;
 
             Poly = new Polygon();
-            Poly.Fill = Brushes.Black;
+            Poly.Fill = Brushes.Red;
             //Poly.Stroke = Brushes.Black;
             //Poly.StrokeThickness = 5;
             this.Children.Add(Poly);

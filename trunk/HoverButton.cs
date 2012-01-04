@@ -18,7 +18,7 @@ namespace DGPDoorbell
     class HoverButton:GestureWidget
     {
         double Radius = 80;
-        double ProgressThickness = 5;
+        double ProgressThickness = 15;
 
         CircularProgressPoly progressPoly;
         TextBlock Text;
@@ -39,13 +39,14 @@ namespace DGPDoorbell
             main.Fill = Brushes.White;
             main.SetValue(Canvas.TopProperty, -(Radius - ProgressThickness));
             main.SetValue(Canvas.LeftProperty, -(Radius - ProgressThickness));
-            main.Opacity = 0.6;
+            main.Opacity = 0.7;
 
             progressPoly = new CircularProgressPoly(Radius);
-            progressPoly.Opacity = 0.6;
+            progressPoly.Opacity = 0.8;
 
             Text = new TextBlock();
             Text.FontSize = 40; Text.FontWeight = FontWeights.Bold;
+            //Text.Foreground = Brushes.White;
             SetText("Button");
 
             widgetCanvas.Children.Add(progressPoly);
