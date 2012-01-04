@@ -25,6 +25,8 @@ namespace DGPDoorbell
 
         public const double STANDARD_HOVER_DURATION = 1.5; //seconds.
 
+        public string WidgetName = "GestureWidget"; //for logging.
+
         public double HoverFraction
         {
             get
@@ -46,7 +48,7 @@ namespace DGPDoorbell
 
                 _state = value;
 
-                //TODO send log event, with widget name attached.
+                Log.Write("GestureWidget: " + WidgetName + " State: " + _state.ToString(), Log.Categories.Interaction);
 
                 StateChanged(oldState);
             }

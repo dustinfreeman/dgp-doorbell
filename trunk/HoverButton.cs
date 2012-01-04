@@ -60,6 +60,8 @@ namespace DGPDoorbell
             Text.Measure(new Size(800, 600)); //I have no idea what I'm doing - Dustin
             Text.SetValue(Canvas.LeftProperty, -Text.DesiredSize.Width / 2.0);
             Text.SetValue(Canvas.TopProperty, -Text.DesiredSize.Height / 2.0);
+
+            this.WidgetName = newText + "Button";
         }
 
         protected override void StateChanged(WidgetState oldState)

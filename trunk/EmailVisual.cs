@@ -154,6 +154,8 @@ namespace DGPDoorbell
 
                 eListing.UpdateNameData();
 
+                eListing.WidgetName = "EmailVisual-" + eListing.GivenName;
+
                 return eListing;
             }
             catch (Exception e)

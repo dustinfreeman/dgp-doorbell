@@ -48,7 +48,9 @@ namespace DGPDoorbell
                     emailListPosition = oldEmailListPosition;
 
                 }
-                if (CurrentEmailIndex >= emailListStackPanel.Children.Count)
+
+                int currentEmailIndex = (-(int)emailListPosition + (int)this.Width / 2) / EmailVisual.EMAIL_WIDTH; //current email width
+                if (currentEmailIndex >= emailListStackPanel.Children.Count)
                 {
                     emailListPosition = oldEmailListPosition;
                 }
@@ -60,34 +62,26 @@ namespace DGPDoorbell
                 }
             }
         }
-
-        int currentEmailIndex = 0;
-        public int CurrentEmailIndex
-        {
-            get
-            {
-                //TODO get rid of re-colourin and use of email index.
-                //uncolour old
-                try
-                {
-                    ((EmailVisual)emailListStackPanel.Children[currentEmailIndex]).border.Background = Brushes.LightGray;
-                }
-                catch { }
-
-                //colour new elsewhere
-                currentEmailIndex = (-(int)emailListPosition + (int)this.Width / 2) / EmailVisual.EMAIL_WIDTH; //current email width;
-                if (currentEmailIndex < 0)
-                    currentEmailIndex = 0;
-                if (currentEmailIndex > emailListStackPanel.Children.Count - 1)
-                    currentEmailIndex = emailListStackPanel.Children.Count - 1;
-                return currentEmailIndex;
-            }
-
-        }
-
+        
         EmailVisual CurrentEmail = null;
 
         DispatcherTimer PicturingTakingTimer = null;
+
+        DispatcherTimer PictureOptionsTimeoutTimer = null;
+        void SetPictureOptionsTimeout()
+        {
+            if (PictureOptionsTimeoutTimer != null)
+            {
+                PictureOptionsTimeoutTimer.Stop();
+            }
+            PictureOptionsTimeoutTimer = new DispatcherTimer(TimeSpan.FromSeconds(10), DispatcherPriority.Input, PictureOptionsTimeout, mainWindow.Dispatcher);
+        } 
+
+        void PictureOptionsTimeout(object o, EventArgs e)
+        {
+            PictureOptionsTimeoutTimer.Stop();
+            State = UIState.NameScrolling;
+        }
 
         public bool CountingDownForPicture
         {
@@ -127,6 +121,7 @@ namespace DGPDoorbell
                         break;
                 }
 
+                //new state.
                 switch (value)
                 {
                     case UIState.Standby:
@@ -147,6 +142,8 @@ namespace DGPDoorbell
                         SendButton.Visibility = Visibility.Visible;
                         RetakeButton.Visibility = Visibility.Visible;
                         CancelButton.Visibility = Visibility.Visible;
+
+                        SetPictureOptionsTimeout();
                         break;
                 }
 
@@ -170,6 +167,9 @@ namespace DGPDoorbell
 
             LeftScrollArrow.SetScrollDirn(ScrollDirn.Left);
             RightScrollArrow.SetScrollDirn(ScrollDirn.Right);
+
+            LeftScrollArrow.WidgetName = "LeftScrollArrow";
+            RightScrollArrow.WidgetName = "RightScrollArrow";
 
             LeftScrollArrow.ActivatedWDouble += new Action<double>(ScrollArrow_Scrolled);
             RightScrollArrow.ActivatedWDouble += new Action<double>(ScrollArrow_Scrolled);
@@ -208,13 +208,9 @@ namespace DGPDoorbell
             ControlPointUpdate(ctrlPt, anchor);
         }
 
-
-        public const int EMAIL_PROGRESS_FRAMES_NEEDED = 35;
-        int EmailProgressFrames = 0;
-
         void ScrollArrow_Scrolled(double param)
         {
-            EmailListPosition += param; //TODO
+            EmailListPosition += param; 
         }
 
         List<object> hitResultsList = new List<object>();
