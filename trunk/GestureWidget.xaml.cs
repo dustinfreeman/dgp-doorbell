@@ -46,6 +46,8 @@ namespace DGPDoorbell
 
                 _state = value;
 
+                //TODO send log event, with widget name attached.
+
                 StateChanged(oldState);
             }
         }

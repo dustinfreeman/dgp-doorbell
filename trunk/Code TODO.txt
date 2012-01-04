@@ -2,38 +2,22 @@ To Do - Friday Dec 9th
 ----------------------
 Code:
 
-- Get rid of CurrentEmailVisual framework 
- 
-
-
-- position of person must stop for 500 ms before they receive control (must show progress) (fill up vertical)
- 
-- List of names wraps (so A follows Z) <Dustin>
+- scrolling accelerates.
 - Fix issue of not being able to scroll completely to left <Dustin>
 - Left/Right: Starts scrolling slow and ramps up.
-
-- Make it run in "Exclusive" Mode (Frank) like a game. Hides Windows Update notifications, etc. (debug mode vs "normal") <Frank>
-
-- Take Picture "for Fun" Stuff.
+- List of names wraps (so A follows Z) <Dustin> (optional)
+- Add "blank" emails at the beginning and the end. Zhao complains that he gets excessive emails.
 
 - PictureOptions timeout - 10 s?
+
+- Get rid of CurrentEmailVisual framework 
+ 
+- position of person must stop for 500 ms before they receive control (must show progress) (fill up vertical)
 
 - Flip image so it's not mirrored of reality <Dustin>
 
 - Logging on all buttons.
 
-
-Heartbeat Monitoring:
-- icon showing "last email failed"
-
-Logging:
-- Talk about log format <Rorik>
-- backup
-- interaction start
-- scroll left/right
-- magnitude of scroll
-- hover over widgets
-- email triggered
 
 Physical:
 - Door sensor (open/close) <Jon>
@@ -43,12 +27,8 @@ Physical:
 
 BUGFIXES
 
-- Fix problem where people walking to the door get control of the system briefly.
-  - maybe only when people stop & stand still can they control it?
-- Add "blank" emails at the beginning and the end. Zhao complains that he gets excessive emails.
-- Better error handling if (private or public) settings files missing
-
 MINOR IMPROVEMENTS
+- Take Picture "for Fun" Stuff.
 - Jon: suggests it should restart into the proper mode when the computer does (mostly does now, except for fullscreen issue).  Note that this needs to be optional to enable debugging sessions.
 - Heartbeat feature so we know it's running
 - Dynamic reloading of names (and settings?) if underlying files change
