@@ -70,6 +70,7 @@ namespace DGPDoorbell
             if (State == WidgetState.Active)
             {
                 progressPoly.SetFraction(1);
+                RaiseActivated();
             }
         }
 

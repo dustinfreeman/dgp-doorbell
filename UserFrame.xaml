@@ -18,14 +18,13 @@
             <Image  Name="userImage" Width="800" Height="600"/>
             <Image  Name="depthImage" Width="800" Height="600" />
             
-            <Canvas Name="PictureOptionsCanvas" Visibility="Hidden">
-                <Border BorderThickness="10" BorderBrush="AntiqueWhite">
-                    <Image  Name="previewImage" Width="800" Height="600" />
-                </Border>
-                <dgp:HoverButton x:Name="SendButton"  Canvas.Top="300" Canvas.Left="700"/>
-                <dgp:HoverButton x:Name="RetakeButton"  Canvas.Top="300" Canvas.Left="100"/>
-                <dgp:HoverButton x:Name="HiddenButton"  Canvas.Top="300" Canvas.Left="400"/>
-            </Canvas>
+            <Border Name="previewBorder" BorderThickness="10" BorderBrush="AntiqueWhite" Visibility="Hidden">
+                <Image  Name="previewImage" Width="800" Height="600" />
+            </Border>
+            <dgp:HoverButton x:Name="SendButton"  Canvas.Top="300" Canvas.Left="700" Visibility="Hidden"/>
+            <dgp:HoverButton x:Name="RetakeButton"  Canvas.Top="300" Canvas.Left="100" Visibility="Hidden"/>
+            <dgp:HoverButton x:Name="CancelButton"  Canvas.Top="300" Canvas.Left="400" Visibility="Hidden"/>
+            
             <!--<Rectangle Fill="AliceBlue" Width="80" Height="80"/>-->
             
             <StackPanel Opacity="0.5" Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0"/>
