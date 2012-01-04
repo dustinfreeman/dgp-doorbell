@@ -23,7 +23,7 @@
             </Border>
             <dgp:HoverButton x:Name="SendButton"  Canvas.Top="250" Canvas.Left="950" Visibility="Hidden"/>
             <dgp:HoverButton x:Name="RetakeButton"  Canvas.Top="400" Canvas.Left="950" Visibility="Hidden"/>
-            <dgp:HoverButton x:Name="CancelButton"  Canvas.Top="550" Canvas.Left="950" Visibility="Hidden"/>
+            <   x:Name="CancelButton"  Canvas.Top="550" Canvas.Left="950" Visibility="Hidden"/>
             
             <!--<Rectangle Fill="AliceBlue" Width="80" Height="80"/>-->
             
