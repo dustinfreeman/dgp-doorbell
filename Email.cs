@@ -158,7 +158,7 @@ namespace DGPDoorbell
             if (InList(ToAddress))
             {
                 if (Settings.LogNotSent)
-                    Log.Write("Message already sent: " + ToAddress, Log.Categories.Email);
+                    Log.Write("Message already sent: " + ToAddress);
 
                 Debug.WriteLine("Message already sent");
                 
@@ -181,7 +181,7 @@ namespace DGPDoorbell
             catch(Exception e)
             {
                 //log if there's a problem attaching file
-                Log.Write("Error attaching File.  Message: " + e.Message, Log.Categories.Email);
+                Log.Write("Error attaching File.  Message: " + e.Message);
             }
 
             //provide message info for email
@@ -220,9 +220,9 @@ namespace DGPDoorbell
 
                 //log results
                 if (!Settings.Debug)
-                    Log.Write("Message successfully sent to: " + ToAddress, Log.Categories.Email);
+                    Log.Write("Message successfully sent to: " + ToAddress);
                 else
-                    Log.Write("Message successfully sent to: " + Settings.DebugEmail + " instead of " + ToAddress, Log.Categories.Email);
+                    Log.Write("Message successfully sent to: " + Settings.DebugEmail + " instead of " + ToAddress);
 
                 //store that person has been emailed
                 m_MessageList.Add(new MessageInfo(ToAddress, DateTime.Now));
@@ -231,7 +231,7 @@ namespace DGPDoorbell
             {
                 //log error
                 Debug.WriteLine("Message: {0}", e.Message);
-                Log.Write("Error sending message to: " + ToAddress + ".  Message: " + e.Message, Log.Categories.Email);
+                Log.Write("Error sending message to: " + ToAddress + ".  Message: " + e.Message);
                 return -1;
             }
             return 0;
