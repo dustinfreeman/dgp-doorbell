@@ -160,7 +160,6 @@ namespace DGPDoorbell
         Action SendEmail;
 
         //relative to Control Point
-        Rect EmailHitRect = new Rect(new Point(2.5*CONTROL_THRESHOLD, -4 * CONTROL_THRESHOLD), new Size(100, 140));
 
         public UserFrame()
         {
@@ -209,16 +208,13 @@ namespace DGPDoorbell
             ControlPointUpdate(ctrlPt, anchor);
         }
 
-        public const double CONTROL_THRESHOLD = 60;
-        public const double CONTROL_OFFSET = 40;
-        public const double SCROLL_RATE = 20;
 
         public const int EMAIL_PROGRESS_FRAMES_NEEDED = 35;
         int EmailProgressFrames = 0;
 
         void ScrollArrow_Scrolled(double param)
         {
-            EmailListPosition += SCROLL_RATE * param;
+            EmailListPosition += param; //TODO
         }
 
         List<object> hitResultsList = new List<object>();

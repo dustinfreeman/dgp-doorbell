@@ -16,11 +16,15 @@ namespace DGPDoorbell
 {
     public class ScrollArrow : GestureWidget
     {
+        public const double SCROLL_RATE_LOW = 10;
+        public const double SCROLL_RATE_HIGH = 100;
+        public const int RATE_LOW_TO_HIGH = 70; //ticks? Whatever.
+        int LowToHighCount = 0;
+
         Image ImgArrowLeft = new Image();
         Image ImgArrowLeftSelect = new Image();
         Image ImgArrowRight = new Image();
         Image ImgArrowRightSelect = new Image();
-
 
         protected override void StateChanged(WidgetState oldState)
         {
@@ -35,6 +39,9 @@ namespace DGPDoorbell
                     ImgArrowRightSelect.Visibility = State == WidgetState.Active ? Visibility.Visible : Visibility.Hidden;
                     break;
             }
+            if (State == WidgetState.Active)
+            { LowToHighCount = 0; }
+
         }
 
         ScrollDirn Direction = ScrollDirn.Left;
@@ -100,7 +107,12 @@ namespace DGPDoorbell
         {
             if (cpHits && State == WidgetState.Active)
             {
-                RaiseActivatedWDouble(ScrollingSign);
+                if (LowToHighCount < RATE_LOW_TO_HIGH)
+                    LowToHighCount++;
+
+                RaiseActivatedWDouble(ScrollingSign * 
+                    ( LowToHighCount/(double)RATE_LOW_TO_HIGH*(SCROLL_RATE_HIGH-SCROLL_RATE_LOW) + SCROLL_RATE_LOW) 
+                    );
             }
             base.ControlPointUpdate(ctrlPt);
         }
