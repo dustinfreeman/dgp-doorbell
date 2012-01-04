@@ -2,16 +2,9 @@ To Do - Friday Dec 9th
 ----------------------
 Code:
 
-- PictureOptions timeout - 10 s?
-
-- Get rid of CurrentEmailVisual framework 
- 
 - position of person must stop for 500 ms before they receive control (must show progress) (fill up vertical)
 
 - Flip image so it's not mirrored of reality <Dustin>
-
-- Logging on all buttons.
-
 
 Physical:
 - Door sensor (open/close) <Jon>
