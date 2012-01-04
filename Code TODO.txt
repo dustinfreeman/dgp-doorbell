@@ -2,11 +2,6 @@ To Do - Friday Dec 9th
 ----------------------
 Code:
 
-- Fix issue of not being able to scroll completely to left <Dustin>
-- Left/Right: Starts scrolling slow and ramps up.
-- List of names wraps (so A follows Z) <Dustin> (optional)
-- Add "blank" emails at the beginning and the end. Zhao complains that he gets excessive emails.
-
 - PictureOptions timeout - 10 s?
 
 - Get rid of CurrentEmailVisual framework 
