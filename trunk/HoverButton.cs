@@ -37,6 +37,8 @@ namespace DGPDoorbell
             main.Width = (Radius-ProgressThickness) * 2;
             main.Height = (Radius-ProgressThickness) * 2;
             main.Fill = Brushes.White;
+            main.Stroke = Brushes.Black;
+            main.StrokeThickness = 3;
             main.SetValue(Canvas.TopProperty, -(Radius - ProgressThickness));
             main.SetValue(Canvas.LeftProperty, -(Radius - ProgressThickness));
             main.Opacity = 0.7;

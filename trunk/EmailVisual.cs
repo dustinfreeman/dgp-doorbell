@@ -21,8 +21,8 @@ namespace DGPDoorbell
         public string GivenName;
         public string LastName;
 
-        public const int EMAIL_WIDTH = 400;
-        public const int EMAIL_HEIGHT = 170;
+        public const int EMAIL_WIDTH = 350;
+        public const int EMAIL_HEIGHT = 150;
         public const int EMAIL_FONT_SIZE = 55;
 
         public Border border;
@@ -88,6 +88,7 @@ namespace DGPDoorbell
             border.Width = EMAIL_WIDTH;
             border.Height = EMAIL_HEIGHT;
 
+            //widgetCanvas.Children.Add(ell); 
             widgetCanvas.Children.Add(border);
             //widgetCanvas.Children.Add(HoverRectangle);
             //widgetCanvas.Children.Add(sp);

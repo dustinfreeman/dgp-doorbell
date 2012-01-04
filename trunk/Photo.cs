@@ -11,6 +11,24 @@ namespace DGPDoorbell
     static class Photo
     {
 
+        public static string SaveMirrorImage(byte[] pixels, int w, int h)
+        {
+            byte[] newPixels = new byte[pixels.Length];
+
+            for (int i = 0; i < w; i++)
+            {
+                for (int j = 0; j < h; j++)
+                {
+                    newPixels[4 * ((w - i - 1) + j * w)] = pixels[4 * (i + j * w)];
+                    newPixels[4 * ((w - i - 1) + j * w) + 1] = pixels[4 * (i + j * w) + 1];
+                    newPixels[4 * ((w - i - 1) + j * w) + 2] = pixels[4 * (i + j * w) + 2];
+                    newPixels[4 * ((w - i - 1) + j * w) + 3] = pixels[4 * (i + j * w) + 3];
+                }
+            }
+
+            return Save(newPixels, w, h);
+        }
+
         public static string Save(byte[] pixels, int w, int h)
         {
             string DirectoryName = "./images/";
