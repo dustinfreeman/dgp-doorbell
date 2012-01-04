@@ -643,7 +643,10 @@ namespace DGPDoorbell
                             }
                             break;
                     }
+                    
+                       
                 }
+
                 if (!SkeletonsVisible && !userFrame1.CountingDownForPicture)
                 {
                     userFrame1.depthImage.Visibility = Visibility.Visible;
@@ -653,6 +656,7 @@ namespace DGPDoorbell
                 {
                     Log.Write("Presence: " + userFrame1.CurrentSkeletonID + " " + LogString);
                 }
+
                 LastSkeletonsVisible = SkeletonsVisible;
             }
         }

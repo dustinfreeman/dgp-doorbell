@@ -1,9 +1,12 @@
 To Do - Friday Dec 9th
 ----------------------
 Code:
+<<<<<<< .mine
+=======
 
 - Debug.
 
+>>>>>>> .r95
 - position of person must stop for 500 ms before they receive control (must show progress) (fill up vertical)
 
 Physical:
