@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:dgp="clr-namespace:DGPDoorbell"
              mc:Ignorable="d" Loaded="UserControl_Loaded" SizeChanged="UserControl_SizeChanged">
-    <StackPanel>
+    <StackPanel HorizontalAlignment="Center">
         <!--DGP Doorbell Sign-->
         <Border HorizontalAlignment="Center" BorderThickness="0" VerticalAlignment="Top">
             <StackPanel Orientation="Horizontal">
@@ -14,31 +14,31 @@
             </StackPanel>
         </Border>
         <!--Interactive Interface-->
-        <Canvas Name="userCanvas" Width="800" Height="600">
-            <Image  Name="userImage" Width="800" Height="600"/>
-            <Image  Name="depthImage" Width="800" Height="600" />
+        <Canvas Name="userCanvas" HorizontalAlignment="Center" Width="1200" Height="900">
+            <Image  Name="userImage" Width="1200" Height="900"/>
+            <Image  Name="depthImage" Width="1200" Height="900" />
             
             <Border Name="previewBorder" BorderThickness="10" BorderBrush="AntiqueWhite" Visibility="Hidden">
                 <Image  Name="previewImage" Width="800" Height="600" />
             </Border>
-            <dgp:HoverButton x:Name="SendButton"  Canvas.Top="300" Canvas.Left="700" Visibility="Hidden"/>
-            <dgp:HoverButton x:Name="RetakeButton"  Canvas.Top="300" Canvas.Left="100" Visibility="Hidden"/>
-            <dgp:HoverButton x:Name="CancelButton"  Canvas.Top="300" Canvas.Left="400" Visibility="Hidden"/>
+            <dgp:HoverButton x:Name="SendButton"  Canvas.Top="250" Canvas.Left="950" Visibility="Hidden"/>
+            <dgp:HoverButton x:Name="RetakeButton"  Canvas.Top="400" Canvas.Left="950" Visibility="Hidden"/>
+            <dgp:HoverButton x:Name="CancelButton"  Canvas.Top="550" Canvas.Left="950" Visibility="Hidden"/>
             
             <!--<Rectangle Fill="AliceBlue" Width="80" Height="80"/>-->
             
-            <StackPanel Opacity="0.5" Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0"/>
+            <StackPanel Name="emailListStackPanel" Orientation="Horizontal" Canvas.Top="0" Canvas.Left="0" Visibility="Hidden" Opacity="0.7"/>
             <!--<dgp:GUI x:Name="gui" Opacity="0.8"  Visibility="Hidden"/>-->
 
-            <Image IsHitTestVisible="False" Name="Hand" Source="gui/hand.png" Width="80" Height ="80" Visibility="Visible"/>
-            <dgp:ScrollArrow x:Name="RightScrollArrow" Visibility="Hidden" Canvas.Top="300" Canvas.Left="600"/>
-            <dgp:ScrollArrow x:Name="LeftScrollArrow" Visibility="Hidden" Canvas.Top="300" Canvas.Left="200"/>
-
+            <Image IsHitTestVisible="False" Name="Hand" Source="gui/hand.png" Width="100" Height ="100" Visibility="Hidden"/>
+            <dgp:ScrollArrow x:Name="RightScrollArrow" Visibility="Hidden" Canvas.Top="450" Canvas.Left="750"/>
+            <dgp:ScrollArrow x:Name="LeftScrollArrow" Visibility="Hidden" Canvas.Top="450" Canvas.Left="450"/>
             
             <TextBlock Name="EmailNotificationTxt" Background="White" 
+                       Width="1200"
                         TextWrapping="Wrap" FontSize="80" Opacity="0.6" 
                         Visibility="Hidden" 
-                        Canvas.Bottom="0">     
+                        Canvas.Bottom="150">     
                 Email Sent!
             </TextBlock>
                 

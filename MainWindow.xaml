@@ -4,12 +4,8 @@
         xmlns:dgp="clr-namespace:DGPDoorbell"
         
         Loaded="Window_Loaded" Closed="Window_Closed" WindowStyle="SingleBorderWindow" Title="DGP Doorbell" WindowState="Normal">    
-    <StackPanel Orientation="Horizontal">
-        
-        <StackPanel Orientation="Vertical">
-            
-            <dgp:UserFrame x:Name="userFrame1" Background="{x:Null}" />
-        </StackPanel>
+    <StackPanel Name="mainStackPanel" Orientation="Horizontal">
+            <dgp:UserFrame x:Name="userFrame1" Background="{x:Null}" HorizontalAlignment="Center"/>
 
         <StackPanel Name="debugPanel" Visibility="Collapsed">
             <TextBlock>Debug Stuff</TextBlock>

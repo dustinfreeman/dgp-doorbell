@@ -100,18 +100,16 @@ namespace DGPDoorbell
                 {
                     case UIState.Standby:
                         userImage.Visibility = Visibility.Visible;
+                        Hand.Visibility = Visibility.Visible;
                         break;
-
                     case UIState.NameScrolling:
                         LeftScrollArrow.Visibility = Visibility.Hidden;
                         RightScrollArrow.Visibility = Visibility.Hidden;
                         emailListStackPanel.Visibility = Visibility.Hidden;
-                        //Reset Email Position
-                        EmailListPosition = -emailListStackPanel.Children.Count * EmailVisual.EMAIL_WIDTH / 2.0;
-
                         break;
                     case UIState.PictureCountdown:
                         depthImage.Visibility = Visibility.Visible;
+                        Hand.Visibility = Visibility.Visible;
                         break;
                     case UIState.PictureOptions:
                         previewBorder.Visibility = Visibility.Hidden;
@@ -126,16 +124,18 @@ namespace DGPDoorbell
                 {
                     case UIState.Standby:
                         userImage.Visibility = Visibility.Hidden;
-
+                        Hand.Visibility = Visibility.Hidden;
                         break;
                     case UIState.NameScrolling:
                         LeftScrollArrow.Visibility = Visibility.Visible;
                         RightScrollArrow.Visibility = Visibility.Visible;
                         emailListStackPanel.Visibility = Visibility.Visible;
+                        //Reset Email Position
+                        EmailListPosition = -emailListStackPanel.Children.Count * EmailVisual.EMAIL_WIDTH / 2.0;
                         break;
                     case UIState.PictureCountdown:
                         depthImage.Visibility = Visibility.Hidden;
-                        emailListStackPanel.Visibility = Visibility.Hidden;
+                        Hand.Visibility = Visibility.Hidden;
                         break;
                     case UIState.PictureOptions:
                         previewBorder.Visibility = Visibility.Visible;
@@ -192,6 +192,7 @@ namespace DGPDoorbell
         void SendButton_Activated(object obj)
         {
             SendEmailNow();
+            this.State = UIState.NameScrolling;
         } 
 
         void RetakeButton_Activated(object obj)
@@ -316,7 +317,7 @@ namespace DGPDoorbell
         }
 
         string CurrentImagePath = "";
-        const double PREVIEW_IMAGE_ANIM_END_SCALE = 0.25;
+        const double PREVIEW_IMAGE_ANIM_END_SCALE = 0.33;
         TimeSpan PREVIEW_IMAGE_ANIM_DURATION = TimeSpan.FromMilliseconds(300);
         DispatcherTimer PreviewImageAnimTimer = null;
         DateTime PreviewImageAnimStart = DateTime.Now;
@@ -324,7 +325,7 @@ namespace DGPDoorbell
         void TakePictureNow()
         {
             byte[] previewImageSource = mainWindow.GetCurrentImage();
-            string ImagePath = Photo.Save(previewImageSource, 640, 480);
+            string ImagePath = Photo.SaveMirrorImage(previewImageSource, 640, 480);
             CurrentImagePath = ImagePath;
 
             previewImage.Width = userImage.Width;
