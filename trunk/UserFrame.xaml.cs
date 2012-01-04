@@ -120,7 +120,10 @@ namespace DGPDoorbell
                         depthImage.Visibility = Visibility.Visible;
                         break;
                     case UIState.PictureOptions:
-                        PictureOptionsCanvas.Visibility = Visibility.Hidden;
+                        previewBorder.Visibility = Visibility.Hidden;
+                        SendButton.Visibility = Visibility.Hidden;
+                        RetakeButton.Visibility = Visibility.Hidden;
+                        CancelButton.Visibility = Visibility.Hidden;
                         break;
                 }
 
@@ -140,7 +143,10 @@ namespace DGPDoorbell
                         emailListStackPanel.Visibility = Visibility.Hidden;
                         break;
                     case UIState.PictureOptions:
-                        PictureOptionsCanvas.Visibility = Visibility.Visible;
+                        previewBorder.Visibility = Visibility.Visible;
+                        SendButton.Visibility = Visibility.Visible;
+                        RetakeButton.Visibility = Visibility.Visible;
+                        CancelButton.Visibility = Visibility.Visible;
                         break;
                 }
 
@@ -170,10 +176,28 @@ namespace DGPDoorbell
             RightScrollArrow.ActivatedWDouble += new Action<double>(ScrollArrow_Scrolled);
 
             SendButton.SetText("Send");
+            SendButton.Activated += new Action<object>(SendButton_Activated);
             RetakeButton.SetText("Retake");
-            HiddenButton.SetText("Hidden");
+            RetakeButton.Activated += new Action<object>(RetakeButton_Activated);
+            CancelButton.SetText("Cancel");
+            CancelButton.Activated += new Action<object>(CancelButton_Activated);
 
             State = UIState.Standby;
+        }
+
+        void CancelButton_Activated(object obj)
+        {
+            this.State = UIState.NameScrolling;
+        }
+
+        void SendButton_Activated(object obj)
+        {
+            SendEmailNow();
+        } 
+
+        void RetakeButton_Activated(object obj)
+        {
+            TakePictureForEmail(CurrentEmail);
         }
 
         public void ControlPointAppear(Point ctrlPt, Point anchor, int ID)
@@ -262,6 +286,8 @@ namespace DGPDoorbell
             CountUntilPicture = COUNT_UNTIL_PICTURE_LENGTH + 1;
             PictureCountingDown(null,null);
             EmailNotificationTxt.Visibility = Visibility.Visible;
+            if (PicturingTakingTimer != null)
+                PicturingTakingTimer.Stop();
             PicturingTakingTimer = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Input, PictureCountingDown, mainWindow.Dispatcher);
 
         }
@@ -316,6 +342,8 @@ namespace DGPDoorbell
             previewImage.Visibility = Visibility.Visible;
 
             PreviewImageAnimStart = DateTime.Now;
+            if (PreviewImageAnimTimer != null)
+                PreviewImageAnimTimer.Stop();
             PreviewImageAnimTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(20), DispatcherPriority.Render, PreviewImageAnimTick, mainWindow.Dispatcher);
         }
 
@@ -326,7 +354,6 @@ namespace DGPDoorbell
             if (Fraction >= 1)
             {
                 PreviewImageAnimTimer.Stop();
-                return;
             }
             double factor = 1 - (1 - PREVIEW_IMAGE_ANIM_END_SCALE)*Fraction;
             previewImage.Width = userImage.Width * factor;
@@ -335,9 +362,7 @@ namespace DGPDoorbell
 
         void SendEmailNow()
         {
-
             int r = 0;
-
             r = Email.SendEmail(CurrentEmail.emailAddress, "DGP Doorbell", "You have someone at the door!", CurrentImagePath);
             
             switch (r)
