@@ -37,3 +37,5 @@ FUTURE IMPROVEMENT IDEAS
 - map
 - reply back / personal state (I'm here, I'm not here, etc.)
 - Door open/close tracking
+- Desk indicator (possible notification response)
+- Redesign of interface
