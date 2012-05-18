@@ -1,23 +1,21 @@
-To Do - Friday Dec 9th
+To Do - May 18th
 ----------------------
-Code:
-<<<<<<< .mine
-=======
-
-- Debug.
-
->>>>>>> .r95
-- position of person must stop for 500 ms before they receive control (must show progress) (fill up vertical)
+EMAIL INTERFACE to dgpdoorbell@dgp.toronto.edu
+Subject lines:
+add me/remove me - add your email to the list
+add study/remove study - add a study notification with your email to the doorbell
+message - puts a message on the doorbell, leaves it for 15 minutes
+(replying to the email you get from the doorbell also puts the message on the doorbell)
 
 Physical:
 - Door sensor (open/close) <Jon>
 - Floor mat <Frank>
 - Arduino - interface between sensors & computer <Frank & Sen>
 
-
 BUGFIXES
 
 MINOR IMPROVEMENTS
+- position of person must stop for 500 ms before they receive control (must show progress) (fill up vertical)
 - Take Picture "for Fun" Stuff.
 - Jon: suggests it should restart into the proper mode when the computer does (mostly does now, except for fullscreen issue).  Note that this needs to be optional to enable debugging sessions.
 - Heartbeat feature so we know it's running
@@ -27,15 +25,17 @@ MINOR IMPROVEMENTS
 - customizable email addresses
 
 
+
+
 FUTURE IMPROVEMENT IDEAS
 
-- Instead of emailing faculty, it shows a map to their offices. Also, show internal maps to people's desks.
-- Other notifications, e.g., SMS, phone call, IM, etc
+- Instead of emailing faculty, it shows a map to their offices. Also, show internal Map to people's desks.
+- Other notifications, e.g., SMS, phone call, IM, Jabber, etc
 - Logging interaction timings/events
 - Announcements/Ticker/Classes/Studies
-- Screen saver 
-- map
+- Screen saver (fun DGP images)
 - reply back / personal state (I'm here, I'm not here, etc.)
 - Door open/close tracking
 - Desk indicator (possible notification response)
-- Redesign of interface
+- Redesign of interface (for shorter people)
+
