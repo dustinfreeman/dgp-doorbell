@@ -26,6 +26,7 @@ MINOR IMPROVEMENTS
 - Meta todo: switch todo list items to actual bug tracker issues
 - by first name and last name
 - customizable email addresses
+- analyse logs to look for trends (when is it most used, how often do people walk by, how many people usually use it, etc.)
 
 
 
