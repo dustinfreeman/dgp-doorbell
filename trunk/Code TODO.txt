@@ -13,7 +13,10 @@ Physical:
 - Arduino - interface between sensors & computer <Frank & Sen>
 
 BUGFIXES
-
+- Program crashed - possibly due to memory issues as log file >500M
+  - break logs into monthly files
+  - add error trapping and logging
+  
 MINOR IMPROVEMENTS
 - position of person must stop for 500 ms before they receive control (must show progress) (fill up vertical)
 - Take Picture "for Fun" Stuff.
