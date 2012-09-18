@@ -27,7 +27,7 @@ MINOR IMPROVEMENTS
 - by first name and last name
 - customizable email addresses
 - analyse logs to look for trends (when is it most used, how often do people walk by, how many people usually use it, etc.)
-
+- Add clock to doorbell screen/screen saver
 
 
 
