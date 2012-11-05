@@ -28,6 +28,7 @@ MINOR IMPROVEMENTS
 - customizable email addresses
 - analyse logs to look for trends (when is it most used, how often do people walk by, how many people usually use it, etc.)
 - Add clock to doorbell screen/screen saver
+- Add intelligent handling of long names (e.g., reduce font size). Right now we just truncate names.
 
 
 
